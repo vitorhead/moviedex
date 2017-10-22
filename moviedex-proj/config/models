@@ -1,0 +1,6 @@
+Cadastros json
+    nome            Text
+    email           Text
+    dtNascimento    Day
+    sexo            Sexo
+    deriving Show
