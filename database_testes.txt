@@ -1,8 +1,0 @@
-psql -h ec2-54-83-58-17.compute-1.amazonaws.com -U jicyjyqhbdjpdj -d d3kni71elgus47
-354eb6940bf972892ac2074a1c6989928574e2fb63bfd39b475ca51e14070000
-
-\dt
-
--- CADASTRO
-    > inserir
-    curl -X POST https://haskelleta-romefeller.c9users.io/cadastro/inserir -d '{"nome":"teste", "dtNascimento":"2017-01-31", "sexo":"M"}'
