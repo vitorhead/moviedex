@@ -1,0 +1,21 @@
+Cadastros json
+    nome            Text
+    email           Text
+    senha           Text
+    dtNascimento    Day
+    sexo            Sexo
+    UniqueEmail     email
+    deriving Show
+    
+Filmes json
+    idapi           Int
+    title           Text
+    vote_average    Double
+    poster_path     Text
+    overview        Text
+    release_date    Text
+    deriving Show
+
+    
+
+

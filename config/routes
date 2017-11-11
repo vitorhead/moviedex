@@ -1,0 +1,11 @@
+/static StaticR Static appStatic
+
+/favicon.ico FaviconR GET
+/robots.txt RobotsR GET
+
+/cadastro/inserir                     CadastroR       POST
+/cadastro/apagar/#CadastrosId         ApagarCadR      DELETE
+/cadastro/alterar/#CadastrosId        AlterarCadR     PUT
+/cadastro/busca/#CadastrosId          BuscaCadR       GET
+/cadastro/busca/#Text/#Text/login     LoginUsuarioR   GET
+

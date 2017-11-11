@@ -1,0 +1,9 @@
+TUDO NA MESMA LINHA
+psql -h ec2-107-21-219-201.compute-1.amazonaws.com -U kpuwtbqndoeyqb -d dd9en8l5q4hh2a
+
+
+psql -h ec2-107-21-219-201.compute-1.amazonaws.com 
+     -U kpuwtbqndoeyqb 
+     -d dd9en8l5q4hh2a
+     
+aCROh525uugAWF1l7kahlNN3E0
