@@ -9,3 +9,5 @@
 /cadastro/busca/#CadastrosId          BuscaCadR       GET
 /cadastro/busca/#Text/#Text/login     LoginUsuarioR   GET
 
+/filmes/inserir                       FilmesR         POST
+
