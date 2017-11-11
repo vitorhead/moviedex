@@ -12,4 +12,7 @@ import Utils
 
 
 postFilmesR :: Handler TypedContent
-postFilmesR = undefined
+postFilmesR = do
+    film <- requireJsonBody :: Handler Filmes
+    idFilm <- runDB $ insert film
+    sendStatusJSON created201 $ Retorno 0 (toJSON $ fromSqlKey idFilm)
