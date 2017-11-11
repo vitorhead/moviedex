@@ -130,7 +130,59 @@ view model =
         --,div [] [text <| toString model.nomeFilme] 
         ,div [] [viewFilme model.resultadoBusca]
     ]
-    
+
+type alias FilmeResult =
+    {
+     id                  : Int
+    ,title               : String
+    ,vote_average        : Float
+    ,poster_path         : Maybe String
+    ,overview            : String
+    ,release_date        : String
+    }
+
+type alias Filme =
+    {
+     page           : Int
+    ,total_results  : Int
+    ,total_pages    : Int
+    ,results        : List(FilmeResult)
+    }
+
+
+type Message = 
+      NomeFilme String
+    | Submit
+    | Response (Result Http.Error Filme)
+
+type alias Model = 
+    {
+     nomeFilme          : String
+    ,error              : String
+    ,resultadoBusca     : Filme
+    }
+
+init : Model
+init = 
+    let 
+        initFilme = Filme 0 0 0 []
+    in
+        Model "" "" initFilme
+
+decodeFilmeResult : Decoder FilmeResult
+decodeFilmeResult = map6 FilmeResult (at ["id"] int)
+                                     (at ["title"] string)
+                                     (at ["vote_average"] float)
+                                (maybe((at ["poster_path"] string)))
+                                     (at ["overview"] string)
+                                     (at ["release_date"] string)
+
+decodeFilme : Decoder Filme
+decodeFilme = map4 Filme (at ["page"] int)
+                         (at ["total_results"] int)
+                         (at ["total_pages"] int)
+                         (at ["results"] (Json.Decode.list decodeFilmeResult))
+
     
 main =
   program 
