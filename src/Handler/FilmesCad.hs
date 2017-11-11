@@ -1,0 +1,26 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies, DeriveGeneric #-}
+module Handler.FilmesCad where
+
+import Import
+import Network.HTTP.Types.Status
+import Database.Persist.Postgresql
+import Utils
+
+
+postFilmesCadR :: Handler TypedContent
+postFilmesCadR = do
+    filmCad <- requireJsonBody :: Handler FilmesCad
+    idFilmCad <- runDB $ insert filmCad
+    sendStatusJSON created201 $ Retorno 0 (toJSON $ fromSqlKey idFilmCad)
+    
+getListarFilmesR :: CadastrosId -> Handler TypedContent
+getListarFilmesR idCad =  do
+    lista <- runDB $ selectList [FilmesCadIdCadastro ==. idCad] []
+    lista' <- return $ fmap (\(Entity _ filmesCad) -> filmesCad) lista 
+    filmesIds <- return $ fmap filmesCadIdFilme lista' --extrair todos os IDs
+    filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds --o sequence vai fazer uma ação pra todos
+    sendStatusJSON ok200 (object ["resp" .= (toJSON filmes)])

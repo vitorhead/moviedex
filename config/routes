@@ -11,3 +11,5 @@
 
 /filmes/inserir                       FilmesR         POST
 
+/filmescad/inserir                    FilmesCadR      POST
+/filmescad/listarfilmes/#CadastrosId  ListarFilmesR   GET

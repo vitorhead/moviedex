@@ -15,6 +15,13 @@ Filmes json
     overview        Text
     release_date    Text
     deriving Show
+    
+FilmesCad json
+    idFilme        FilmesId
+    idCadastro     CadastrosId
+    deriving Show
+
+    
 
     
 
