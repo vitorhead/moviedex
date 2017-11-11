@@ -1,0 +1,22 @@
+var _billstclair$elm_bitwise_infix$BitwiseInfix_ops = _billstclair$elm_bitwise_infix$BitwiseInfix_ops || {};
+_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'] = F2(
+	function (num, shift) {
+		return num >>> shift;
+	});
+var _billstclair$elm_bitwise_infix$BitwiseInfix_ops = _billstclair$elm_bitwise_infix$BitwiseInfix_ops || {};
+_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'] = F2(
+	function (num, shift) {
+		return num >> shift;
+	});
+var _billstclair$elm_bitwise_infix$BitwiseInfix_ops = _billstclair$elm_bitwise_infix$BitwiseInfix_ops || {};
+_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'] = F2(
+	function (num, shift) {
+		return num << shift;
+	});
+var _billstclair$elm_bitwise_infix$BitwiseInfix$lognot = _elm_lang$core$Bitwise$complement;
+var _billstclair$elm_bitwise_infix$BitwiseInfix_ops = _billstclair$elm_bitwise_infix$BitwiseInfix_ops || {};
+_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'] = _elm_lang$core$Bitwise$xor;
+var _billstclair$elm_bitwise_infix$BitwiseInfix_ops = _billstclair$elm_bitwise_infix$BitwiseInfix_ops || {};
+_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'] = _elm_lang$core$Bitwise$or;
+var _billstclair$elm_bitwise_infix$BitwiseInfix_ops = _billstclair$elm_bitwise_infix$BitwiseInfix_ops || {};
+_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'] = _elm_lang$core$Bitwise$and;

@@ -1,0 +1,228 @@
+var _user$project$ExchangeRate$viewCad = function (c) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$label,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(c.nome)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$label,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(c.email)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$label,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(c.senha)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$label,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(c.dtNascimento)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$label,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										_elm_lang$core$Basics$toString(c.sexo)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$ExchangeRate$Cadastro = F5(
+	function (a, b, c, d, e) {
+		return {nome: a, email: b, senha: c, dtNascimento: d, sexo: e};
+	});
+var _user$project$ExchangeRate$decodeCad = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$ExchangeRate$Cadastro,
+	A2(_elm_lang$core$Json_Decode$field, 'nome', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'email', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'senha', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'dtNascimento', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'sexo', _elm_lang$core$Json_Decode$string));
+var _user$project$ExchangeRate$Model = F2(
+	function (a, b) {
+		return {idcad: a, cad: b};
+	});
+var _user$project$ExchangeRate$init = function () {
+	var cadIni = A5(_user$project$ExchangeRate$Cadastro, '', '', '', '', '');
+	return A2(_user$project$ExchangeRate$Model, '', cadIni);
+}();
+var _user$project$ExchangeRate$Response = function (a) {
+	return {ctor: 'Response', _0: a};
+};
+var _user$project$ExchangeRate$getBusca = function (idcad) {
+	var url = A2(_elm_lang$core$Basics_ops['++'], 'haskelleta-romefeller.c9users.io/cadastro/busca/', idcad);
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$ExchangeRate$Response,
+		A2(_elm_lang$http$Http$get, url, _user$project$ExchangeRate$decodeCad));
+};
+var _user$project$ExchangeRate$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'IdCad':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{idcad: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Submit':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$ExchangeRate$getBusca(model.idcad)
+				};
+			default:
+				var _p1 = _p0._0;
+				if (_p1.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								idcad: A2(
+									_elm_lang$core$Basics_ops['++'],
+									'Erro',
+									_elm_lang$core$Basics$toString(_p1._0))
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{cad: _p1._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _user$project$ExchangeRate$Submit = {ctor: 'Submit'};
+var _user$project$ExchangeRate$IdCad = function (a) {
+	return {ctor: 'IdCad', _0: a};
+};
+var _user$project$ExchangeRate$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('divGeral'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('text'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('idCad'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$required(true),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$ExchangeRate$IdCad),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$id('btnEnviar'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$ExchangeRate$Submit),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('GO'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(model.idcad)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _user$project$ExchangeRate$viewCad(model.cad),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$ExchangeRate$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _user$project$ExchangeRate$init, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$ExchangeRate$view,
+		update: _user$project$ExchangeRate$update,
+		subscriptions: function (_p2) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();

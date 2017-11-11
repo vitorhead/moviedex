@@ -1,0 +1,988 @@
+var _billstclair$elm_sha256$Sha256$initialHs = function (is224) {
+	return is224 ? {a: 3238371032, b: 914150663, c: 812702999, d: 4144912697, e: 4290775857, f: 1750603025, g: 1694076839, h: 3204075428} : {a: 1779033703, b: 3144134277, c: 1013904242, d: 2773480762, e: 1359893119, f: 2600822924, g: 528734635, h: 1541459225};
+};
+var _billstclair$elm_sha256$Sha256$stringToMessage = function (string) {
+	return _elm_lang$core$Array$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			_elm_lang$core$Char$toCode,
+			_elm_lang$core$String$toList(string)));
+};
+var _billstclair$elm_sha256$Sha256$toHex1 = function (x) {
+	var x2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], x, 15);
+	return _elm_lang$core$Char$fromCode(
+		x2 + ((_elm_lang$core$Native_Utils.cmp(x2, 10) < 0) ? _elm_lang$core$Char$toCode(
+			_elm_lang$core$Native_Utils.chr('0')) : (-10 + _elm_lang$core$Char$toCode(
+			_elm_lang$core$Native_Utils.chr('a')))));
+};
+var _billstclair$elm_sha256$Sha256$toHex8 = function (x) {
+	return _elm_lang$core$String$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			function (shift) {
+				return _billstclair$elm_sha256$Sha256$toHex1(
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], x, shift));
+			},
+			{
+				ctor: '::',
+				_0: 28,
+				_1: {
+					ctor: '::',
+					_0: 24,
+					_1: {
+						ctor: '::',
+						_0: 20,
+						_1: {
+							ctor: '::',
+							_0: 16,
+							_1: {
+								ctor: '::',
+								_0: 12,
+								_1: {
+									ctor: '::',
+									_0: 8,
+									_1: {
+										ctor: '::',
+										_0: 4,
+										_1: {
+											ctor: '::',
+											_0: 0,
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}));
+};
+var _billstclair$elm_sha256$Sha256$toHex56 = function (hs) {
+	return A3(
+		_elm_lang$core$List$foldr,
+		F2(
+			function (x, y) {
+				return A2(_elm_lang$core$Basics_ops['++'], x, y);
+			}),
+		'',
+		A2(
+			_elm_lang$core$List$map,
+			_billstclair$elm_sha256$Sha256$toHex8,
+			{
+				ctor: '::',
+				_0: hs.a,
+				_1: {
+					ctor: '::',
+					_0: hs.b,
+					_1: {
+						ctor: '::',
+						_0: hs.c,
+						_1: {
+							ctor: '::',
+							_0: hs.d,
+							_1: {
+								ctor: '::',
+								_0: hs.e,
+								_1: {
+									ctor: '::',
+									_0: hs.f,
+									_1: {
+										ctor: '::',
+										_0: hs.g,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}));
+};
+var _billstclair$elm_sha256$Sha256$toHex64 = function (hs) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_billstclair$elm_sha256$Sha256$toHex56(hs),
+		_billstclair$elm_sha256$Sha256$toHex8(hs.h));
+};
+var _billstclair$elm_sha256$Sha256$sumHS = F2(
+	function (hs1, hs2) {
+		return {
+			a: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.a + hs2.a, 0),
+			b: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.b + hs2.b, 0),
+			c: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.c + hs2.c, 0),
+			d: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.d + hs2.d, 0),
+			e: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.e + hs2.e, 0),
+			f: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.f + hs2.f, 0),
+			g: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.g + hs2.g, 0),
+			h: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs1.h + hs2.h, 0)
+		};
+	});
+var _billstclair$elm_sha256$Sha256$makeBlocks = function (block) {
+	return A3(
+		_elm_lang$core$Array$set,
+		0,
+		block,
+		A2(_elm_lang$core$Array$repeat, 64, 0));
+};
+var _billstclair$elm_sha256$Sha256$getShift = F2(
+	function (i, n) {
+		return 8 * (3 - A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], i + n, 3));
+	});
+var _billstclair$elm_sha256$Sha256$getAt = F2(
+	function (index, list) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			0,
+			A2(_elm_community$list_extra$List_Extra$getAt, index, list));
+	});
+var _billstclair$elm_sha256$Sha256$get = F2(
+	function (index, array) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			0,
+			A2(_elm_lang$core$Array$get, index, array));
+	});
+var _billstclair$elm_sha256$Sha256$orIntoBlocks = F3(
+	function (idx, val, blocks) {
+		return A3(
+			_elm_lang$core$Array$set,
+			idx,
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				val,
+				A2(_billstclair$elm_sha256$Sha256$get, idx, blocks)),
+			blocks);
+	});
+var _billstclair$elm_sha256$Sha256$indexLoop = F5(
+	function (i, index, message, length, blocks) {
+		indexLoop:
+		while (true) {
+			if (!((_elm_lang$core$Native_Utils.cmp(index, length) < 0) && (_elm_lang$core$Native_Utils.cmp(i, 64) < 0))) {
+				return {ctor: '_Tuple3', _0: i, _1: index, _2: blocks};
+			} else {
+				var shift = _billstclair$elm_sha256$Sha256$getShift(i);
+				var code = A2(_billstclair$elm_sha256$Sha256$get, index, message);
+				var _p0 = (_elm_lang$core$Native_Utils.cmp(code, 128) < 0) ? {
+					ctor: '_Tuple3',
+					_0: 1,
+					_1: 0,
+					_2: A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+						code,
+						shift(0))
+				} : ((_elm_lang$core$Native_Utils.cmp(code, 2048) < 0) ? {
+					ctor: '_Tuple3',
+					_0: 2,
+					_1: 0,
+					_2: A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								192,
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], code, 6)),
+							shift(0)),
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								128,
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], code, 63)),
+							shift(1)))
+				} : (((_elm_lang$core$Native_Utils.cmp(code, 55296) < 0) || (_elm_lang$core$Native_Utils.cmp(code, 57344) > -1)) ? {
+					ctor: '_Tuple3',
+					_0: 3,
+					_1: 0,
+					_2: A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+								A2(
+									_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+									224,
+									A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], code, 12)),
+								shift(0)),
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+								A2(
+									_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+									128,
+									A2(
+										_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+										A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], code, 6),
+										63)),
+								shift(1))),
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								128,
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], code, 63)),
+							shift(2)))
+				} : {
+					ctor: '_Tuple3',
+					_0: 4,
+					_1: 1,
+					_2: function () {
+						var code2 = 65536 + A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], code, 1023),
+								10),
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+								A2(_billstclair$elm_sha256$Sha256$get, index + 1, message),
+								1023));
+						return A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								A2(
+									_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+									A2(
+										_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+										A2(
+											_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+											240,
+											A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], code2, 18)),
+										shift(0)),
+									A2(
+										_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+										A2(
+											_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+											128,
+											A2(
+												_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+												A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], code2, 12),
+												63)),
+										shift(1))),
+								A2(
+									_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+									A2(
+										_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+										128,
+										A2(
+											_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+											A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], code2, 6),
+											63)),
+									shift(2))),
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+								A2(
+									_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+									128,
+									A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], code2, 63)),
+								shift(3)));
+					}()
+				}));
+				var iInc = _p0._0;
+				var idxInc = _p0._1;
+				var val = _p0._2;
+				var blocks2 = A3(
+					_billstclair$elm_sha256$Sha256$orIntoBlocks,
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], i, 2),
+					val,
+					blocks);
+				var _v0 = i + iInc,
+					_v1 = (index + idxInc) + 1,
+					_v2 = message,
+					_v3 = length,
+					_v4 = blocks2;
+				i = _v0;
+				index = _v1;
+				message = _v2;
+				length = _v3;
+				blocks = _v4;
+				continue indexLoop;
+			}
+		}
+	});
+var _billstclair$elm_sha256$Sha256$jLoop1 = F2(
+	function (j, blocks) {
+		jLoop1:
+		while (true) {
+			var t2 = A2(_billstclair$elm_sha256$Sha256$get, j - 2, blocks);
+			var s1 = A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+					A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], t2, 17),
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t2, 15)),
+					A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], t2, 19),
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t2, 13))),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], t2, 10));
+			var t1 = A2(_billstclair$elm_sha256$Sha256$get, j - 15, blocks);
+			var s0 = A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+					A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], t1, 7),
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t1, 25)),
+					A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], t1, 18),
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t1, 14))),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], t1, 3));
+			var blocks2 = A3(
+				_elm_lang$core$Array$set,
+				j,
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'],
+					((A2(_billstclair$elm_sha256$Sha256$get, j - 16, blocks) + s0) + A2(_billstclair$elm_sha256$Sha256$get, j - 7, blocks)) + s1,
+					0),
+				blocks);
+			if (_elm_lang$core$Native_Utils.cmp(j, 63) < 0) {
+				var _v5 = j + 1,
+					_v6 = blocks2;
+				j = _v5;
+				blocks = _v6;
+				continue jLoop1;
+			} else {
+				return blocks2;
+			}
+		}
+	});
+var _billstclair$elm_sha256$Sha256$ks = _elm_lang$core$Array$fromList(
+	{
+		ctor: '::',
+		_0: 1116352408,
+		_1: {
+			ctor: '::',
+			_0: 1899447441,
+			_1: {
+				ctor: '::',
+				_0: 3049323471,
+				_1: {
+					ctor: '::',
+					_0: 3921009573,
+					_1: {
+						ctor: '::',
+						_0: 961987163,
+						_1: {
+							ctor: '::',
+							_0: 1508970993,
+							_1: {
+								ctor: '::',
+								_0: 2453635748,
+								_1: {
+									ctor: '::',
+									_0: 2870763221,
+									_1: {
+										ctor: '::',
+										_0: 3624381080,
+										_1: {
+											ctor: '::',
+											_0: 310598401,
+											_1: {
+												ctor: '::',
+												_0: 607225278,
+												_1: {
+													ctor: '::',
+													_0: 1426881987,
+													_1: {
+														ctor: '::',
+														_0: 1925078388,
+														_1: {
+															ctor: '::',
+															_0: 2162078206,
+															_1: {
+																ctor: '::',
+																_0: 2614888103,
+																_1: {
+																	ctor: '::',
+																	_0: 3248222580,
+																	_1: {
+																		ctor: '::',
+																		_0: 3835390401,
+																		_1: {
+																			ctor: '::',
+																			_0: 4022224774,
+																			_1: {
+																				ctor: '::',
+																				_0: 264347078,
+																				_1: {
+																					ctor: '::',
+																					_0: 604807628,
+																					_1: {
+																						ctor: '::',
+																						_0: 770255983,
+																						_1: {
+																							ctor: '::',
+																							_0: 1249150122,
+																							_1: {
+																								ctor: '::',
+																								_0: 1555081692,
+																								_1: {
+																									ctor: '::',
+																									_0: 1996064986,
+																									_1: {
+																										ctor: '::',
+																										_0: 2554220882,
+																										_1: {
+																											ctor: '::',
+																											_0: 2821834349,
+																											_1: {
+																												ctor: '::',
+																												_0: 2952996808,
+																												_1: {
+																													ctor: '::',
+																													_0: 3210313671,
+																													_1: {
+																														ctor: '::',
+																														_0: 3336571891,
+																														_1: {
+																															ctor: '::',
+																															_0: 3584528711,
+																															_1: {
+																																ctor: '::',
+																																_0: 113926993,
+																																_1: {
+																																	ctor: '::',
+																																	_0: 338241895,
+																																	_1: {
+																																		ctor: '::',
+																																		_0: 666307205,
+																																		_1: {
+																																			ctor: '::',
+																																			_0: 773529912,
+																																			_1: {
+																																				ctor: '::',
+																																				_0: 1294757372,
+																																				_1: {
+																																					ctor: '::',
+																																					_0: 1396182291,
+																																					_1: {
+																																						ctor: '::',
+																																						_0: 1695183700,
+																																						_1: {
+																																							ctor: '::',
+																																							_0: 1986661051,
+																																							_1: {
+																																								ctor: '::',
+																																								_0: 2177026350,
+																																								_1: {
+																																									ctor: '::',
+																																									_0: 2456956037,
+																																									_1: {
+																																										ctor: '::',
+																																										_0: 2730485921,
+																																										_1: {
+																																											ctor: '::',
+																																											_0: 2820302411,
+																																											_1: {
+																																												ctor: '::',
+																																												_0: 3259730800,
+																																												_1: {
+																																													ctor: '::',
+																																													_0: 3345764771,
+																																													_1: {
+																																														ctor: '::',
+																																														_0: 3516065817,
+																																														_1: {
+																																															ctor: '::',
+																																															_0: 3600352804,
+																																															_1: {
+																																																ctor: '::',
+																																																_0: 4094571909,
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: 275423344,
+																																																	_1: {
+																																																		ctor: '::',
+																																																		_0: 430227734,
+																																																		_1: {
+																																																			ctor: '::',
+																																																			_0: 506948616,
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: 659060556,
+																																																				_1: {
+																																																					ctor: '::',
+																																																					_0: 883997877,
+																																																					_1: {
+																																																						ctor: '::',
+																																																						_0: 958139571,
+																																																						_1: {
+																																																							ctor: '::',
+																																																							_0: 1322822218,
+																																																							_1: {
+																																																								ctor: '::',
+																																																								_0: 1537002063,
+																																																								_1: {
+																																																									ctor: '::',
+																																																									_0: 1747873779,
+																																																									_1: {
+																																																										ctor: '::',
+																																																										_0: 1955562222,
+																																																										_1: {
+																																																											ctor: '::',
+																																																											_0: 2024104815,
+																																																											_1: {
+																																																												ctor: '::',
+																																																												_0: 2227730452,
+																																																												_1: {
+																																																													ctor: '::',
+																																																													_0: 2361852424,
+																																																													_1: {
+																																																														ctor: '::',
+																																																														_0: 2428436474,
+																																																														_1: {
+																																																															ctor: '::',
+																																																															_0: 2756734187,
+																																																															_1: {
+																																																																ctor: '::',
+																																																																_0: 3204031479,
+																																																																_1: {
+																																																																	ctor: '::',
+																																																																	_0: 3329325298,
+																																																																	_1: {ctor: '[]'}
+																																																																}
+																																																															}
+																																																														}
+																																																													}
+																																																												}
+																																																											}
+																																																										}
+																																																									}
+																																																								}
+																																																							}
+																																																						}
+																																																					}
+																																																				}
+																																																			}
+																																																		}
+																																																	}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+var _billstclair$elm_sha256$Sha256$jLoopBody2 = F4(
+	function (j, ab, hs, blocks) {
+		var h = hs.h;
+		var s1 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], h, 6),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], h, 26)),
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], h, 11),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], h, 21))),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], h, 25),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], h, 7)));
+		var g = hs.g;
+		var f = hs.f;
+		var e = hs.e;
+		var ch = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], h, e),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+				_billstclair$elm_bitwise_infix$BitwiseInfix$lognot(h),
+				f));
+		var t1 = (((g + s1) + ch) + A2(_billstclair$elm_sha256$Sha256$get, j + 1, _billstclair$elm_sha256$Sha256$ks)) + A2(_billstclair$elm_sha256$Sha256$get, j + 1, blocks);
+		var d = hs.d;
+		var s0 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], d, 2),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], d, 30)),
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], d, 13),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], d, 19))),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], d, 22),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], d, 10)));
+		var c = hs.c;
+		var g2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], c + t1, 0);
+		var s3 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], g2, 6),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], g2, 26)),
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], g2, 11),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], g2, 21))),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], g2, 25),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], g2, 7)));
+		var ch2 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], g2, h),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+				_billstclair$elm_bitwise_infix$BitwiseInfix$lognot(g2),
+				e));
+		var t3 = (((f + s3) + ch2) + A2(_billstclair$elm_sha256$Sha256$get, j + 2, _billstclair$elm_sha256$Sha256$ks)) + A2(_billstclair$elm_sha256$Sha256$get, j + 2, blocks);
+		var b = hs.b;
+		var f2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], b + t3, 0);
+		var s5 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], f2, 6),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], f2, 26)),
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], f2, 11),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], f2, 21))),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], f2, 25),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], f2, 7)));
+		var ch3 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], f2, g2),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+				_billstclair$elm_bitwise_infix$BitwiseInfix$lognot(f2),
+				h));
+		var t5 = (((e + s5) + ch3) + A2(_billstclair$elm_sha256$Sha256$get, j + 3, _billstclair$elm_sha256$Sha256$ks)) + A2(_billstclair$elm_sha256$Sha256$get, j + 3, blocks);
+		var a = hs.a;
+		var da = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], d, a);
+		var maj = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				da,
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], d, b)),
+			ab);
+		var t2 = s0 + maj;
+		var c2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t1 + t2, 0);
+		var s2 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], c2, 2),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], c2, 30)),
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], c2, 13),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], c2, 19))),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], c2, 22),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], c2, 10)));
+		var cd = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], c2, d);
+		var maj2 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				cd,
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], c2, a)),
+			da);
+		var t4 = s2 + maj2;
+		var b2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t3 + t4, 0);
+		var s4 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], b2, 2),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], b2, 30)),
+				A2(
+					_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], b2, 13),
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], b2, 19))),
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], b2, 22),
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], b2, 10)));
+		var bc = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], b2, c2);
+		var maj3 = A2(
+			_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+			A2(
+				_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+				bc,
+				A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], b2, d)),
+			cd);
+		var t6 = s4 + maj3;
+		var a2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t5 + t6, 0);
+		var e2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], a + t5, 0);
+		return {a: a2, b: b2, c: c2, d: d, e: e2, f: f2, g: g2, h: h};
+	});
+var _billstclair$elm_sha256$Sha256$jLoop2 = F5(
+	function (j, first, is224, hs, blocks) {
+		jLoop2:
+		while (true) {
+			var jp4 = j + 4;
+			var first2 = false;
+			var _p1 = function () {
+				if (first) {
+					if (is224) {
+						var t1 = A2(_billstclair$elm_sha256$Sha256$get, 0, blocks) - 1413257819;
+						return {
+							ctor: '_Tuple3',
+							_0: 300032,
+							_1: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t1 - 150054599, 0),
+							_2: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t1 + 24177077, 0)
+						};
+					} else {
+						var t2 = A2(_billstclair$elm_sha256$Sha256$get, 0, blocks) - 210244248;
+						return {
+							ctor: '_Tuple3',
+							_0: 704751109,
+							_1: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t2 - 1521486534, 0),
+							_2: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t2 + 143694565, 0)
+						};
+					}
+				} else {
+					var ch = A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], hs.e, hs.f),
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'],
+							_billstclair$elm_bitwise_infix$BitwiseInfix$lognot(hs.e),
+							hs.g));
+					var ab2 = A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], hs.a, hs.b);
+					var maj = A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+							ab2,
+							A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], hs.a, hs.c)),
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], hs.b, hs.c));
+					var s1 = A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], hs.e, 6),
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.e, 26)),
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], hs.e, 11),
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.e, 21))),
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+							A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], hs.e, 25),
+							A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.e, 7)));
+					var t3 = (((hs.h + s1) + ch) + A2(_billstclair$elm_sha256$Sha256$get, j, _billstclair$elm_sha256$Sha256$ks)) + A2(_billstclair$elm_sha256$Sha256$get, j, blocks);
+					var s0 = A2(
+						_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~^'],
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], hs.a, 2),
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.a, 30)),
+							A2(
+								_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], hs.a, 13),
+								A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.a, 19))),
+						A2(
+							_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~|'],
+							A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>>'], hs.a, 22),
+							A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.a, 10)));
+					var t4 = s0 + maj;
+					return {
+						ctor: '_Tuple3',
+						_0: ab2,
+						_1: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], hs.d + t3, 0),
+						_2: A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], t3 + t4, 0)
+					};
+				}
+			}();
+			var ab = _p1._0;
+			var h = _p1._1;
+			var d = _p1._2;
+			var hs2 = _elm_lang$core$Native_Utils.update(
+				hs,
+				{h: h, d: d});
+			var hs3 = A4(_billstclair$elm_sha256$Sha256$jLoopBody2, j, ab, hs2, blocks);
+			if (_elm_lang$core$Native_Utils.cmp(jp4, 64) < 0) {
+				var _v7 = jp4,
+					_v8 = first2,
+					_v9 = is224,
+					_v10 = hs3,
+					_v11 = blocks;
+				j = _v7;
+				first = _v8;
+				is224 = _v9;
+				hs = _v10;
+				blocks = _v11;
+				continue jLoop2;
+			} else {
+				return hs3;
+			}
+		}
+	});
+var _billstclair$elm_sha256$Sha256$extra = {
+	ctor: '::',
+	_0: -2147483648,
+	_1: {
+		ctor: '::',
+		_0: 8388608,
+		_1: {
+			ctor: '::',
+			_0: 32768,
+			_1: {
+				ctor: '::',
+				_0: 128,
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _billstclair$elm_sha256$Sha256$outerLoop = F9(
+	function (first, hs, block, start, bytes, index, is224, message, length) {
+		outerLoop:
+		while (true) {
+			var blocks = _billstclair$elm_sha256$Sha256$makeBlocks(block);
+			var _p2 = A5(_billstclair$elm_sha256$Sha256$indexLoop, start, index, message, length, blocks);
+			var i = _p2._0;
+			var index2 = _p2._1;
+			var blocks2 = _p2._2;
+			var bytes2 = (bytes + i) - start;
+			var start2 = i - 64;
+			var _p3 = _elm_lang$core$Native_Utils.eq(index2, length) ? {
+				ctor: '_Tuple2',
+				_0: A3(
+					_billstclair$elm_sha256$Sha256$orIntoBlocks,
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~>>'], i, 2),
+					A2(
+						_billstclair$elm_sha256$Sha256$getAt,
+						A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~&'], i, 3),
+						_billstclair$elm_sha256$Sha256$extra),
+					blocks2),
+				_1: index2 + 1
+			} : {ctor: '_Tuple2', _0: blocks2, _1: index2};
+			var blocks3 = _p3._0;
+			var index3 = _p3._1;
+			var block2 = A2(_billstclair$elm_sha256$Sha256$get, 16, blocks3);
+			var _p4 = ((_elm_lang$core$Native_Utils.cmp(index3, length) > 0) && (_elm_lang$core$Native_Utils.cmp(i, 56) < 0)) ? {
+				ctor: '_Tuple2',
+				_0: true,
+				_1: A3(
+					_elm_lang$core$Array$set,
+					15,
+					A2(_billstclair$elm_bitwise_infix$BitwiseInfix_ops['~<<'], bytes2, 3),
+					blocks3)
+			} : {ctor: '_Tuple2', _0: false, _1: blocks3};
+			var end = _p4._0;
+			var blocks4 = _p4._1;
+			var blocks5 = A2(_billstclair$elm_sha256$Sha256$jLoop1, 16, blocks4);
+			var hs2 = A5(_billstclair$elm_sha256$Sha256$jLoop2, 0, first, is224, hs, blocks5);
+			var hs3 = A2(_billstclair$elm_sha256$Sha256$sumHS, hs, hs2);
+			if (!end) {
+				var _v12 = false,
+					_v13 = hs3,
+					_v14 = block2,
+					_v15 = start2,
+					_v16 = bytes2,
+					_v17 = index3,
+					_v18 = is224,
+					_v19 = message,
+					_v20 = length;
+				first = _v12;
+				hs = _v13;
+				block = _v14;
+				start = _v15;
+				bytes = _v16;
+				index = _v17;
+				is224 = _v18;
+				message = _v19;
+				length = _v20;
+				continue outerLoop;
+			} else {
+				return hs3;
+			}
+		}
+	});
+var _billstclair$elm_sha256$Sha256$hash = F2(
+	function (string, is224) {
+		var message = _billstclair$elm_sha256$Sha256$stringToMessage(string);
+		var length = _elm_lang$core$Array$length(message);
+		var index = 0;
+		var bytes = 0;
+		var start = 0;
+		var block = 0;
+		var hs = _billstclair$elm_sha256$Sha256$initialHs(is224);
+		var hs2 = A9(_billstclair$elm_sha256$Sha256$outerLoop, true, hs, block, start, bytes, index, is224, message, length);
+		return is224 ? _billstclair$elm_sha256$Sha256$toHex56(hs2) : _billstclair$elm_sha256$Sha256$toHex64(hs2);
+	});
+var _billstclair$elm_sha256$Sha256$sha256 = function (string) {
+	return A2(_billstclair$elm_sha256$Sha256$hash, string, false);
+};
+var _billstclair$elm_sha256$Sha256$sha224 = function (string) {
+	return A2(_billstclair$elm_sha256$Sha256$hash, string, true);
+};
+var _billstclair$elm_sha256$Sha256$HS = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {a: a, b: b, c: c, d: d, e: e, f: f, g: g, h: h};
+	});
