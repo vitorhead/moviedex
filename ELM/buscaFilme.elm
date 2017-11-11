@@ -119,6 +119,52 @@ urlFoto = "http://image.tmdb.org/t/p/w154/"
 formatarNome : String -> String
 formatarNome nome = String.split " " nome |> String.join "%20"
 
+styleLinha : Html.Attribute Message
+styleLinha = style [
+                    ("background", "lightgray"),
+                    ("margin-bottom", "1px")
+                   ]
+
+styleListaLinhas : Html.Attribute Message
+styleListaLinhas = style [
+                            ("position", "relative"),
+                            ("right", "200"),
+                            ("top", "200"),
+                            ("display", "inline")
+                         ]
+formatFilmeResult : FilmeResult -> Html Message
+formatFilmeResult fr = 
+    let
+        linhaFoto = case fr.poster_path of
+                        Nothing -> "---"
+                        Just x  -> urlFoto++x
+    in
+    div [] 
+    [
+      img [src linhaFoto, style [("display", "inline")]] []
+     ,ul [styleListaLinhas]
+     [
+      li [styleLinha] [text <| "ID: "++(toString fr.id)]
+     ,li [styleLinha] [text <| "Titulo: "++fr.title]
+     ,li [styleLinha] [text <| "Nota:"++(toString fr.vote_average)]
+     ,li [styleLinha] [text <| "Data de lancamento:"++fr.release_date]
+     ,li [styleLinha] [text <| "Sinopse: "++fr.overview]
+     ]
+    ]
+
+--teste pra jogar no html
+viewFilme : Filme -> Html Message
+viewFilme f =
+    div [] 
+    [
+     label [] [text <| "pagina "++toString f.page ++ " - " ++ "total :"++toString f.total_results ++ " - " ++ "total de paginas: "++toString f.total_pages]
+    ,br [] []
+    ,div [] [
+                label [] [text "DADOS DA BUSCA: "]
+                ,br [] []
+                ,div [style[("position", "absolute")]] (List.map formatFilmeResult f.results)
+            ]
+    ]
 
 view : Model -> Html Message
 view model = 
