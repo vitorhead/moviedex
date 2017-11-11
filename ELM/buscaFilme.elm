@@ -182,6 +182,29 @@ decodeFilme = map4 Filme (at ["page"] int)
                          (at ["total_results"] int)
                          (at ["total_pages"] int)
                          (at ["results"] (Json.Decode.list decodeFilmeResult))
+                         
+getFilme : String -> Cmd Message
+getFilme nomefilme =
+    let 
+        url = ("https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=en-US&query="++nomefilme++"&page=1&include_adult=false")
+    in
+        send Response <| Http.get url decodeFilme
+        
+        
+update : Message -> Model -> (Model, Cmd Message)
+update msg model =
+    case msg of
+        NomeFilme x ->
+            ({model | nomeFilme = formatarNome x}, Cmd.none)
+        
+        Submit ->
+            ({model | resultadoBusca = (Filme 0 0 0 []), 
+                      error = ""}, getFilme model.nomeFilme)
+            
+        Response x ->
+            case x of
+                Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
+                Ok  y -> ({ model | resultadoBusca = y }, Cmd.none)
 
     
 main =
