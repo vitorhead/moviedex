@@ -88,6 +88,37 @@ map14 f a b c d e f g h i j k l m n =
     ,release_date       : String
     }
 -}
+httpErrorString : Error -> String
+httpErrorString error =
+    case error of
+        BadUrl text ->
+            "[ERRO HTTP] Bad Url: " ++ text
+
+        Timeout ->
+            "[ERRO HTTP] Timeout"
+
+        NetworkError ->
+            "[ERRO HTTP] Network Error"
+
+        BadStatus response ->
+            "[ERRO HTTP] Status: " ++ toString response.status.code
+
+        BadPayload message response ->
+            "[ERRO HTTP] Payload incorreto: "++ 
+             toString message++"("++toString response.status.code++")"
+             
+urlFoto : String
+urlFoto = "http://image.tmdb.org/t/p/w154/"
+
+--%20 = espaço na query da URL
+-- ex: Hello World
+-- o Split vai dividir em uma lista: ["Hello", "World"]
+--   => split " " Hello World = ["Hello", "World"]
+-- o Join vai unir a lista com um delimitador: "Hello%20World" 
+--   => join "/" ["vitu", "home", "Download"]  = vitu/home/Downloads
+formatarNome : String -> String
+formatarNome nome = String.split " " nome |> String.join "%20"
+
 
 view : Model -> Html Message
 view model = 
