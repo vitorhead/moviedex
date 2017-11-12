@@ -94,6 +94,50 @@ postCadastro cad url =
     in
         Http.send Response <|
                             Http.post url requestBody decodeInserirRetorno --o retorno do POST é um ID só
+
+update : Message -> Model -> (Model, Cmd Message)
+update msg model =
+    case msg of
+        Nome x ->
+            ({model | nome = x}, Cmd.none)
+        
+        Email x ->
+            ({model | email = x}, Cmd.none)
+        
+        Senha x ->
+            ({model | senha = SHA.sha256(x)}, Cmd.none)
+        
+        DtNascimento x ->
+            ({model | dtNascimento = x}, Cmd.none)
+        
+        Sexo x ->
+            ({model | sexo = x}, Cmd.none)
+        
+        Submit ->
+            (model, postCadastro model urlPOST)
+            
+        Response x ->
+            case x of
+                Err y -> ({ model | error = (httpErrorRetorno y) }, Cmd.none)
+                Ok  y -> ({ model | retorno = y }, Cmd.none)
+                -- Err y -> (model, Cmd.none)
+                -- Ok  y -> (model, Cmd.none)
+                
+           
+view : Model -> Html Message
+view model = 
+    div []
+    [ 
+     input [type_ "text", placeholder "nome", required True, onInput Nome] []
+    ,input [type_ "text", placeholder "dtNascimento", required True, onInput DtNascimento] []
+    ,input [type_ "text", placeholder "sexo", required True, onInput Sexo] []
+    ,input [type_ "text", placeholder "email", required True, onInput Email] []
+    ,input [type_ "text", placeholder "senha", required True, onInput Senha] []
+    ,button [id "btnEnviar", onClick Submit] [text "GO"]
+    ,div [] [text <| toString <| Http.jsonBody <| encodeCad model] --teste pra ver se montou certo
+    ,div [] [text <| toString model.retorno] 
+    ,div [] [text <| toString model.error]
+    ]
              
 main =
   program 
