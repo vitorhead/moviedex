@@ -67,6 +67,33 @@ init =
 
 urlPOST : String
 urlPOST = "https://haskelleta-romefeller.c9users.io/cadastro/inserir" 
+
+decodeInserirRetorno : Decoder Retorno
+decodeInserirRetorno = map2 Retorno (at ["mensagem"] Decode.int)
+                                    (at ["codigo"] Decode.int)
+
+encodeCad : Model -> Encode.Value
+encodeCad cad = 
+    let
+        lstCad =
+        [
+         ("email", Encode.string <| cad.email)
+        ,("senha", Encode.string <| cad.senha)
+        ,("nome", Encode.string <| cad.nome)
+        ,("dtNascimento", Encode.string <| cad.dtNascimento)
+        ,("sexo", Encode.string <| cad.sexo)
+        ]
+    in
+        Encode.object <| lstCad
+ 
+ 
+postCadastro : Model -> String -> Cmd Message
+postCadastro cad url =
+    let
+        requestBody = Http.jsonBody <| encodeCad cad
+    in
+        Http.send Response <|
+                            Http.post url requestBody decodeInserirRetorno --o retorno do POST é um ID só
              
 main =
   program 
