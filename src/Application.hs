@@ -35,6 +35,7 @@ import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
                                              toLogStr)
 --CORS pra fix o bug do elm na outra vm
 import Network.Wai.Middleware.Cors
+import Middlewares
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -101,7 +102,12 @@ makeApplication foundation = do
     logWare <- makeLogWare foundation
     -- Create the WAI application and apply middlewares
     appPlain <- toWaiAppPlain foundation
-    return $ logWare $ defaultMiddlewaresNoLogging $ simpleCors appPlain
+    --return $ logWare $ defaultMiddlewaresNoLogging $ simpleCors $ appPlain
+    --return $ logWare $ defaultMiddlewaresNoLogging $ (allowCsrf . corsified)
+    return $ logWare . allowCsrf . corsified $ appPlain 
+    
+-- run port $ logger . allowCsrf . corsified $ app cfg
+
 
 makeLogWare :: App -> IO Middleware
 makeLogWare foundation =
