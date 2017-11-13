@@ -43,49 +43,40 @@ var _user$project$Cadastro$encodeCad = function (cad) {
 	return _elm_lang$core$Json_Encode$object(lstCad);
 };
 var _user$project$Cadastro$urlPOST = 'https://haskelleta-romefeller.c9users.io/cadastro/inserir';
-var _user$project$Cadastro$Retorno = F2(
-	function (a, b) {
-		return {mensagem: a, codigo: b};
-	});
 var _user$project$Cadastro$httpErrorRetorno = function (error) {
 	var _p0 = error;
 	switch (_p0.ctor) {
 		case 'BadUrl':
-			return A2(
-				_user$project$Cadastro$Retorno,
-				A2(_elm_lang$core$Basics_ops['++'], '[ERRO HTTP] Bad Url: ', _p0._0),
-				666);
+			return A2(_elm_lang$core$Basics_ops['++'], '[ERRO HTTP] Bad Url: ', _p0._0);
 		case 'Timeout':
-			return A2(_user$project$Cadastro$Retorno, '[ERRO HTTP] Timeout', 666);
+			return '[ERRO HTTP] Timeout';
 		case 'NetworkError':
-			return A2(_user$project$Cadastro$Retorno, '[ERRO HTTP] Network Error', 666);
+			return '[ERRO HTTP] Network Error';
 		case 'BadStatus':
 			return A2(
-				_user$project$Cadastro$Retorno,
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'[ERRO HTTP] Status: ',
-					_elm_lang$core$Basics$toString(_p0._0.status.code)),
-				666);
+				_elm_lang$core$Basics_ops['++'],
+				'[ERRO HTTP] Status: ',
+				_elm_lang$core$Basics$toString(_p0._0.status.code));
 		default:
 			return A2(
-				_user$project$Cadastro$Retorno,
+				_elm_lang$core$Basics_ops['++'],
+				'[ERRO HTTP] Payload incorreto: ',
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					'[ERRO HTTP] Payload incorreto: ',
+					_elm_lang$core$Basics$toString(_p0._0),
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p0._0),
+						'(',
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							'(',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(_p0._1.status.code),
-								')')))),
-				666);
+							_elm_lang$core$Basics$toString(_p0._1.status.code),
+							')'))));
 	}
 };
+var _user$project$Cadastro$Retorno = F2(
+	function (a, b) {
+		return {mensagem: a, codigo: b};
+	});
 var _user$project$Cadastro$decodeInserirRetorno = A3(
 	_elm_lang$core$Json_Decode$map2,
 	_user$project$Cadastro$Retorno,
@@ -96,7 +87,7 @@ var _user$project$Cadastro$decodeInserirRetorno = A3(
 			_0: 'mensagem',
 			_1: {ctor: '[]'}
 		},
-		_elm_lang$core$Json_Decode$string),
+		_elm_lang$core$Json_Decode$int),
 	A2(
 		_elm_lang$core$Json_Decode$at,
 		{
@@ -109,56 +100,13 @@ var _user$project$Cadastro$Cadastro = F5(
 	function (a, b, c, d, e) {
 		return {email: a, nome: b, dtNascimento: c, senha: d, sexo: e};
 	});
-var _user$project$Cadastro$decodeCad = A6(
-	_elm_lang$core$Json_Decode$map5,
-	_user$project$Cadastro$Cadastro,
-	A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'email',
-			_1: {ctor: '[]'}
-		},
-		_elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'senha',
-			_1: {ctor: '[]'}
-		},
-		_elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'nome',
-			_1: {ctor: '[]'}
-		},
-		_elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'dtNascimento',
-			_1: {ctor: '[]'}
-		},
-		_elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'sexo',
-			_1: {ctor: '[]'}
-		},
-		_elm_lang$core$Json_Decode$string));
-var _user$project$Cadastro$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {nome: a, dtNascimento: b, sexo: c, email: d, senha: e, retorno: f};
+var _user$project$Cadastro$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {nome: a, dtNascimento: b, sexo: c, email: d, senha: e, retorno: f, error: g};
 	});
 var _user$project$Cadastro$init = function () {
-	var retornoIni = A2(_user$project$Cadastro$Retorno, '', 0);
-	return A6(_user$project$Cadastro$Model, '', '', '', '', '', retornoIni);
+	var retornoIni = A2(_user$project$Cadastro$Retorno, 0, 0);
+	return A7(_user$project$Cadastro$Model, '', '', '', '', '', retornoIni, '');
 }();
 var _user$project$Cadastro$Response = function (a) {
 	return {ctor: 'Response', _0: a};
@@ -232,7 +180,7 @@ var _user$project$Cadastro$update = F2(
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								retorno: _user$project$Cadastro$httpErrorRetorno(_p2._0)
+								error: _user$project$Cadastro$httpErrorRetorno(_p2._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -419,7 +367,19 @@ var _user$project$Cadastro$view = function (model) {
 													_elm_lang$core$Basics$toString(model.retorno)),
 												_1: {ctor: '[]'}
 											}),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														_elm_lang$core$Basics$toString(model.error)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}

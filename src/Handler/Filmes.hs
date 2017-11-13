@@ -16,3 +16,8 @@ postFilmesR = do
     film <- requireJsonBody :: Handler Filmes
     idFilm <- runDB $ insert film
     sendStatusJSON created201 $ Retorno 0 (toJSON $ fromSqlKey idFilm)
+    
+getConsultaFilmesR  :: Int -> Handler TypedContent
+getConsultaFilmesR idApi  = do
+    filme <- runDB $ selectList [FilmesIdapi ==. idApi] []    
+    sendStatusJSON created201 $ Retorno 0 (toJSON filme)
