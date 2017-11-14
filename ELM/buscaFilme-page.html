@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
-    <meta charsqet="UTF-8">
-    <title>BUSCA DE FILMES</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WebHaskell</title>
+
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="../static/css/materialize.css"  media="screen,projection"/>
+  <link rel="stylesheet" href="../static/css/cadastro-page.css">
+  <link rel="stylesheet" href="../static/css/buscaFilme.css">
 </head>
+
 <body>
-    <div id="appBuscaFilme"></div>
+  <header>
+    <nav>
+      <div class="nav-wrapper cyan">
+        <a href="#" class="brand-logo">MovieDex</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="cadastro-page.html" >Home</a></li>
+          <li><a href="login.html" class="btn green">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main id="appBuscaFilme"></main>
+  <footer>
+    &copy copyright-2017
+  </footer>
+
     <script type="text/javascript" src="buscaFilme.js"></script>
     <script>
         var nodeBuscaFilme = document.getElementById("appBuscaFilme");

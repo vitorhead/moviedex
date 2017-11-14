@@ -8,23 +8,23 @@ import Json.Decode exposing (..)
 
 {-
     API utilizada: The Movie DB API
-    https://developers.themoviedb.org/3 
-    
+    https://developers.themoviedb.org/3
+
     moviedexHaskell@gmail.com
     !Moviedex123
-    
+
     haskellmovie
     !Moviedex123
-    
+
     API KEY: 3a97c7968533c6effacc04e1449450b1
     Cadastrei uns dados fakes rs
-    
+
     PARAMETROS DE CONFIGURAÇÃO DA API:
     https://api.themoviedb.org/3/configuration?api_key=3a97c7968533c6effacc04e1449450b1
     A implementação recomendada é cachear isso no início do programa e ir usando.
-    No momento deixei fixo 
+    No momento deixei fixo
     http://image.tmdb.org/t/p/w154/<<posterpath>>
-    
+
     posterpath tamanhos:
     	"w92"
         "w154"
@@ -54,22 +54,22 @@ map14 : (a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> k -> l -> m -> n -> v
  Decoder value
 
 map14 f a b c d e f g h i j k l m n =
- f head(a) 
-   head(b) 
-   head(c) 
-   head(d) 
-   head(e) 
-   head(f) 
-   head(g) 
-   head(h) 
-   head(i) 
-   head(j) 
-   head(k) 
-   head(l) 
-   head(m) 
+ f head(a)
+   head(b)
+   head(c)
+   head(d)
+   head(e)
+   head(f)
+   head(g)
+   head(h)
+   head(i)
+   head(j)
+   head(k)
+   head(l)
+   head(m)
    head(n) :: map14 f a b c d e f g h i j k l m n
-   
-   
+
+
    type alias FilmeResult1 =
     {
      vote_count         : Int
@@ -104,9 +104,9 @@ httpErrorString error =
             "[ERRO HTTP] Status: " ++ toString response.status.code
 
         BadPayload message response ->
-            "[ERRO HTTP] Payload incorreto: "++ 
+            "[ERRO HTTP] Payload incorreto: "++
              toString message++"("++toString response.status.code++")"
-             
+
 urlFoto : String
 urlFoto = "http://image.tmdb.org/t/p/w154/"
 
@@ -114,68 +114,45 @@ urlFoto = "http://image.tmdb.org/t/p/w154/"
 -- ex: Hello World
 -- o Split vai dividir em uma lista: ["Hello", "World"]
 --   => split " " Hello World = ["Hello", "World"]
--- o Join vai unir a lista com um delimitador: "Hello%20World" 
+-- o Join vai unir a lista com um delimitador: "Hello%20World"
 --   => join "/" ["vitu", "home", "Download"]  = vitu/home/Downloads
 formatarNome : String -> String
 formatarNome nome = String.split " " nome |> String.join "%20"
 
-styleLinha : Html.Attribute Message
-styleLinha = style [
-                    ("background", "lightgray"),
-                    ("margin-bottom", "1px")
-                   ]
-
-styleListaLinhas : Html.Attribute Message
-styleListaLinhas = style [
-                            ("position", "relative"),
-                            ("right", "200"),
-                            ("top", "200"),
-                            ("display", "inline")
-                         ]
 formatFilmeResult : FilmeResult -> Html Message
-formatFilmeResult fr = 
+formatFilmeResult fr =
     let
         linhaFoto = case fr.poster_path of
                         Nothing -> "---"
                         Just x  -> urlFoto++x
     in
-    div [] 
+    div [class "info-filme"]
     [
-      img [src linhaFoto, style [("display", "inline")]] []
-     ,ul [styleListaLinhas]
+      img [class "responsive-img",src linhaFoto] []
+     ,div []
      [
-      li [styleLinha] [text <| "ID: "++(toString fr.id)]
-     ,li [styleLinha] [text <| "Titulo: "++fr.title]
-     ,li [styleLinha] [text <| "Nota:"++(toString fr.vote_average)]
-     ,li [styleLinha] [text <| "Data de lancamento:"++fr.release_date]
-     ,li [styleLinha] [text <| "Sinopse: "++fr.overview]
+      p [] [text <| "ID: "++(toString fr.id)]
+     ,p [] [text <| "Titulo: "++fr.title]
+     ,p [] [text <| "Nota:"++(toString fr.vote_average)]
+     ,p [] [text <| "Data de lancamento:"++fr.release_date]
+     ,p [] [text <| "Sinopse: "++fr.overview]
      ]
     ]
 
 --teste pra jogar no html
 viewFilme : Filme -> Html Message
 viewFilme f =
-    div [] 
+    div []
     [
      label [] [text <| "pagina "++toString f.page ++ " - " ++ "total :"++toString f.total_results ++ " - " ++ "total de paginas: "++toString f.total_pages]
     ,br [] []
     ,div [] [
-                label [] [text "DADOS DA BUSCA: "]
+                h5 [] [text "DADOS DA BUSCA: "]
                 ,br [] []
-                ,div [style[("position", "absolute")]] (List.map formatFilmeResult f.results)
+                ,div [class "grid"] (List.map formatFilmeResult f.results)
             ]
     ]
 
-view : Model -> Html Message
-view model = 
-    div [class "divGeral"]
-    [ 
-         input [type_ "text", placeholder "nome do filme que deseja buscar", required True, onInput NomeFilme] []
-        ,button [onClick Submit] [text "BUSCAR!"]
-        ,div [style [("color", "red")]] [text <| toString model.error]
-        --,div [] [text <| toString model.nomeFilme] 
-        ,div [] [viewFilme model.resultadoBusca]
-    ]
 
 type alias FilmeResult =
     {
@@ -196,12 +173,12 @@ type alias Filme =
     }
 
 
-type Message = 
+type Message =
       NomeFilme String
     | Submit
     | Response (Result Http.Error Filme)
 
-type alias Model = 
+type alias Model =
     {
      nomeFilme          : String
     ,error              : String
@@ -209,8 +186,8 @@ type alias Model =
     }
 
 init : Model
-init = 
-    let 
+init =
+    let
         initFilme = Filme 0 0 0 []
     in
         Model "" "" initFilme
@@ -228,36 +205,56 @@ decodeFilme = map4 Filme (at ["page"] int)
                          (at ["total_results"] int)
                          (at ["total_pages"] int)
                          (at ["results"] (Json.Decode.list decodeFilmeResult))
-                         
+
 getFilme : String -> Cmd Message
 getFilme nomefilme =
-    let 
+    let
         url = ("https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=en-US&query="++nomefilme++"&page=1&include_adult=false")
     in
         send Response <| Http.get url decodeFilme
-        
-        
+
+
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
     case msg of
         NomeFilme x ->
             ({model | nomeFilme = formatarNome x}, Cmd.none)
-        
+
         Submit ->
-            ({model | resultadoBusca = (Filme 0 0 0 []), 
+            ({model | resultadoBusca = (Filme 0 0 0 []),
                       error = ""}, getFilme model.nomeFilme)
-            
+
         Response x ->
             case x of
                 Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
                 Ok  y -> ({ model | resultadoBusca = y }, Cmd.none)
 
-    
+view : Model -> Html Message
+view model =
+    div [class "divGeral"]
+    [
+      div [class "container center-align"]
+      [
+        div [class "input-field inline"]
+        [
+        input [type_ "text", class "validate", placeholder "nome do filme que deseja buscar", required True, onInput NomeFilme] []
+        ,button [class "btn green waves-effect", onClick Submit] [text "BUSCAR!"]
+        ]
+      ]
+      ,div [class "center-align"]
+      [
+        div [style [("color", "red")]] [text <| toString model.error]
+        --,div [] [text <| toString model.nomeFilme]
+        ,div [] [viewFilme model.resultadoBusca]
+      ]
+    ]
+
+
 main =
-  program 
-    { 
+  program
+    {
      init = (init, Cmd.none)
     ,view = view
     ,update = update
     ,subscriptions = \_ -> Sub.none
-    }        
+    }

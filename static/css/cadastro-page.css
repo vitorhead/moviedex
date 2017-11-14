@@ -1,0 +1,49 @@
+body{
+  margin: 0;
+  font-family: Verdana, Tahoma, sans-serif;
+  background: #f4f4f4;
+}
+a{
+  text-decoration: none;
+}
+img{
+  width: 50%;
+}
+footer{
+  text-align: center;
+}
+.login{
+  width: 50%;
+  margin: auto;
+  padding: 1em;
+  background: #f4f4f4;
+  margin: 10px auto;
+}
+.brand-logo{
+  margin-left: 5%;
+}
+ /*FIM TOPO*/
+
+.apresentacao{
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  justify-content: center;
+  text-align: center;
+  /*IMAGEM*/
+  background-image: url("../images/pexels-photo-109669.jpeg");
+  background-size: cover;
+  background-position: center;
+  height: 50vh;
+}
+#inscreva{
+  background: darkgreen;
+}
+button{
+  margin-bottom: 10px;
+}
+.elm-form{
+  background: #f4f4f4;
+  padding: 1em;
+  margin-bottom: 10px;
+}
