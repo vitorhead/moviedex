@@ -1,11 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
+
 <head>
-    <meta charsqet="UTF-8">
-    <title>castor cadastro</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WebHaskell</title>
+
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="../static/css/materialize.css"  media="screen,projection"/>
+  <link rel="stylesheet" href="../static/css/cadastro-page.css">
 </head>
 <body>
-    <div id="appCadastro"></div>
+  <header>
+    <nav>
+      <div class="nav-wrapper cyan">
+        <a href="#" class="brand-logo">MovieDex</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="cadastro-page.html" >Home</a></li>
+          <li><a href="buscaFilme-page.html" class="btn green">Busca</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="apresentacao">
+      <h2>MovieDex</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil.</p>
+    </section>
+
+    <section id="quem-somos" class="container">
+      <div class="row center-align">
+        <a href="" class="col s12 m6">
+          <img src="" class="responsive-img circle" alt="GitHub Ramon">ramon
+        </a>
+        <p class="col s12 m6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?</p>
+      </div>
+      <hr>
+      <div class="row center-align">
+        <a href="https://github.com/vitorhead" class="col s12 m6">
+          <img src="../static/images/vitor.jpeg" class="responsive-img circle" alt="Vitor GitHub">
+        </a>
+        <p class="col s12 m6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?</p>
+      </div>
+      <hr>
+      <div class="row center-align">
+        <a href="https://github.com/castylho" class="col s12 m6">
+          <img src="../static/images/Yohann.jpg" class="responsive-img circle" alt="Yohann GitHub">
+        </a>
+        <p class="col s12 m6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?</p>
+      </div>
+    </section>
+
+    <section id="appCadastro"></section>
+  </main>
+
+    <footer>
+      &copy copyright-2017
+    </footer>
     <script type="text/javascript" src="cadastro.js"></script>
     <script>
         var nodeCadastro = document.getElementById("appCadastro");
