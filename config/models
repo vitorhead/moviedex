@@ -21,8 +21,11 @@ FilmesCad json
     idCadastro     CadastrosId
     deriving Show
 
-    
-
+Autenticacao json
+    auth           Text
+    idCadastro     CadastrosId
+    dtGerada       UTCTime
+    deriving Show
     
 
 
