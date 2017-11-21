@@ -9,6 +9,9 @@ import Import
 import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 import Utils
+import Autenticacao 
+import Data.Time
+import Control.Monad.IO.Class
 
 
 postCadastroR :: Handler TypedContent
@@ -16,6 +19,7 @@ postCadastroR = do
     cad <- requireJsonBody :: Handler Cadastros
     idCad <- runDB $ insert cad
     sendStatusJSON created201 $ Retorno 0 (toJSON $ fromSqlKey idCad)
+    
     
 deleteApagarCadR :: CadastrosId -> Handler TypedContent
 deleteApagarCadR idCad = do
@@ -38,19 +42,21 @@ getBuscaCadR idCad = do
 
 getLoginUsuarioR :: Text -> Text -> Handler TypedContent
 getLoginUsuarioR login senha = do
-    cad' <- runDB $ selectList [CadastrosEmail ==. login, CadastrosSenha ==. senha] []
-    --cad' é entity
-    cad <- return $ fmap (\(Entity _ cadastro) -> cadastro) cad'
-    case cad of
-        -- []  -> sendStatusJSON notFound404 $ Retorno 0 ("Não encontrado!")
-        -- [x] -> sendStatusJSON ok200 $ Retorno 0 (toJSON x)
-        []  -> sendStatusJSON notFound404 $ object (["resp" .= (show login ++" Não encontrado!")])
-        [x] -> sendStatusJSON ok200 $ toJSON x
-    
-    -- buscaCad <- runDB $ getBy (UniqueEmail login)
-    -- case buscaCad of
-    --     Nothing ->  sendStatusJSON notFound404 $ Retorno 404 "Não encontrado!"
-    --     Just cad -> sendStatusJSON ok200 $ Retorno 0 (toJSON cad)
+    buscaCad <- runDB $ getBy (UniqueEmail login)
+    case buscaCad of
+        Nothing ->  sendStatusJSON notFound404 $ Retorno 100 $ object ( ["resp" .= (show login ++" Não encontrado!"),
+                                                                      "idcadastro" .= (show ""),
+                                                                      "autenticacao" .= (show "")] )
+        
+        --liftIO : transformer // utilizado por causa do ActionT                                                              
+        Just (Entity idcad _) -> do
+                                    auth <- liftIO $ stringRandom 100 
+                                    --getCurrentTime volta uma IO UTCTTime... liftIO pra trabalhar com o MonadT
+                                    dtNow <- liftIO getCurrentTime
+                                    idAuth <- runDB $ insert (Autenticacao (pack auth) idcad dtNow)
+                                    sendStatusJSON ok200 $ Retorno 0 $ object ( ["resp" .= (show ""),
+                                                                                 "idcadastro" .= (fromSqlKey idcad),
+                                                                                 "autenticacao" .= (show auth)] )
                     
 
 
