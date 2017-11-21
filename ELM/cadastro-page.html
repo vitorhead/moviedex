@@ -26,45 +26,16 @@
     </nav>
   </header>
 
-  <main>
-    <section class="apresentacao">
-      <h2>MovieDex</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil.</p>
-    </section>
-
-    <section id="quem-somos" class="container">
-      <div class="row center-align">
-        <a href="" class="col s12 m6">
-          <img src="" class="responsive-img circle" alt="GitHub Ramon">ramon
-        </a>
-        <p class="col s12 m6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?</p>
-      </div>
-      <hr>
-      <div class="row center-align">
-        <a href="https://github.com/vitorhead" class="col s12 m6">
-          <img src="../static/images/vitor.jpeg" class="responsive-img circle" alt="Vitor GitHub">
-        </a>
-        <p class="col s12 m6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?</p>
-      </div>
-      <hr>
-      <div class="row center-align">
-        <a href="https://github.com/castylho" class="col s12 m6">
-          <img src="../static/images/Yohann.jpg" class="responsive-img circle" alt="Yohann GitHub">
-        </a>
-        <p class="col s12 m6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?</p>
-      </div>
-    </section>
-
-    <section id="appCadastro"></section>
+  <main id="appMain">
   </main>
 
     <footer>
       &copy copyright-2017
     </footer>
-    <script type="text/javascript" src="cadastro.js"></script>
+    <script type="text/javascript" src="main.js"></script>
     <script>
-        var nodeCadastro = document.getElementById("appCadastro");
-        var appCadastro = Elm.Cadastro.embed(nodeCadastro);
+        var nodeCadastro = document.getElementById("appMain");
+        var appCadastro = Elm.Main.embed(nodeCadastro);
     </script>
 </body>
 </html>
