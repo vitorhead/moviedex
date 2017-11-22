@@ -3,14 +3,16 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/cadastro/inserir                     CadastroR             POST
-/cadastro/apagar/#CadastrosId         ApagarCadR            DELETE
-/cadastro/alterar/#CadastrosId        AlterarCadR           PUT
-/cadastro/busca/#CadastrosId          BuscaCadR             GET
-/cadastro/busca/#Text/#Text/login     LoginUsuarioR         GET
+/cadastro/inserir                           CadastroR             POST
+/cadastro/apagar/#CadastrosId               ApagarCadR            DELETE
+/cadastro/alterar/#CadastrosId              AlterarCadR           PUT
+/cadastro/busca/#CadastrosId                BuscaCadR             GET
+/cadastro/busca/#Text/#Text/login           LoginUsuarioR         GET
 
-/filmes/inserir                       FilmesR               POST
-/filmes/consultaFilme/#Int            ConsultaFilmesR       GET
+/filmes/inserir                             FilmesR               POST
+/filmes/consultaFilme/#Int                  ConsultaFilmesR       GET
 
-/filmescad/inserir                    FilmesCadR            POST
-/filmescad/listarfilmes/#CadastrosId  ListarFilmesR         GET
+/filmescad/inserir                          FilmesCadR            POST
+/filmescad/listarfilmes/#CadastrosId        ListarFilmesR         GET
+/filmescad/listarfavoritos/#CadastrosId     ListarFavoritosR      GET
+/filmescad/listarassistidos/#CadastrosId    ListarAssistidosR     GET

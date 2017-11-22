@@ -19,6 +19,8 @@ Filmes json
 FilmesCad json
     idFilme        FilmesId
     idCadastro     CadastrosId
+    assistido      Bool
+    favorito       Bool
     deriving Show
 
 Autenticacao json

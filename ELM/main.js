@@ -11997,16 +11997,12 @@ var _user$project$Main$viewRoot = A2(
 									_elm_lang$html$Html$a,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$href(''),
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Main$Mudar(_user$project$Main$Cadastro)),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Main$Mudar(_user$project$Main$Cadastro)),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('btn green'),
-												_1: {ctor: '[]'}
-											}
+											_0: _elm_lang$html$Html_Attributes$class('btn green'),
+											_1: {ctor: '[]'}
 										}
 									},
 									{
@@ -12020,12 +12016,8 @@ var _user$project$Main$viewRoot = A2(
 										_elm_lang$html$Html$a,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$href(''),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('btn'),
-												_1: {ctor: '[]'}
-											}
+											_0: _elm_lang$html$Html_Attributes$class('btn'),
+											_1: {ctor: '[]'}
 										},
 										{
 											ctor: '::',
