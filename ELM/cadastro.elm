@@ -126,39 +126,33 @@ update msg model =
 
 view : Model -> Html Message
 view model =
-  div [id "inscreva", class "row"]
+  section [class "center-align form-margin"]
   [
-    p [class "col s12 center-align"] [text "Cadastre-se Agora"]
-    ,div [class "elm-form col s10 offset-s1 m8 offset-m2 l6 offset-l3"]
-    [
-      div [class "input-field"]
+      div [class "elm-form col s12 m6 l6"]
       [
-        input [type_ "text", required True, class "validate", onInput Nome] []
-        ,label [class "active"] [text "Name"]
+        div [class "input-field"] --NOME
+        [
+          input [type_ "text", required True, class "validate", onInput Nome] []
+          ,label [class "active"] [text "Name"]
+        ]
+        ,div [class "input-field"] --EMAIL
+        [
+          input [type_ "email", required True,class "validate", onInput Email] []
+          ,label [class "active"] [text "Email"]
+        ]
+        ,div [class "input-field"] --SENHA
+        [
+          input [type_ "password", required True,class "validate", onInput Senha] []
+          ,label [class "active"] [text "Password"]
+        ]
+        ,div [class "input-field"] --DATA NASCIMENTO
+        [
+        input [] []
+        ,label [class "active"] [text "Data Nascimento"]
+        ]
+         --SEXO SELECT/RADIO
+        ,button [type_ "submit", class "btn waves-effect green center-align"] [text "Cadastrar"]
       ]
-      ,div [class "input-field"]
-      [
-        input [type_ "text", required True,class "validate", onInput DtNascimento] []
-        ,label [class "active"] [text "Birth-Date"]
-      ]
-      ,div [class "input-field"]
-      [
-        input [type_ "text", required True,class "validate", onInput Sexo] []
-        ,label [class "active"] [text "Sex"]
-      ]
-      ,div [class "input-field"]
-      [
-        input [type_ "email", required True,class "validate", onInput Email] []
-        ,label [class "active"] [text "Email"]
-      ]
-      ,div [class "input-field"]
-      [
-        input [type_ "password", required True,class "validate", onInput Senha] []
-        ,label [class "active"] [text "Password"]
-      ]
-
-      ,button [class "btn green waves-effect", id "btnEnviar", onClick Submit] [text "go"]
-    ]
   ]
 
 main =

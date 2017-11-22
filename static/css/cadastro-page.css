@@ -43,7 +43,11 @@ button{
   margin-bottom: 10px;
 }
 .elm-form{
-  background: #f4f4f4;
+  max-width: 960px;
+  margin: auto;
+  background: #fff;
   padding: 1em;
-  margin-bottom: 10px;
+}
+.form-margin{
+  margin-top: 1em;
 }
