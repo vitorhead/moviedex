@@ -205,35 +205,6 @@ var _user$project$Cadastro$Email = function (a) {
 var _user$project$Cadastro$Sexo = function (a) {
 	return {ctor: 'Sexo', _0: a};
 };
-var _user$project$Cadastro$radio = function (value) {
-	return A2(
-		_elm_lang$html$Html$label,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$input,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$type_('radio'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$name('font-size'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Cadastro$Sexo),
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(value),
-				_1: {ctor: '[]'}
-			}
-		});
-};
 var _user$project$Cadastro$DtNascimento = function (a) {
 	return {ctor: 'DtNascimento', _0: a};
 };

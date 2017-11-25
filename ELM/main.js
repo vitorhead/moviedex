@@ -11605,35 +11605,6 @@ var _user$project$Cadastro$Email = function (a) {
 var _user$project$Cadastro$Sexo = function (a) {
 	return {ctor: 'Sexo', _0: a};
 };
-var _user$project$Cadastro$radio = function (value) {
-	return A2(
-		_elm_lang$html$Html$label,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$input,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$type_('radio'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$name('font-size'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Cadastro$Sexo),
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(value),
-				_1: {ctor: '[]'}
-			}
-		});
-};
 var _user$project$Cadastro$DtNascimento = function (a) {
 	return {ctor: 'DtNascimento', _0: a};
 };
@@ -11870,27 +11841,426 @@ var _user$project$Cadastro$main = _elm_lang$html$Html$program(
 		}
 	})();
 
+var _user$project$Login$styleBotaoGO = _elm_lang$html$Html_Attributes$style(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'background', _1: '#009E73'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'padding', _1: '01em'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '1px'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'letter-spacing', _1: '5px'},
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	});
+var _user$project$Login$styleLogin = _elm_lang$html$Html_Attributes$style(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'background', _1: '#f4f4f4'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'padding', _1: '1em'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '10px'},
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$Login$viewCad = function (c) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$label,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(c.nome)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$label,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(c.email)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$label,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(c.senha)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$label,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(c.dtNascimento)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$label,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										_elm_lang$core$Basics$toString(c.sexo)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Login$httpErrorString = function (error) {
+	var _p0 = error;
+	switch (_p0.ctor) {
+		case 'BadUrl':
+			return A2(_elm_lang$core$Basics_ops['++'], '[ERRO HTTP] Bad Url: ', _p0._0);
+		case 'Timeout':
+			return '[ERRO HTTP] Timeout';
+		case 'NetworkError':
+			return '[ERRO HTTP] Network Error';
+		case 'BadStatus':
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				'[ERRO HTTP] Status: ',
+				_elm_lang$core$Basics$toString(_p0._0.status.code));
+		default:
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				'[ERRO HTTP] Payload incorreto: ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(_p0._0),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'(',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p0._1.status.code),
+							')'))));
+	}
+};
+var _user$project$Login$Cadastro = F5(
+	function (a, b, c, d, e) {
+		return {email: a, nome: b, dtNascimento: c, senha: d, sexo: e};
+	});
+var _user$project$Login$decodeCad = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$Login$Cadastro,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'email',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'nome',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'dtNascimento',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'senha',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'sexo',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string));
+var _user$project$Login$Model = F4(
+	function (a, b, c, d) {
+		return {login: a, senha: b, error: c, cad: d};
+	});
+var _user$project$Login$init = function () {
+	var cadIni = A5(_user$project$Login$Cadastro, '', '', '', '', '');
+	return A4(_user$project$Login$Model, '', '', '', cadIni);
+}();
+var _user$project$Login$Retorno = F2(
+	function (a, b) {
+		return {mensagem: a, codigo: b};
+	});
+var _user$project$Login$decodeRetorno = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Login$Retorno,
+	_elm_lang$core$Json_Decode$maybe(
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'mensagem',
+				_1: {ctor: '[]'}
+			},
+			_user$project$Login$decodeCad)),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'codigo',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int));
+var _user$project$Login$Response = function (a) {
+	return {ctor: 'Response', _0: a};
+};
+var _user$project$Login$getLogin = F2(
+	function (login, senha) {
+		var url = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'https://haskelleta-romefeller.c9users.io/cadastro/busca/',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				login,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'/',
+					A2(_elm_lang$core$Basics_ops['++'], senha, '/login'))));
+		return A2(
+			_elm_lang$http$Http$send,
+			_user$project$Login$Response,
+			A2(_elm_lang$http$Http$get, url, _user$project$Login$decodeCad));
+	});
+var _user$project$Login$update = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
+			case 'Login':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{login: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Senha':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{senha: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Submit':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A2(_user$project$Login$getLogin, model.login, model.senha)
+				};
+			default:
+				var _p2 = _p1._0;
+				if (_p2.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _user$project$Login$httpErrorString(_p2._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{cad: _p2._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _user$project$Login$Submit = {ctor: 'Submit'};
+var _user$project$Login$Senha = function (a) {
+	return {ctor: 'Senha', _0: a};
+};
+var _user$project$Login$Login = function (a) {
+	return {ctor: 'Login', _0: a};
+};
+var _user$project$Login$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('divGeral'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('text'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('login'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$required(true),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$Login$Login),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('text'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$placeholder('senha'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$required(true),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_user$project$Login$Senha),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _user$project$Login$styleBotaoGO,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$id('btnEnviar'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Login$Submit),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('GO'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(model.error)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _user$project$Login$viewCad(model.cad),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Login$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _user$project$Login$init, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$Login$view,
+		update: _user$project$Login$update,
+		subscriptions: function (_p3) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
+
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'Mudar') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{janela: _p0._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		switch (_p0.ctor) {
+			case 'Mudar':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{janela: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PgLogin':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {cadastro: a, janela: b};
+var _user$project$Main$Model = F3(
+	function (a, b, c) {
+		return {login: a, cadastro: b, janela: c};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
-var _user$project$Main$init = A2(_user$project$Main$Model, _user$project$Cadastro$init, _user$project$Main$Root);
+var _user$project$Main$init = A3(_user$project$Main$Model, _user$project$Login$init, _user$project$Cadastro$init, _user$project$Main$Root);
+var _user$project$Main$Login = {ctor: 'Login'};
 var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
 var _user$project$Main$Mudar = function (a) {
 	return {ctor: 'Mudar', _0: a};
@@ -11935,7 +12305,7 @@ var _user$project$Main$viewRoot = A2(
 							{
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$button,
+									_elm_lang$html$Html$a,
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html_Events$onClick(
@@ -11954,11 +12324,16 @@ var _user$project$Main$viewRoot = A2(
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$button,
+										_elm_lang$html$Html$a,
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html_Attributes$class('btn'),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Main$Mudar(_user$project$Main$Login)),
+												_1: {ctor: '[]'}
+											}
 										},
 										{
 											ctor: '::',
@@ -12169,19 +12544,28 @@ var _user$project$Main$viewRoot = A2(
 			_1: {ctor: '[]'}
 		}
 	});
+var _user$project$Main$PgLogin = function (a) {
+	return {ctor: 'PgLogin', _0: a};
+};
 var _user$project$Main$PgCadastro = function (a) {
 	return {ctor: 'PgCadastro', _0: a};
 };
 var _user$project$Main$view = function (model) {
 	var escolhido = function () {
 		var _p1 = model.janela;
-		if (_p1.ctor === 'Cadastro') {
-			return A2(
-				_elm_lang$html$Html$map,
-				_user$project$Main$PgCadastro,
-				_user$project$Cadastro$view(model.cadastro));
-		} else {
-			return _user$project$Main$viewRoot;
+		switch (_p1.ctor) {
+			case 'Login':
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgLogin,
+					_user$project$Login$view(model.login));
+			case 'Cadastro':
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgCadastro,
+					_user$project$Cadastro$view(model.cadastro));
+			default:
+				return _user$project$Main$viewRoot;
 		}
 	}();
 	return escolhido;
@@ -12200,6 +12584,10 @@ var Elm = {};
 Elm['Cadastro'] = Elm['Cadastro'] || {};
 if (typeof _user$project$Cadastro$main !== 'undefined') {
     _user$project$Cadastro$main(Elm['Cadastro'], 'Cadastro', undefined);
+}
+Elm['Login'] = Elm['Login'] || {};
+if (typeof _user$project$Login$main !== 'undefined') {
+    _user$project$Login$main(Elm['Login'], 'Login', undefined);
 }
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {

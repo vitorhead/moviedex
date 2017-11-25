@@ -1,24 +1,28 @@
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'Mudar') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{janela: _p0._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		switch (_p0.ctor) {
+			case 'Mudar':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{janela: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PgLogin':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {cadastro: a, janela: b};
+var _user$project$Main$Model = F3(
+	function (a, b, c) {
+		return {login: a, cadastro: b, janela: c};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
-var _user$project$Main$init = A2(_user$project$Main$Model, _user$project$Cadastro$init, _user$project$Main$Root);
+var _user$project$Main$init = A3(_user$project$Main$Model, _user$project$Login$init, _user$project$Cadastro$init, _user$project$Main$Root);
+var _user$project$Main$Login = {ctor: 'Login'};
 var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
 var _user$project$Main$Mudar = function (a) {
 	return {ctor: 'Mudar', _0: a};
@@ -63,7 +67,7 @@ var _user$project$Main$viewRoot = A2(
 							{
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$button,
+									_elm_lang$html$Html$a,
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html_Events$onClick(
@@ -82,11 +86,16 @@ var _user$project$Main$viewRoot = A2(
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$button,
+										_elm_lang$html$Html$a,
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html_Attributes$class('btn'),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Main$Mudar(_user$project$Main$Login)),
+												_1: {ctor: '[]'}
+											}
 										},
 										{
 											ctor: '::',
@@ -297,19 +306,28 @@ var _user$project$Main$viewRoot = A2(
 			_1: {ctor: '[]'}
 		}
 	});
+var _user$project$Main$PgLogin = function (a) {
+	return {ctor: 'PgLogin', _0: a};
+};
 var _user$project$Main$PgCadastro = function (a) {
 	return {ctor: 'PgCadastro', _0: a};
 };
 var _user$project$Main$view = function (model) {
 	var escolhido = function () {
 		var _p1 = model.janela;
-		if (_p1.ctor === 'Cadastro') {
-			return A2(
-				_elm_lang$html$Html$map,
-				_user$project$Main$PgCadastro,
-				_user$project$Cadastro$view(model.cadastro));
-		} else {
-			return _user$project$Main$viewRoot;
+		switch (_p1.ctor) {
+			case 'Login':
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgLogin,
+					_user$project$Login$view(model.login));
+			case 'Cadastro':
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgCadastro,
+					_user$project$Cadastro$view(model.cadastro));
+			default:
+				return _user$project$Main$viewRoot;
 		}
 	}();
 	return escolhido;

@@ -120,8 +120,7 @@ update msg model =
             case x of
                 Err y -> ({ model | error = (httpErrorRetorno y) }, Cmd.none)
                 Ok  y -> ({ model | retorno = y }, Cmd.none)
-                -- Err y -> (model, Cmd.none)
-                -- Ok  y -> (model, Cmd.none)
+  
 
 
 view : Model -> Html Message

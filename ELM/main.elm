@@ -3,37 +3,37 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
---import Login as ModuloLogin
+import Login as ModuloLogin
 import Cadastro as ModuloCadastro
 
 
 type Pagina = Cadastro
-            --| Login
+            | Login
             | Root
 
 type Message =
      PgCadastro ModuloCadastro.Message
-  --  |  PgLogin ModuloLogin.Message
+    |  PgLogin ModuloLogin.Message
     | Mudar Pagina
 
 
 type alias Model =
     {
-     --login    : ModuloLogin.Model
-    cadastro : ModuloCadastro.Model
+    login    : ModuloLogin.Model
+    ,cadastro : ModuloCadastro.Model
     ,janela   : Pagina
     }
 
 init : Model
 init = Model
-{--        ModuloLogin.init--} ModuloCadastro.init Root
+        ModuloLogin.init ModuloCadastro.init Root
 
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
     case msg of
         Mudar p -> ({model | janela = p}, Cmd.none)
 
---        PgLogin p -> (model, Cmd.none)
+        PgLogin p -> (model, Cmd.none)
 
         PgCadastro p -> (model, Cmd.none)
 
@@ -48,7 +48,7 @@ viewRoot =  div []
         ,div []
         [
           a [onClick (Mudar Cadastro) ,class "btn green"] [text "Cadastro"]
-          ,a [class "btn"] [text "Login"]
+          ,a [class "btn", onClick(Mudar Login)] [text "Login"]
         ]
       ]
     ,section [id "quem-somos", class "container"]
@@ -84,7 +84,7 @@ view : Model -> Html Message
 view model =
     let escolhido =
         case model.janela of
-          --  Login -> Html.map PgLogin <| ModuloLogin.view model.login
+            Login -> Html.map PgLogin <| ModuloLogin.view model.login
 
             Cadastro -> Html.map PgCadastro <| ModuloCadastro.view model.cadastro
 
