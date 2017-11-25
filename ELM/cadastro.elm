@@ -54,11 +54,13 @@ type Message =
       Nome String
     | DtNascimento String
     -- | SetDatePicker DatePicker.Msg
-    | Sexo String
+    | SwitchSexo Sexo
     | Email String
     | Senha String
     | Submit
     | Response (Result Http.Error Retorno)
+
+type Sexo = M | F
 
 init : Model
 init =
@@ -112,8 +114,10 @@ update msg model =
         DtNascimento x ->
             ({model | dtNascimento = x}, Cmd.none)
 
-        Sexo x ->
-            ({model | sexo = x}, Cmd.none)
+        SwitchSexo x ->
+            case x of
+              M -> ({model | sexo = "M"}, Cmd.none)
+              F -> ({model | sexo = "F"}, Cmd.none)
 
         Submit ->
             (model, postCadastro model urlPOST)
@@ -151,10 +155,15 @@ view model =
         ]
         ,div [class "input-field"] --DATA NASCIMENTO
         [
-        input [placeholder "dd/mm/aaaa"] []
-        ,label [class "active"] [text "Data de nascimento"]
+          input [placeholder "dd/mm/aaaa"] []
+          ,label [class "active"] [text "Data de nascimento"]
         ]
-         --SEXO SELECT/RADIO
+        ,div []
+        [
+          button [class "btn blue", onClick (SwitchSexo M)] [text "M"]
+          ,button [class "btn pink", onClick (SwitchSexo F)] [text "F"]
+          ,button [] [text model.sexo]
+        ]--SEXO SELECT/RADIO
         ,button [type_ "submit", class "btn waves-effect green center-align"] [text "Cadastrar"]
       ]
   ]

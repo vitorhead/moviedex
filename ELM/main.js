@@ -11558,14 +11558,25 @@ var _user$project$Cadastro$update = F2(
 						{dtNascimento: _p1._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'Sexo':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{sexo: _p1._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+			case 'SwitchSexo':
+				var _p2 = _p1._0;
+				if (_p2.ctor === 'M') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{sexo: 'M'}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{sexo: 'F'}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
 			case 'Submit':
 				return {
 					ctor: '_Tuple2',
@@ -11573,14 +11584,14 @@ var _user$project$Cadastro$update = F2(
 					_1: A2(_user$project$Cadastro$postCadastro, model, _user$project$Cadastro$urlPOST)
 				};
 			default:
-				var _p2 = _p1._0;
-				if (_p2.ctor === 'Err') {
+				var _p3 = _p1._0;
+				if (_p3.ctor === 'Err') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								error: _user$project$Cadastro$httpErrorRetorno(_p2._0)
+								error: _user$project$Cadastro$httpErrorRetorno(_p3._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -11589,7 +11600,7 @@ var _user$project$Cadastro$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{retorno: _p2._0}),
+							{retorno: _p3._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
@@ -11602,8 +11613,8 @@ var _user$project$Cadastro$Senha = function (a) {
 var _user$project$Cadastro$Email = function (a) {
 	return {ctor: 'Email', _0: a};
 };
-var _user$project$Cadastro$Sexo = function (a) {
-	return {ctor: 'Sexo', _0: a};
+var _user$project$Cadastro$SwitchSexo = function (a) {
+	return {ctor: 'SwitchSexo', _0: a};
 };
 var _user$project$Cadastro$DtNascimento = function (a) {
 	return {ctor: 'DtNascimento', _0: a};
@@ -11611,6 +11622,8 @@ var _user$project$Cadastro$DtNascimento = function (a) {
 var _user$project$Cadastro$Nome = function (a) {
 	return {ctor: 'Nome', _0: a};
 };
+var _user$project$Cadastro$F = {ctor: 'F'};
+var _user$project$Cadastro$M = {ctor: 'M'};
 var _user$project$Cadastro$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$section,
@@ -11815,22 +11828,80 @@ var _user$project$Cadastro$view = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$button,
+										_elm_lang$html$Html$div,
+										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$type_('submit'),
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('btn blue'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Cadastro$SwitchSexo(_user$project$Cadastro$M)),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('M'),
+													_1: {ctor: '[]'}
+												}),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('btn waves-effect green center-align'),
-												_1: {ctor: '[]'}
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('btn pink'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(
+																_user$project$Cadastro$SwitchSexo(_user$project$Cadastro$F)),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('F'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$button,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(model.sexo),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
 											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Cadastrar'),
-											_1: {ctor: '[]'}
 										}),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('submit'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('btn waves-effect green center-align'),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Cadastrar'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
@@ -11844,7 +11915,7 @@ var _user$project$Cadastro$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$Cadastro$init, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$Cadastro$view,
 		update: _user$project$Cadastro$update,
-		subscriptions: function (_p3) {
+		subscriptions: function (_p4) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
