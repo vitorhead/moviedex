@@ -131,6 +131,18 @@ update msg model =
 
 -- formataData : String -> String
 -- formataData dt = String.split "/"
+--          a [class "waves-effect waves-light blue", onClick (SwitchSexo M)] [text "M"]
+          --,a [class "waves-effect waves-light pink", onClick (SwitchSexo F)] [text "F"]
+
+checaSexo : Bool -> Message
+checaSexo x =
+  case x of
+    True ->  SwitchSexo F
+    False ->  SwitchSexo M
+
+onChange : msg -> Attribute msg
+onChange message =
+  on "change" (Decode.succeed message)
 
 view : Model -> Html Message
 view model =
@@ -158,10 +170,15 @@ view model =
           input [placeholder "dd/mm/aaaa"] []
           ,label [class "active"] [text "Data de nascimento"]
         ]
-        ,div []
+        ,div [class "switch"]
         [
-          button [class "btn blue", onClick (SwitchSexo M)] [text "M"]
-          ,button [class "btn pink", onClick (SwitchSexo F)] [text "F"]
+          label []
+          [
+            text "M"
+          ,input [type_ "checkbox", onCheck checaSexo] []
+          ,span [class "lever"] []
+          ,text "F"
+          ]
           ,button [] [text model.sexo]
         ]--SEXO SELECT/RADIO
         ,button [type_ "submit", class "btn waves-effect green center-align"] [text "Cadastrar"]

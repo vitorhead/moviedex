@@ -1,3 +1,9 @@
+var _user$project$Cadastro$onChange = function (message) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		_elm_lang$core$Json_Decode$succeed(message));
+};
 var _user$project$Cadastro$encodeCad = function (cad) {
 	var lstCad = {
 		ctor: '::',
@@ -224,6 +230,14 @@ var _user$project$Cadastro$Nome = function (a) {
 };
 var _user$project$Cadastro$F = {ctor: 'F'};
 var _user$project$Cadastro$M = {ctor: 'M'};
+var _user$project$Cadastro$checaSexo = function (x) {
+	var _p4 = x;
+	if (_p4 === true) {
+		return _user$project$Cadastro$SwitchSexo(_user$project$Cadastro$F);
+	} else {
+		return _user$project$Cadastro$SwitchSexo(_user$project$Cadastro$M);
+	}
+};
 var _user$project$Cadastro$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$section,
@@ -429,57 +443,62 @@ var _user$project$Cadastro$view = function (model) {
 									ctor: '::',
 									_0: A2(
 										_elm_lang$html$Html$div,
-										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('switch'),
+											_1: {ctor: '[]'}
+										},
 										{
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$button,
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('btn blue'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(
-															_user$project$Cadastro$SwitchSexo(_user$project$Cadastro$M)),
-														_1: {ctor: '[]'}
-													}
-												},
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: _elm_lang$html$Html$text('M'),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$input,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Events$onCheck(_user$project$Cadastro$checaSexo),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$span,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$class('lever'),
+																	_1: {ctor: '[]'}
+																},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('F'),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
 												}),
 											_1: {
 												ctor: '::',
 												_0: A2(
 													_elm_lang$html$Html$button,
+													{ctor: '[]'},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('btn pink'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onClick(
-																_user$project$Cadastro$SwitchSexo(_user$project$Cadastro$F)),
-															_1: {ctor: '[]'}
-														}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('F'),
+														_0: _elm_lang$html$Html$text(model.sexo),
 														_1: {ctor: '[]'}
 													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$button,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(model.sexo),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}
+												_1: {ctor: '[]'}
 											}
 										}),
 									_1: {
@@ -515,7 +534,7 @@ var _user$project$Cadastro$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$Cadastro$init, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$Cadastro$view,
 		update: _user$project$Cadastro$update,
-		subscriptions: function (_p4) {
+		subscriptions: function (_p5) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
