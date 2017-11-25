@@ -11818,8 +11818,12 @@ var _user$project$Cadastro$view = function (model) {
 											_elm_lang$html$Html$input,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$placeholder('dd/mm/aaaa'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$html$Html_Attributes$placeholder('aaaa-mm-dd'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$Cadastro$DtNascimento),
+													_1: {ctor: '[]'}
+												}
 											},
 											{ctor: '[]'}),
 										_1: {
@@ -11911,7 +11915,11 @@ var _user$project$Cadastro$view = function (model) {
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$class('btn waves-effect green center-align'),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(_user$project$Cadastro$Submit),
+														_1: {ctor: '[]'}
+													}
 												}
 											},
 											{
@@ -12084,28 +12092,53 @@ var _user$project$Login$decodeCad = A6(
 		_elm_lang$core$Json_Decode$string));
 var _user$project$Login$Model = F4(
 	function (a, b, c, d) {
-		return {login: a, senha: b, error: c, cad: d};
+		return {login: a, senha: b, error: c, ret: d};
 	});
-var _user$project$Login$init = function () {
-	var cadIni = A5(_user$project$Login$Cadastro, '', '', '', '', '');
-	return A4(_user$project$Login$Model, '', '', '', cadIni);
-}();
 var _user$project$Login$Retorno = F2(
 	function (a, b) {
-		return {mensagem: a, codigo: b};
+		return {codigo: a, mensagem: b};
 	});
+var _user$project$Login$Mensagem = F3(
+	function (a, b, c) {
+		return {autenticacao: a, idcadastro: b, resp: c};
+	});
+var _user$project$Login$init = function () {
+	var retIni = A2(
+		_user$project$Login$Retorno,
+		0,
+		A3(_user$project$Login$Mensagem, '', 0, ''));
+	return A4(_user$project$Login$Model, '', '', '', retIni);
+}();
+var _user$project$Login$decodeMensagem = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$Login$Mensagem,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'autenticacao',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'idcadastro',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'resp',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string));
 var _user$project$Login$decodeRetorno = A3(
 	_elm_lang$core$Json_Decode$map2,
 	_user$project$Login$Retorno,
-	_elm_lang$core$Json_Decode$maybe(
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'mensagem',
-				_1: {ctor: '[]'}
-			},
-			_user$project$Login$decodeCad)),
 	A2(
 		_elm_lang$core$Json_Decode$at,
 		{
@@ -12113,7 +12146,15 @@ var _user$project$Login$decodeRetorno = A3(
 			_0: 'codigo',
 			_1: {ctor: '[]'}
 		},
-		_elm_lang$core$Json_Decode$int));
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'mensagem',
+			_1: {ctor: '[]'}
+		},
+		_user$project$Login$decodeMensagem));
 var _user$project$Login$Response = function (a) {
 	return {ctor: 'Response', _0: a};
 };
@@ -12132,7 +12173,7 @@ var _user$project$Login$getLogin = F2(
 		return A2(
 			_elm_lang$http$Http$send,
 			_user$project$Login$Response,
-			A2(_elm_lang$http$Http$get, url, _user$project$Login$decodeCad));
+			A2(_elm_lang$http$Http$get, url, _user$project$Login$decodeRetorno));
 	});
 var _user$project$Login$update = F2(
 	function (msg, model) {
@@ -12151,7 +12192,9 @@ var _user$project$Login$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{senha: _p1._0}),
+						{
+							senha: _billstclair$elm_sha256$Sha256$sha256(_p1._0)
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Submit':
@@ -12177,7 +12220,7 @@ var _user$project$Login$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{cad: _p2._0}),
+							{ret: _p2._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
@@ -12329,7 +12372,18 @@ var _user$project$Login$view = function (model) {
 						}
 					}
 				}),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(model.error),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _user$project$Login$main = _elm_lang$html$Html$program(
@@ -12355,7 +12409,10 @@ var _user$project$Main$init = {
 			'',
 			'',
 			'',
-			A5(_user$project$Login$Cadastro, '', '', '', '', '')),
+			A2(
+				_user$project$Login$Retorno,
+				0,
+				A3(_user$project$Login$Mensagem, '', 0, ''))),
 		cadastro: A7(
 			_user$project$Cadastro$Model,
 			'',
@@ -12719,7 +12776,14 @@ var _user$project$Main$view = function (model) {
 				return _user$project$Main$viewRoot;
 		}
 	}();
-	return escolhido;
+	return _elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '') ? escolhido : A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('logouuuuuuuuu'),
+			_1: {ctor: '[]'}
+		});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{

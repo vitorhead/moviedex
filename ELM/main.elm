@@ -31,7 +31,7 @@ init : (Model, Cmd Message)
 --         janela = Root
 --       in
         --Model login cadastro janela, 
-init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Cadastro "" "" "" "" ""),
+init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Retorno 0 (ModuloLogin.Mensagem "" 0 "")),
          cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
          janela = Root}, Cmd.none)
       
@@ -53,6 +53,7 @@ update msg model =
             updt = ModuloCadastro.update p model.cadastro
           in
             ({model | cadastro = Tuple.first updt}, Cmd.map PgCadastro <| Tuple.second updt)
+
 
 
 viewRoot : Html Message
@@ -99,16 +100,21 @@ viewRoot =  div []
 
 view : Model -> Html Message
 view model =
-    let escolhido =
+    let 
+      escolhido =
         case model.janela of
             Login -> Html.map PgLogin <| ModuloLogin.view model.login
 
             Cadastro -> Html.map PgCadastro <| ModuloCadastro.view model.cadastro
 
             Root -> viewRoot
+      
     in
-      escolhido
-
+      if model.login.ret.mensagem.autenticacao == "" then
+        escolhido
+      else
+        div [] [text "logouuuuuuuuu"]  
+        
 main = program
     { init = init
     , view = view

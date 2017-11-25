@@ -167,7 +167,7 @@ view model =
         ]
         ,div [class "input-field"] --DATA NASCIMENTO
         [
-          input [placeholder "dd/mm/aaaa"] []
+          input [placeholder "aaaa-mm-dd", onInput DtNascimento] []
           ,label [class "active"] [text "Data de nascimento"]
         ]
         ,div [class "switch"]
@@ -181,7 +181,7 @@ view model =
           ]
           ,button [] [text model.sexo]
         ]--SEXO SELECT/RADIO
-        ,button [type_ "submit", class "btn waves-effect green center-align"] [text "Cadastrar"]
+        ,button [type_ "submit", class "btn waves-effect green center-align", onClick Submit] [text "Cadastrar"]
       ]
   ]
 

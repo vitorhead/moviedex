@@ -1,31 +1,3 @@
-var _user$project$BuscaFilme$styleListaLinhas = _elm_lang$html$Html_Attributes$style(
-	{
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'right', _1: '200'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'top', _1: '200'},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline'},
-					_1: {ctor: '[]'}
-				}
-			}
-		}
-	});
-var _user$project$BuscaFilme$styleLinha = _elm_lang$html$Html_Attributes$style(
-	{
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'background', _1: 'lightgray'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '1px'},
-			_1: {ctor: '[]'}
-		}
-	});
 var _user$project$BuscaFilme$formatarNome = function (nome) {
 	return A2(
 		_elm_lang$core$String$join,
@@ -44,22 +16,21 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 	}();
 	return A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('info-filme'),
+			_1: {ctor: '[]'}
+		},
 		{
 			ctor: '::',
 			_0: A2(
 				_elm_lang$html$Html$img,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$src(linhaFoto),
+					_0: _elm_lang$html$Html_Attributes$class('responsive-img'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline'},
-								_1: {ctor: '[]'}
-							}),
+						_0: _elm_lang$html$Html_Attributes$src(linhaFoto),
 						_1: {ctor: '[]'}
 					}
 				},
@@ -67,21 +38,13 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$ul,
-					{
-						ctor: '::',
-						_0: _user$project$BuscaFilme$styleListaLinhas,
-						_1: {ctor: '[]'}
-					},
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
 					{
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$li,
-							{
-								ctor: '::',
-								_0: _user$project$BuscaFilme$styleLinha,
-								_1: {ctor: '[]'}
-							},
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
@@ -94,12 +57,8 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$li,
-								{
-									ctor: '::',
-									_0: _user$project$BuscaFilme$styleLinha,
-									_1: {ctor: '[]'}
-								},
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html$text(
@@ -109,12 +68,8 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$li,
-									{
-										ctor: '::',
-										_0: _user$project$BuscaFilme$styleLinha,
-										_1: {ctor: '[]'}
-									},
+									_elm_lang$html$Html$p,
+									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html$text(
@@ -127,12 +82,8 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$li,
-										{
-											ctor: '::',
-											_0: _user$project$BuscaFilme$styleLinha,
-											_1: {ctor: '[]'}
-										},
+										_elm_lang$html$Html$p,
+										{ctor: '[]'},
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html$text(
@@ -142,12 +93,8 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$li,
-											{
-												ctor: '::',
-												_0: _user$project$BuscaFilme$styleLinha,
-												_1: {ctor: '[]'}
-											},
+											_elm_lang$html$Html$p,
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: _elm_lang$html$Html$text(
@@ -214,7 +161,7 @@ var _user$project$BuscaFilme$viewFilme = function (f) {
 						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$label,
+								_elm_lang$html$Html$h5,
 								{ctor: '[]'},
 								{
 									ctor: '::',
@@ -233,12 +180,7 @@ var _user$project$BuscaFilme$viewFilme = function (f) {
 										_elm_lang$html$Html$div,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$style(
-												{
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-													_1: {ctor: '[]'}
-												}),
+											_0: _elm_lang$html$Html_Attributes$class('grid'),
 											_1: {ctor: '[]'}
 										},
 										A2(_elm_lang$core$List$map, _user$project$BuscaFilme$formatFilmeResult, f.results)),
@@ -470,72 +412,113 @@ var _user$project$BuscaFilme$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$type_('text'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder('nome do filme que deseja buscar'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$required(true),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onInput(_user$project$BuscaFilme$NomeFilme),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
+					_0: _elm_lang$html$Html_Attributes$class('container center-align'),
+					_1: {ctor: '[]'}
 				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$button,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$Submit),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('BUSCAR!'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
+				{
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'color', _1: 'red'},
-									_1: {ctor: '[]'}
-								}),
+							_0: _elm_lang$html$Html_Attributes$class('input-field inline'),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(model.error)),
-							_1: {ctor: '[]'}
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('text'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('validate'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('nome do filme que deseja buscar'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$required(true),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$BuscaFilme$NomeFilme),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('btn green waves-effect'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$Submit),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('BUSCAR!'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
 						}),
-					_1: {
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('center-align'),
+						_1: {ctor: '[]'}
+					},
+					{
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$div,
-							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _user$project$BuscaFilme$viewFilme(model.resultadoBusca),
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'color', _1: 'red'},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(model.error)),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
-					}
-				}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _user$project$BuscaFilme$viewFilme(model.resultadoBusca),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
 			}
 		});
 };

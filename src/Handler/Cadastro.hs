@@ -42,22 +42,25 @@ getBuscaCadR idCad = do
 
 getLoginUsuarioR :: Text -> Text -> Handler TypedContent
 getLoginUsuarioR login senha = do
-    buscaCad <- runDB $ getBy (UniqueEmail login)
+    -- buscaCad <- runDB $ getBy (UniqueEmail login)
+    temp <- runDB $ selectList [CadastrosEmail ==. login, CadastrosSenha ==. senha] []
+    buscaCad <- return $ fmap (\(Entity idcad _) -> idcad) temp
     case buscaCad of
-        Nothing ->  sendStatusJSON notFound404 $ Retorno 100 $ object ( ["resp" .= (show login ++" Não encontrado!"),
+        [] ->  sendStatusJSON notFound404 $ Retorno 100 $ object ( ["resp" .= (show login ++" Não encontrado!"),
                                                                       "idcadastro" .= (show ""),
                                                                       "autenticacao" .= (show "")] )
         
         --liftIO : transformer // utilizado por causa do ActionT                                                              
-        Just (Entity idcad _) -> do
-                                    auth <- liftIO $ stringRandom 100 
-                                    --getCurrentTime volta uma IO UTCTTime... liftIO pra trabalhar com o MonadT
-                                    dtNow <- liftIO getCurrentTime
-                                    idAuth <- runDB $ insert (Autenticacao (pack auth) idcad dtNow)
-                                    sendStatusJSON ok200 $ Retorno 0 $ object ( ["resp" .= (show ""),
-                                                                                 "idcadastro" .= (fromSqlKey idcad),
-                                                                                 "autenticacao" .= (show auth)] )
-                    
+        --Just (Entity idcad _) -> do
+        [idcad] -> do
+                       auth <- liftIO $ stringRandom 100 
+                       --getCurrentTime volta uma IO UTCTTime... liftIO pra trabalhar com o MonadT
+                       dtNow <- liftIO getCurrentTime
+                       idAuth <- runDB $ insert (Autenticacao (pack auth) idcad dtNow)
+                       sendStatusJSON ok200 $ Retorno 0 $ object ( ["resp" .= (show ""),
+                                                                    "idcadastro" .= (fromSqlKey idcad),
+                                                                    "autenticacao" .= (show auth)] )
+
 
 
 -- -- Define our data that will be used for creating the form.

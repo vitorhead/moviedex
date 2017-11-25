@@ -6,6 +6,7 @@ import Http exposing (..)
 import Json.Decode exposing (..)
 import Html.Attributes exposing (..)
 import Dict exposing (..)
+import Sha256 as SHA exposing (sha256)
 
 httpErrorString : Error -> String
 httpErrorString error =
@@ -40,28 +41,34 @@ type alias Model =
      login : String
     ,senha : String
     ,error : String
-    ,cad   : Cadastro
+    ,ret   : Retorno
     }
 
 type Message =
       Login String
     | Senha String
     | Submit
-    | Response (Result Http.Error Cadastro)
+    | Response (Result Http.Error Retorno)
 
 type alias Retorno =
     {
-     mensagem : Maybe Cadastro
-    ,codigo   : Int
+      codigo : Int
+    , mensagem : Mensagem
     }
 
+type alias Mensagem =
+    {
+        autenticacao : String
+    ,   idcadastro   : Int
+    ,   resp         : String
+    }
 
 init : Model
 init =
     let
-        cadIni = Cadastro "" "" "" "" ""
+        retIni = Retorno 0 (Mensagem "" 0 "")
     in
-        (Model "" "" "" cadIni)
+        (Model "" "" "" retIni)
 
 
 decodeCad : Decoder Cadastro
@@ -71,10 +78,16 @@ decodeCad =  map5 Cadastro (at ["email"] string)
                            (at ["senha"] string)
                            (at ["sexo"] string)
 
---nao ta em uso ainda..
+
+decodeMensagem : Decoder Mensagem
+decodeMensagem = map3 Mensagem  (at ["autenticacao"] string)
+                                (at ["idcadastro"] int)
+                                (at ["resp"] string)
+
 decodeRetorno : Decoder Retorno
-decodeRetorno = map2 Retorno (maybe (at ["mensagem"] decodeCad) )
-                             (at ["codigo"] int)
+decodeRetorno = map2 Retorno (at ["codigo"] int)
+                             (at ["mensagem"] decodeMensagem)
+                            
 
 
 getLogin : String -> String -> Cmd Message
@@ -82,7 +95,7 @@ getLogin login senha =
     let
         url = ("https://haskelleta-romefeller.c9users.io/cadastro/busca/"++login++"/"++senha++"/login")
     in
-        send Response <| Http.get url decodeCad
+        send Response <| Http.get url decodeRetorno
 
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
@@ -91,7 +104,7 @@ update msg model =
             ({model | login = x}, Cmd.none)
 
         Senha x ->
-            ({model | senha = x}, Cmd.none)
+            ({model | senha = SHA.sha256(x)}, Cmd.none)
 
         Submit ->
             (model, getLogin model.login model.senha)
@@ -99,7 +112,7 @@ update msg model =
         Response x ->
             case x of
                 Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
-                Ok  y -> ({ model | cad = y }, Cmd.none)
+                Ok  y -> ({ model | ret = y }, Cmd.none)
 
 viewCad : Cadastro -> Html Message
 viewCad c =
@@ -130,7 +143,9 @@ view model =
         ]
         ,button [class "btn waves-effect green", id "btnEnviar", onClick Submit] [text "Login"]
       ]
+      , div [] [text model.error]
     ]
+
 
 
 main =

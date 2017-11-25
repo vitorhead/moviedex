@@ -418,8 +418,12 @@ var _user$project$Cadastro$view = function (model) {
 											_elm_lang$html$Html$input,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$placeholder('dd/mm/aaaa'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$html$Html_Attributes$placeholder('aaaa-mm-dd'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$Cadastro$DtNascimento),
+													_1: {ctor: '[]'}
+												}
 											},
 											{ctor: '[]'}),
 										_1: {
@@ -511,7 +515,11 @@ var _user$project$Cadastro$view = function (model) {
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$class('btn waves-effect green center-align'),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(_user$project$Cadastro$Submit),
+														_1: {ctor: '[]'}
+													}
 												}
 											},
 											{
