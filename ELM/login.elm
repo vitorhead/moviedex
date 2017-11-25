@@ -85,7 +85,22 @@ getLogin login senha =
     in
         send Response <| Http.get url decodeCad
 
+update : Message -> Model -> (Model, Cmd Message)
+update msg model =
+    case msg of
+        Login x ->
+            ({model | login = x}, Cmd.none)
 
+        Senha x ->
+            ({model | senha = x}, Cmd.none)
+
+        Submit ->
+            (model, getLogin model.login model.senha)
+
+        Response x ->
+            case x of
+                Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
+                Ok  y -> ({ model | cad = y }, Cmd.none)
 
 viewCad : Cadastro -> Html Message
 viewCad c =
