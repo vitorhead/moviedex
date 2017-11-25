@@ -24,16 +24,17 @@ type alias Model =
     ,janela   : Pagina
     }
 
-init : Model
-init = let 
-        login = ModuloLogin.Model "" "" "" (ModuloLogin.Cadastro "" "" "" "" "")  
-        cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "" 
-        janela = Root
-      in
-        Model login cadastro janela
+init : (Model, Cmd Message)
+-- init = let 
+--         login = ModuloLogin.Model "" "" "" (ModuloLogin.Cadastro "" "" "" "" "")  
+--         cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "" 
+--         janela = Root
+--       in
+        --Model login cadastro janela, 
+init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Cadastro "" "" "" "" ""),
+         cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
+         janela = Root}, Cmd.none)
       
--- init = Model
---         ModuloLogin.init ModuloCadastro.init Root
         
 
 update : Message -> Model -> (Model, Cmd Message)
@@ -45,13 +46,13 @@ update msg model =
           let 
             updt = ModuloLogin.update p model.login
           in
-            ({model | login = Tuple.first updt}, Cmd.none)
+            ({model | login = Tuple.first updt}, Cmd.map PgLogin <| Tuple.second updt)
 
         PgCadastro p -> 
           let
             updt = ModuloCadastro.update p model.cadastro
           in
-            ({model | cadastro = Tuple.first updt}, Cmd.none)
+            ({model | cadastro = Tuple.first updt}, Cmd.map PgCadastro <| Tuple.second updt)
 
 
 viewRoot : Html Message
@@ -64,7 +65,7 @@ viewRoot =  div []
         ,div []
         [
           a [onClick (Mudar Cadastro) ,class "btn green"] [text "Cadastro"]
-          ,a [class "btn", onClick(Mudar Login)] [text "Login"]
+          ,a [class "btn", onClick (Mudar Login)] [text "Login"]
         ]
       ]
     ,section [id "quem-somos", class "container"]
@@ -107,16 +108,9 @@ view model =
             Root -> viewRoot
     in
       escolhido
-{--
-     [
-        p [onClick (Mudar Cadastro)] [text "cadastro"]
-        --p [onClick (Mudar Login)] [text "login"]
-        ,div [] [escolhido]
-        ]
---}
 
 main = program
-    { init = (init, Cmd.none)
+    { init = init
     , view = view
     , update = update
     , subscriptions =  \_ -> Sub.none

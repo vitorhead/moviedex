@@ -1,63 +1,30 @@
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Mudar':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{janela: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'PgLogin':
-				var updt = A2(_user$project$Login$update, _p0._0, model.login);
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							login: _elm_lang$core$Tuple$first(updt)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				var updt = A2(_user$project$Cadastro$update, _p0._0, model.cadastro);
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							cadastro: _elm_lang$core$Tuple$first(updt)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
-	});
 var _user$project$Main$Model = F3(
 	function (a, b, c) {
 		return {login: a, cadastro: b, janela: c};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
-var _user$project$Main$init = function () {
-	var janela = _user$project$Main$Root;
-	var cadastro = A7(
-		_user$project$Cadastro$Model,
-		'',
-		'',
-		'',
-		'',
-		'',
-		A2(_user$project$Cadastro$Retorno, 0, 0),
-		'');
-	var login = A4(
-		_user$project$Login$Model,
-		'',
-		'',
-		'',
-		A5(_user$project$Login$Cadastro, '', '', '', '', ''));
-	return A3(_user$project$Main$Model, login, cadastro, janela);
-}();
+var _user$project$Main$init = {
+	ctor: '_Tuple2',
+	_0: {
+		login: A4(
+			_user$project$Login$Model,
+			'',
+			'',
+			'',
+			A5(_user$project$Login$Cadastro, '', '', '', '', '')),
+		cadastro: A7(
+			_user$project$Cadastro$Model,
+			'',
+			'',
+			'',
+			'',
+			'',
+			A2(_user$project$Cadastro$Retorno, 0, 0),
+			''),
+		janela: _user$project$Main$Root
+	},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
 var _user$project$Main$Login = {ctor: 'Login'};
 var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
 var _user$project$Main$Mudar = function (a) {
@@ -348,6 +315,48 @@ var _user$project$Main$PgLogin = function (a) {
 var _user$project$Main$PgCadastro = function (a) {
 	return {ctor: 'PgCadastro', _0: a};
 };
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Mudar':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{janela: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PgLogin':
+				var updt = A2(_user$project$Login$update, _p0._0, model.login);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							login: _elm_lang$core$Tuple$first(updt)
+						}),
+					_1: A2(
+						_elm_lang$core$Platform_Cmd$map,
+						_user$project$Main$PgLogin,
+						_elm_lang$core$Tuple$second(updt))
+				};
+			default:
+				var updt = A2(_user$project$Cadastro$update, _p0._0, model.cadastro);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							cadastro: _elm_lang$core$Tuple$first(updt)
+						}),
+					_1: A2(
+						_elm_lang$core$Platform_Cmd$map,
+						_user$project$Main$PgCadastro,
+						_elm_lang$core$Tuple$second(updt))
+				};
+		}
+	});
 var _user$project$Main$view = function (model) {
 	var escolhido = function () {
 		var _p1 = model.janela;
@@ -370,7 +379,7 @@ var _user$project$Main$view = function (model) {
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{
-		init: {ctor: '_Tuple2', _0: _user$project$Main$init, _1: _elm_lang$core$Platform_Cmd$none},
+		init: _user$project$Main$init,
 		view: _user$project$Main$view,
 		update: _user$project$Main$update,
 		subscriptions: function (_p2) {
