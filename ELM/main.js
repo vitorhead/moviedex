@@ -11789,7 +11789,11 @@ var _user$project$Cadastro$view = function (model) {
 										ctor: '::',
 										_0: A2(
 											_elm_lang$html$Html$input,
-											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('dd/mm/aaaa'),
+												_1: {ctor: '[]'}
+											},
 											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
@@ -11802,7 +11806,7 @@ var _user$project$Cadastro$view = function (model) {
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Data Nascimento'),
+													_0: _elm_lang$html$Html$text('Data de nascimento'),
 													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
@@ -12261,9 +12265,27 @@ var _user$project$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'PgLogin':
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				var updt = A2(_user$project$Login$update, _p0._0, model.login);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							login: _elm_lang$core$Tuple$first(updt)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			default:
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				var updt = A2(_user$project$Cadastro$update, _p0._0, model.cadastro);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							cadastro: _elm_lang$core$Tuple$first(updt)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _user$project$Main$Model = F3(
@@ -12271,7 +12293,25 @@ var _user$project$Main$Model = F3(
 		return {login: a, cadastro: b, janela: c};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
-var _user$project$Main$init = A3(_user$project$Main$Model, _user$project$Login$init, _user$project$Cadastro$init, _user$project$Main$Root);
+var _user$project$Main$init = function () {
+	var janela = _user$project$Main$Root;
+	var cadastro = A7(
+		_user$project$Cadastro$Model,
+		'',
+		'',
+		'',
+		'',
+		'',
+		A2(_user$project$Cadastro$Retorno, 0, 0),
+		'');
+	var login = A4(
+		_user$project$Login$Model,
+		'',
+		'',
+		'',
+		A5(_user$project$Login$Cadastro, '', '', '', '', ''));
+	return A3(_user$project$Main$Model, login, cadastro, janela);
+}();
 var _user$project$Main$Login = {ctor: 'Login'};
 var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
 var _user$project$Main$Mudar = function (a) {

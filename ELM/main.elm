@@ -12,30 +12,46 @@ type Pagina = Cadastro
             | Root
 
 type Message =
-     PgCadastro ModuloCadastro.Message
-    |  PgLogin ModuloLogin.Message
+      PgCadastro ModuloCadastro.Message
+    | PgLogin ModuloLogin.Message
     | Mudar Pagina
 
 
 type alias Model =
     {
-    login    : ModuloLogin.Model
+     login    : ModuloLogin.Model
     ,cadastro : ModuloCadastro.Model
     ,janela   : Pagina
     }
 
 init : Model
-init = Model
-        ModuloLogin.init ModuloCadastro.init Root
+init = let 
+        login = ModuloLogin.Model "" "" "" (ModuloLogin.Cadastro "" "" "" "" "")  
+        cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "" 
+        janela = Root
+      in
+        Model login cadastro janela
+      
+-- init = Model
+--         ModuloLogin.init ModuloCadastro.init Root
+        
 
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
     case msg of
         Mudar p -> ({model | janela = p}, Cmd.none)
 
-        PgLogin p -> (model, Cmd.none)
+        PgLogin p ->
+          let 
+            updt = ModuloLogin.update p model.login
+          in
+            ({model | login = Tuple.first updt}, Cmd.none)
 
-        PgCadastro p -> (model, Cmd.none)
+        PgCadastro p -> 
+          let
+            updt = ModuloCadastro.update p model.cadastro
+          in
+            ({model | cadastro = Tuple.first updt}, Cmd.none)
 
 
 viewRoot : Html Message

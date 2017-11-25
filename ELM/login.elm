@@ -16,7 +16,7 @@ httpErrorString error =
         Timeout ->
             "[ERRO HTTP] Timeout"
 
-        NetworkError ->
+        NetworkError -> 
             "[ERRO HTTP] Network Error"
 
         BadStatus response ->

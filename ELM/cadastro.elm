@@ -9,6 +9,7 @@ import Html.Attributes exposing (..)
 import Dict exposing (..)
 import Sha256 as SHA exposing (sha256)
 
+
 httpErrorRetorno : Error -> String
 httpErrorRetorno error =
     case error of
@@ -52,6 +53,7 @@ type alias Model =
 type Message =
       Nome String
     | DtNascimento String
+    -- | SetDatePicker DatePicker.Msg
     | Sexo String
     | Email String
     | Senha String
@@ -123,6 +125,9 @@ update msg model =
 
 
 
+-- formataData : String -> String
+-- formataData dt = String.split "/"
+
 view : Model -> Html Message
 view model =
   section [class "center-align form-margin"]
@@ -146,8 +151,8 @@ view model =
         ]
         ,div [class "input-field"] --DATA NASCIMENTO
         [
-        input [] []
-        ,label [class "active"] [text "Data Nascimento"]
+        input [placeholder "dd/mm/aaaa"] []
+        ,label [class "active"] [text "Data de nascimento"]
         ]
          --SEXO SELECT/RADIO
         ,button [type_ "submit", class "btn waves-effect green center-align"] [text "Cadastrar"]
