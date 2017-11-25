@@ -65,6 +65,17 @@ init =
         (Model "" "" "" cadIni)
 
 
+decodeCad : Decoder Cadastro
+decodeCad =  map5 Cadastro (at ["email"] string)
+                           (at ["nome"] string)
+                           (at ["dtNascimento"] string)
+                           (at ["senha"] string)
+                           (at ["sexo"] string)
+
+--nao ta em uso ainda..
+decodeRetorno : Decoder Retorno
+decodeRetorno = map2 Retorno (maybe (at ["mensagem"] decodeCad) )
+                             (at ["codigo"] int)
 
 
 getLogin : String -> String -> Cmd Message
@@ -73,7 +84,6 @@ getLogin login senha =
         url = ("https://haskelleta-romefeller.c9users.io/cadastro/busca/"++login++"/"++senha++"/login")
     in
         send Response <| Http.get url decodeCad
-
 
 
 
