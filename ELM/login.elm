@@ -16,8 +16,7 @@ httpErrorString error =
         Timeout ->
             "[ERRO HTTP] Timeout"
 
-        NetworkEr              Err y -> (model, Cmd.none)
-                Ok  y -> (model, Cmd.none)ror ->
+        NetworkError ->
             "[ERRO HTTP] Network Error"
 
         BadStatus response ->
@@ -113,30 +112,24 @@ viewCad c =
     ,label [] [text <| toString c.sexo]
     ]
 
-styleLogin : Html.Attribute Message
-styleLogin =  style
-                [ ("background", "#f4f4f4"),
-                  ("padding", "1em"),
-                  ("margin-bottom", "10px")
-                ]
-
-styleBotaoGO : Html.Attribute Message
-styleBotaoGO =  style
-                [ ("background", "#009E73"),
-                  ("padding", "01em"),
-                  ("margin-bottom", "1px"),
-                  ("letter-spacing", "5px")
-                ]
-
 view : Model -> Html Message
 view model =
-    div [class "divGeral"]
+    section [class "center-align form-margin"]
     [
-         input [type_ "text", placeholder "login", required True, onInput Login] []
-        ,input [type_ "text", placeholder "senha", required True, onInput Senha] []
-        ,button [styleBotaoGO, id "btnEnviar", onClick Submit] [text "GO"]
-        ,div [] [text <| toString model.error]
-        ,div [] [(viewCad model.cad)]
+      div [class "elm-form col s12 m6 l6"]
+      [
+        div [class "input-field"] --NOME
+        [
+          input [type_ "text", required True, class "validate", onInput Login] []
+          ,label [class "active"] [text "Name"]
+        ]
+        ,div [class "input-field"] --SENHA
+        [
+          input [type_ "password", required True,class "validate", onInput Senha] []
+          ,label [class "active"] [text "Password"]
+        ]
+        ,button [class "btn waves-effect green", id "btnEnviar", onClick Submit] [text "Login"]
+      ]
     ]
 
 

@@ -11694,14 +11694,18 @@ var _user$project$Cadastro$view = function (model) {
 										_0: _elm_lang$html$Html_Attributes$type_('email'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$required(true),
+											_0: _elm_lang$html$Html_Attributes$id('email'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('validate'),
+												_0: _elm_lang$html$Html_Attributes$required(true),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onInput(_user$project$Cadastro$Email),
-													_1: {ctor: '[]'}
+													_0: _elm_lang$html$Html_Attributes$class('validate'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(_user$project$Cadastro$Email),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
@@ -11841,38 +11845,6 @@ var _user$project$Cadastro$main = _elm_lang$html$Html$program(
 		}
 	})();
 
-var _user$project$Login$styleBotaoGO = _elm_lang$html$Html_Attributes$style(
-	{
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'background', _1: '#009E73'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'padding', _1: '01em'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '1px'},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'letter-spacing', _1: '5px'},
-					_1: {ctor: '[]'}
-				}
-			}
-		}
-	});
-var _user$project$Login$styleLogin = _elm_lang$html$Html_Attributes$style(
-	{
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'background', _1: '#f4f4f4'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'padding', _1: '1em'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '10px'},
-				_1: {ctor: '[]'}
-			}
-		}
-	});
 var _user$project$Login$viewCad = function (c) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -12126,104 +12098,144 @@ var _user$project$Login$Login = function (a) {
 };
 var _user$project$Login$view = function (model) {
 	return A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$section,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('divGeral'),
+			_0: _elm_lang$html$Html_Attributes$class('center-align form-margin'),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$type_('text'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder('login'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$required(true),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onInput(_user$project$Login$Login),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
+					_0: _elm_lang$html$Html_Attributes$class('elm-form col s12 m6 l6'),
+					_1: {ctor: '[]'}
 				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$input,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$type_('text'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$placeholder('senha'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$required(true),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onInput(_user$project$Login$Senha),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
+				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$button,
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _user$project$Login$styleBotaoGO,
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$id('btnEnviar'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Login$Submit),
-									_1: {ctor: '[]'}
-								}
-							}
+							_0: _elm_lang$html$Html_Attributes$class('input-field'),
+							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('GO'),
-							_1: {ctor: '[]'}
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('text'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$required(true),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('validate'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Login$Login),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$label,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('active'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Name'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
 						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$div,
-							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									_elm_lang$core$Basics$toString(model.error)),
+								_0: _elm_lang$html$Html_Attributes$class('input-field'),
 								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$input,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$type_('password'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$required(true),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('validate'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$Login$Senha),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('active'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Password'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
 							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$div,
-								{ctor: '[]'},
+								_elm_lang$html$Html$button,
 								{
 									ctor: '::',
-									_0: _user$project$Login$viewCad(model.cad),
+									_0: _elm_lang$html$Html_Attributes$class('btn waves-effect green'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$id('btnEnviar'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Login$Submit),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Login'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
 						}
 					}
-				}
-			}
+				}),
+			_1: {ctor: '[]'}
 		});
 };
 var _user$project$Login$main = _elm_lang$html$Html$program(

@@ -120,7 +120,7 @@ update msg model =
             case x of
                 Err y -> ({ model | error = (httpErrorRetorno y) }, Cmd.none)
                 Ok  y -> ({ model | retorno = y }, Cmd.none)
-  
+
 
 
 view : Model -> Html Message
@@ -136,7 +136,7 @@ view model =
         ]
         ,div [class "input-field"] --EMAIL
         [
-          input [type_ "email", required True,class "validate", onInput Email] []
+          input [type_ "email", id "email" , required True,class "validate", onInput Email] []
           ,label [class "active"] [text "Email"]
         ]
         ,div [class "input-field"] --SENHA

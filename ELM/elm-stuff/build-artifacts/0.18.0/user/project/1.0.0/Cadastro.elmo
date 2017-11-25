@@ -294,14 +294,18 @@ var _user$project$Cadastro$view = function (model) {
 										_0: _elm_lang$html$Html_Attributes$type_('email'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$required(true),
+											_0: _elm_lang$html$Html_Attributes$id('email'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('validate'),
+												_0: _elm_lang$html$Html_Attributes$required(true),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onInput(_user$project$Cadastro$Email),
-													_1: {ctor: '[]'}
+													_0: _elm_lang$html$Html_Attributes$class('validate'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(_user$project$Cadastro$Email),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
