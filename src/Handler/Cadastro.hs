@@ -61,21 +61,22 @@ getLoginUsuarioR login senha = do
                                                                     "idcadastro" .= (fromSqlKey idcad),
                                                                     "autenticacao" .= (show auth)] )
                                                                     
-{-                                                                    
-/cadastro/autenticacao/#Text                ValidaAuthR           GET
+                                                                   
+
 getValidaAuthR :: Text -> Handler TypedContent
 getValidaAuthR auth = do
-    temp <- selectList [AutenticacaoAuth ==. auth] []
+    temp <- runDB $ selectList [AutenticacaoAuth ==. auth] []
     autvalida <- return $ fmap (\(Entity _ entAut) -> entAut) temp
     case autvalida of
         [] -> sendStatusJSON notFound404 $ object(["resp" .= (show "Invalido!")])
         
         [ret] -> do
             now <- liftIO $ getCurrentTime
-            case ( (diffUTCTime now (dtGerada ret)) < 40) of
+            --60 pq volta secs
+            case ( (diffUTCTime now (autenticacaoDtGerada ret)) < (40*60) ) of
                 True ->  sendStatusJSON created201 $ object(["resp" .= (show "Valido!")])
                 False -> sendStatusJSON notFound404 $ object(["resp" .= (show "Invalido!")])
--}
+
 
 -- -- Define our data that will be used for creating the form.
 -- data FileForm = FileForm

@@ -8,6 +8,7 @@
 /cadastro/alterar/#CadastrosId              AlterarCadR           PUT
 /cadastro/busca/#CadastrosId                BuscaCadR             GET
 /cadastro/busca/#Text/#Text/login           LoginUsuarioR         GET
+/cadastro/autenticacao/#Text                ValidaAuthR           GET
 
 
 /filmes/inserir                             FilmesR               POST
