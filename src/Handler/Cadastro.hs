@@ -50,7 +50,7 @@ getLoginUsuarioR login senha = do
                                                                       "idcadastro" .= (show ""),
                                                                       "autenticacao" .= (show "")] )
         
-        --liftIO : transformer // utilizado por causa do ActionT                                                              
+        --liftIO : transformer // utilizado por causa do ActionT //> trocar monads
         --Just (Entity idcad _) -> do
         [idcad] -> do
                        auth <- liftIO $ stringRandom 100 
@@ -60,8 +60,22 @@ getLoginUsuarioR login senha = do
                        sendStatusJSON ok200 $ Retorno 0 $ object ( ["resp" .= (show ""),
                                                                     "idcadastro" .= (fromSqlKey idcad),
                                                                     "autenticacao" .= (show auth)] )
-
-
+                                                                    
+{-                                                                    
+/cadastro/autenticacao/#Text                ValidaAuthR           GET
+getValidaAuthR :: Text -> Handler TypedContent
+getValidaAuthR auth = do
+    temp <- selectList [AutenticacaoAuth ==. auth] []
+    autvalida <- return $ fmap (\(Entity _ entAut) -> entAut) temp
+    case autvalida of
+        [] -> sendStatusJSON notFound404 $ object(["resp" .= (show "Invalido!")])
+        
+        [ret] -> do
+            now <- liftIO $ getCurrentTime
+            case ( (diffUTCTime now (dtGerada ret)) < 40) of
+                True ->  sendStatusJSON created201 $ object(["resp" .= (show "Valido!")])
+                False -> sendStatusJSON notFound404 $ object(["resp" .= (show "Invalido!")])
+-}
 
 -- -- Define our data that will be used for creating the form.
 -- data FileForm = FileForm

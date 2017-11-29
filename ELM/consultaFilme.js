@@ -9033,6 +9033,91 @@ var _elm_lang$http$Http$StringPart = F2(
 	});
 var _elm_lang$http$Http$stringPart = _elm_lang$http$Http$StringPart;
 
+var _user$project$ConsultaFilme$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{ctor: '[]'});
+};
+var _user$project$ConsultaFilme$Model = F3(
+	function (a, b, c) {
+		return {resp: a, error: b, idAPI: c};
+	});
+var _user$project$ConsultaFilme$ConsultaFilme = function (a) {
+	return {filmesID: a};
+};
+var _user$project$ConsultaFilme$init = A3(
+	_user$project$ConsultaFilme$Model,
+	_user$project$ConsultaFilme$ConsultaFilme(0),
+	'',
+	0);
+var _user$project$ConsultaFilme$decodeConsultaFilme = A2(
+	_elm_lang$core$Json_Decode$map,
+	_user$project$ConsultaFilme$ConsultaFilme,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'id',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int));
+var _user$project$ConsultaFilme$ResponseConsultaFilme = function (a) {
+	return {ctor: 'ResponseConsultaFilme', _0: a};
+};
+var _user$project$ConsultaFilme$getConsultaFilmes = function (idAPI) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmes/consultaFilme/',
+		_elm_lang$core$Basics$toString(idAPI));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$ConsultaFilme$ResponseConsultaFilme,
+		A2(_elm_lang$http$Http$get, url, _user$project$ConsultaFilme$decodeConsultaFilme));
+};
+var _user$project$ConsultaFilme$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'SubmitConsultaFilme') {
+			return {
+				ctor: '_Tuple2',
+				_0: model,
+				_1: _user$project$ConsultaFilme$getConsultaFilmes(model.idAPI)
+			};
+		} else {
+			var _p1 = _p0._0;
+			if (_p1.ctor === 'Err') {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							error: _elm_lang$core$Basics$toString(_p1._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{resp: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			}
+		}
+	});
+var _user$project$ConsultaFilme$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _user$project$ConsultaFilme$init, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$ConsultaFilme$view,
+		update: _user$project$ConsultaFilme$update,
+		subscriptions: function (_p2) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
+var _user$project$ConsultaFilme$SubmitConsultaFilme = {ctor: 'SubmitConsultaFilme'};
+
 var _user$project$BuscaFilme$formatarNome = function (nome) {
 	return A2(
 		_elm_lang$core$String$join,
@@ -9041,6 +9126,7 @@ var _user$project$BuscaFilme$formatarNome = function (nome) {
 };
 var _user$project$BuscaFilme$urlFoto = 'http://image.tmdb.org/t/p/w154/';
 var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
+	var filmeExiste = _user$project$ConsultaFilme$getConsultaFilmes(fr.id);
 	var linhaFoto = function () {
 		var _p0 = fr.poster_path;
 		if (_p0.ctor === 'Nothing') {
@@ -9134,7 +9220,19 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 												_0: _elm_lang$html$Html$text('dehaze'),
 												_1: {ctor: '[]'}
 											}),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														_elm_lang$core$Basics$toString(filmeExiste)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
 									}
 								}),
 							_1: {ctor: '[]'}
@@ -9364,8 +9462,8 @@ var _user$project$BuscaFilme$init = function () {
 		{ctor: '[]'});
 	return A3(_user$project$BuscaFilme$Model, '', '', initFilme);
 }();
-var _user$project$BuscaFilme$Response = function (a) {
-	return {ctor: 'Response', _0: a};
+var _user$project$BuscaFilme$ResponseBusca = function (a) {
+	return {ctor: 'ResponseBusca', _0: a};
 };
 var _user$project$BuscaFilme$getFilme = function (nomefilme) {
 	var url = A2(
@@ -9374,7 +9472,7 @@ var _user$project$BuscaFilme$getFilme = function (nomefilme) {
 		A2(_elm_lang$core$Basics_ops['++'], nomefilme, '&page=1&include_adult=false'));
 	return A2(
 		_elm_lang$http$Http$send,
-		_user$project$BuscaFilme$Response,
+		_user$project$BuscaFilme$ResponseBusca,
 		A2(_elm_lang$http$Http$get, url, _user$project$BuscaFilme$decodeFilme));
 };
 var _user$project$BuscaFilme$update = F2(
@@ -9391,7 +9489,7 @@ var _user$project$BuscaFilme$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'Submit':
+			case 'SubmitBusca':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -9430,7 +9528,7 @@ var _user$project$BuscaFilme$update = F2(
 				}
 		}
 	});
-var _user$project$BuscaFilme$Submit = {ctor: 'Submit'};
+var _user$project$BuscaFilme$SubmitBusca = {ctor: 'SubmitBusca'};
 var _user$project$BuscaFilme$NomeFilme = function (a) {
 	return {ctor: 'NomeFilme', _0: a};
 };
@@ -9495,7 +9593,7 @@ var _user$project$BuscaFilme$view = function (model) {
 										_0: _elm_lang$html$Html_Attributes$class('btn green waves-effect'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$Submit),
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$SubmitBusca),
 											_1: {ctor: '[]'}
 										}
 									},
@@ -9569,6 +9667,10 @@ var Elm = {};
 Elm['BuscaFilme'] = Elm['BuscaFilme'] || {};
 if (typeof _user$project$BuscaFilme$main !== 'undefined') {
     _user$project$BuscaFilme$main(Elm['BuscaFilme'], 'BuscaFilme', undefined);
+}
+Elm['ConsultaFilme'] = Elm['ConsultaFilme'] || {};
+if (typeof _user$project$ConsultaFilme$main !== 'undefined') {
+    _user$project$ConsultaFilme$main(Elm['ConsultaFilme'], 'ConsultaFilme', undefined);
 }
 
 if (typeof define === "function" && define['amd'])

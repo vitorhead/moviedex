@@ -1,6 +1,6 @@
-var _user$project$Main$Model = F3(
-	function (a, b, c) {
-		return {login: a, cadastro: b, janela: c};
+var _user$project$Main$Model = F4(
+	function (a, b, c, d) {
+		return {login: a, cadastro: b, buscaFilme: c, janela: d};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
 var _user$project$Main$init = {
@@ -24,6 +24,7 @@ var _user$project$Main$init = {
 			'',
 			A2(_user$project$Cadastro$Retorno, 0, 0),
 			''),
+		buscaFilme: _user$project$BuscaFilme$init,
 		janela: _user$project$Main$Root
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
@@ -312,6 +313,9 @@ var _user$project$Main$viewRoot = A2(
 			_1: {ctor: '[]'}
 		}
 	});
+var _user$project$Main$PgBuscaFilme = function (a) {
+	return {ctor: 'PgBuscaFilme', _0: a};
+};
 var _user$project$Main$PgLogin = function (a) {
 	return {ctor: 'PgLogin', _0: a};
 };
@@ -344,7 +348,7 @@ var _user$project$Main$update = F2(
 						_user$project$Main$PgLogin,
 						_elm_lang$core$Tuple$second(updt))
 				};
-			default:
+			case 'PgCadastro':
 				var updt = A2(_user$project$Cadastro$update, _p0._0, model.cadastro);
 				return {
 					ctor: '_Tuple2',
@@ -356,6 +360,22 @@ var _user$project$Main$update = F2(
 					_1: A2(
 						_elm_lang$core$Platform_Cmd$map,
 						_user$project$Main$PgCadastro,
+						_elm_lang$core$Tuple$second(updt))
+				};
+			default:
+				var updt = A2(_user$project$BuscaFilme$update, _p0._0, model.buscaFilme);
+				var oldModelBuscaFilme = _elm_lang$core$Tuple$first(updt);
+				var newBF = _elm_lang$core$Native_Utils.update(
+					oldModelBuscaFilme,
+					{idCadLogado: model.login.ret.mensagem.idcadastro});
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{buscaFilme: newBF}),
+					_1: A2(
+						_elm_lang$core$Platform_Cmd$map,
+						_user$project$Main$PgBuscaFilme,
 						_elm_lang$core$Tuple$second(updt))
 				};
 		}
@@ -378,14 +398,22 @@ var _user$project$Main$view = function (model) {
 				return _user$project$Main$viewRoot;
 		}
 	}();
-	return _elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '') ? escolhido : A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text('logouuuuuuuuu'),
-			_1: {ctor: '[]'}
-		});
+	if (_elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '')) {
+		return escolhido;
+	} else {
+		var logado = A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgBuscaFilme,
+					_user$project$BuscaFilme$view(model.buscaFilme)),
+				_1: {ctor: '[]'}
+			});
+		return logado;
+	}
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{

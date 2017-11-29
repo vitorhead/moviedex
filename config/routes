@@ -9,6 +9,7 @@
 /cadastro/busca/#CadastrosId                BuscaCadR             GET
 /cadastro/busca/#Text/#Text/login           LoginUsuarioR         GET
 
+
 /filmes/inserir                             FilmesR               POST
 /filmes/consultaFilme/#Int                  ConsultaFilmesR       GET
 
@@ -16,3 +17,4 @@
 /filmescad/listarfilmes/#CadastrosId        ListarFilmesR         GET
 /filmescad/listarfavoritos/#CadastrosId     ListarFavoritosR      GET
 /filmescad/listarassistidos/#CadastrosId    ListarAssistidosR     GET
+/filmescad/alterarfavoritos/#FilmesCadId    AlterarFavoritosR     PATCH

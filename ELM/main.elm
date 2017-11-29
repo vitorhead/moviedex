@@ -5,6 +5,8 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Login as ModuloLogin
 import Cadastro as ModuloCadastro
+import BuscaFilme as ModuloBuscaFilme
+--import ConsultaFilme as ModuloConsultaFilme
 
 
 type Pagina = Cadastro
@@ -14,14 +16,17 @@ type Pagina = Cadastro
 type Message =
       PgCadastro ModuloCadastro.Message
     | PgLogin ModuloLogin.Message
+    | PgBuscaFilme ModuloBuscaFilme.Message
     | Mudar Pagina
+    -- | IdCadLogado Int
 
 
 type alias Model =
     {
-     login    : ModuloLogin.Model
-    ,cadastro : ModuloCadastro.Model
-    ,janela   : Pagina
+     login      : ModuloLogin.Model
+    ,cadastro   : ModuloCadastro.Model
+    ,buscaFilme : ModuloBuscaFilme.Model
+    ,janela     : Pagina
     }
 
 init : (Model, Cmd Message)
@@ -33,6 +38,7 @@ init : (Model, Cmd Message)
         --Model login cadastro janela, 
 init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Retorno 0 (ModuloLogin.Mensagem "" 0 "")),
          cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
+         buscaFilme = ModuloBuscaFilme.init,
          janela = Root}, Cmd.none)
       
         
@@ -53,7 +59,24 @@ update msg model =
             updt = ModuloCadastro.update p model.cadastro
           in
             ({model | cadastro = Tuple.first updt}, Cmd.map PgCadastro <| Tuple.second updt)
-
+        
+        PgBuscaFilme p ->
+          let
+            updt = ModuloBuscaFilme.update p model.buscaFilme
+            --pegando model antigo
+            oldModelBuscaFilme = Tuple.first updt
+            --passando idCadastro do model do main pro model do buscaFilme
+            newBF = {oldModelBuscaFilme | idCadLogado = model.login.ret.mensagem.idcadastro}
+          in
+            ({model | buscaFilme = newBF}, Cmd.map PgBuscaFilme <| Tuple.second updt)
+            
+        -- IdCadLogado s ->
+        --   let
+        --     oldIdCadastro = model.buscaFilme
+        --     newIdCadastro = { oldIdCadastro | idCadLogado = s }
+        --   in
+        --   ({model | buscaFilme = newIdCadastro}, Cmd.none)
+      
 
 
 viewRoot : Html Message
@@ -98,6 +121,7 @@ viewRoot =  div []
       ]
   ]
 
+
 view : Model -> Html Message
 view model =
     let 
@@ -108,12 +132,19 @@ view model =
             Cadastro -> Html.map PgCadastro <| ModuloCadastro.view model.cadastro
 
             Root -> viewRoot
-      
+            
     in
       if model.login.ret.mensagem.autenticacao == "" then
         escolhido
       else
-        div [] [text "logouuuuuuuuu"]  
+        let
+          logado = div [] 
+            [
+               --button [] [onClick <| IdCadLogado model.login.ret.mensagem.idcadastro],
+               Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme 
+            ]
+        in
+        logado
         
 main = program
     { init = init

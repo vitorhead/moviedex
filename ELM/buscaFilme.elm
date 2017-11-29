@@ -4,7 +4,9 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Http exposing (..)
-import Json.Decode exposing (..)
+import Json.Decode as Decode exposing (..)
+import Json.Encode as Encode exposing (..)
+
 
 {-
     API utilizada: The Movie DB API
@@ -35,59 +37,6 @@ import Json.Decode exposing (..)
         "original"
 -}
 
-{-
-map14 : (a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> k -> l -> m -> n -> value) ->
- Decoder a ->
- Decoder b ->
- Decoder c ->
- Decoder d ->
- Decoder e ->
- Decoder f ->
- Decoder g ->
- Decoder h ->
- Decoder i ->
- Decoder j ->
- Decoder k ->
- Decoder l ->
- Decoder m ->
- Decoder n ->
- Decoder value
-
-map14 f a b c d e f g h i j k l m n =
- f head(a)
-   head(b)
-   head(c)
-   head(d)
-   head(e)
-   head(f)
-   head(g)
-   head(h)
-   head(i)
-   head(j)
-   head(k)
-   head(l)
-   head(m)
-   head(n) :: map14 f a b c d e f g h i j k l m n
-
-
-   type alias FilmeResult1 =
-    {
-     vote_count         : Int
-    ,id                 : Int
-    ,video              : Bool
-    ,vote_average       : Float
-    ,title              : String
-    ,popularity         : Float
-    ,poster_path        : String
-    ,original_language  : String
-    ,original_title     : String
-    ,genre_ids          : List(Int)
-    ,backdrop_path      : String
-    ,adult              : Bool
-    ,overview           : String
-    ,release_date       : String
-    }
--}
 httpErrorString : Error -> String
 httpErrorString error =
     case error of
@@ -125,17 +74,26 @@ formatFilmeResult fr =
         linhaFoto = case fr.poster_path of
                         Nothing -> "---"
                         Just x  -> urlFoto++x
+        
     in
     div [class "info-filme"]
     [
       img [class "responsive-img",src linhaFoto] []
      ,div []
      [
-      p [] [text <| "ID: "++(toString fr.id)]
-     ,p [] [text <| "Titulo: "++fr.title]
-     ,p [] [text <| "Nota:"++(toString fr.vote_average)]
-     ,p [] [text <| "Data de lancamento:"++fr.release_date]
-     ,p [] [text <| "Sinopse: "++fr.overview]
+        button [class "btn btn-filme", onClick <| SubmitConsultaFilme fr.id] 
+        [ 
+         i [class "material-icons small"] [text "add"]
+        ]
+       ,button [class "btn btn-filme"]
+        [
+         i [class "material-icons small"] [text "dehaze"]
+        ]
+    --   p [] [text <| "ID: "++(toString fr.id)]
+    --  ,p [] [text <| "Titulo: "++fr.title]
+    --  ,p [] [text <| "Nota:"++(toString fr.vote_average)]
+    --  ,p [] [text <| "Data de lancamento:"++fr.release_date]
+    --  ,p [] [text <| "Sinopse: "++fr.overview]
      ]
     ]
 
@@ -162,7 +120,7 @@ type alias FilmeResult =
     ,poster_path         : Maybe String
     ,overview            : String
     ,release_date        : String
-    }
+    } 
 
 type alias Filme =
     {
@@ -172,46 +130,99 @@ type alias Filme =
     ,results        : List(FilmeResult)
     }
 
+type alias FilmesCad = 
+    {
+     idFilme : Int
+    ,idCadastro : Int
+    ,assistido : Bool
+    ,favorito : Bool
+    }
 
 type Message =
       NomeFilme String
-    | Submit
-    | Response (Result Http.Error Filme)
+    | SubmitBusca
+    | ResponseBusca (Result Http.Error Filme)
+    | SubmitConsultaFilme Int
+    | ResponseConsultaFilme (Result Http.Error Int)
+    | SubmitInsereFilmesCad
+    | ResponseInsereFilmesCad (Result Http.Error Int)
+
+
+encodeFilmesCad : FilmesCad -> Encode.Value
+encodeFilmesCad fc =
+    let
+        lstFC =
+        [
+         ("idFilme", Encode.int <| fc.idFilme)
+        ,("idCadastro", Encode.int <| fc.idCadastro)
+        ,("assistido", Encode.bool <| fc.assistido)
+        ,("favorito", Encode.bool <| fc.favorito)
+        ]
+    in
+        Encode.object <| lstFC
+
+--POST pra inserir na filmescad
+postInsereFilmesCad : FilmesCad -> Cmd Message
+postInsereFilmesCad fc =
+    let
+        url = "https://haskelleta-romefeller.c9users.io/filmescad/inserir"
+        requestBody = Http.jsonBody <| encodeFilmesCad fc
+    in
+        Http.send ResponseInsereFilmesCad <|
+                            Http.post url requestBody Decode.int --o retorno do POST é um ID só
 
 type alias Model =
     {
      nomeFilme          : String
     ,error              : String
     ,resultadoBusca     : Filme
+    ,filmesIdConsulta   : Int
+    ,idCadLogado        : Int
     }
 
 init : Model
 init =
     let
-        initFilme = Filme 0 0 0 []
+        initFilme = Filme 0 0 0 []   
     in
-        Model "" "" initFilme
+        Model "" "" initFilme 0 0
 
+--DECODER DA API DE FILMES
 decodeFilmeResult : Decoder FilmeResult
-decodeFilmeResult = map6 FilmeResult (at ["id"] int)
-                                     (at ["title"] string)
-                                     (at ["vote_average"] float)
-                                (maybe((at ["poster_path"] string)))
-                                     (at ["overview"] string)
-                                     (at ["release_date"] string)
+decodeFilmeResult = map6 FilmeResult (at ["id"] Decode.int)
+                                     (at ["title"] Decode.string)
+                                     (at ["vote_average"] Decode.float)
+                                (maybe((at ["poster_path"] Decode.string)))
+                                     (at ["overview"] Decode.string)
+                                     (at ["release_date"] Decode.string)
 
+--DECODER DA API DE FILMES
 decodeFilme : Decoder Filme
-decodeFilme = map4 Filme (at ["page"] int)
-                         (at ["total_results"] int)
-                         (at ["total_pages"] int)
-                         (at ["results"] (Json.Decode.list decodeFilmeResult))
-
+decodeFilme = map4 Filme (at ["page"] Decode.int)
+                         (at ["total_results"] Decode.int)
+                         (at ["total_pages"] Decode.int)
+                         (at ["results"] (Decode.list decodeFilmeResult))
+                         
+--GET NA API DE FILMES
 getFilme : String -> Cmd Message
 getFilme nomefilme =
     let
         url = ("https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=en-US&query="++nomefilme++"&page=1&include_adult=false")
     in
-        send Response <| Http.get url decodeFilme
+        send ResponseBusca <| Http.get url decodeFilme
+
+
+-- DECODE PRO GET DO CONSULTA FILMES
+decodeConsultaFilme : Decoder Int
+decodeConsultaFilme = (at ["id"] Decode.int)
+
+-- FUNÇÃO PRA FAZER O GET NA TABELA FILMES E VER SE EXISTE NO BANCO
+getConsultaFilmes : Int -> Cmd Message
+getConsultaFilmes idAPI = 
+    let
+        url = ("https://haskelleta-romefeller.c9users.io/filmes/consultaFilme/"++ toString idAPI)
+    in
+        Http.send ResponseConsultaFilme <| Http.get url decodeConsultaFilme
 
 
 update : Message -> Model -> (Model, Cmd Message)
@@ -219,15 +230,34 @@ update msg model =
     case msg of
         NomeFilme x ->
             ({model | nomeFilme = formatarNome x}, Cmd.none)
+        
 
-        Submit ->
+        SubmitBusca ->
             ({model | resultadoBusca = (Filme 0 0 0 []),
                       error = ""}, getFilme model.nomeFilme)
-
-        Response x ->
+                      
+        ResponseBusca x ->
             case x of
                 Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
                 Ok  y -> ({ model | resultadoBusca = y }, Cmd.none)
+                
+        SubmitConsultaFilme idAPI ->
+            (model, getConsultaFilmes idAPI)
+            
+        ResponseConsultaFilme x ->
+            let
+              cadInserir = FilmesCad model.filmesIdConsulta model.idCadLogado False False
+              cmdInsereFilmesCad = postInsereFilmesCad cadInserir
+            in
+            case x of
+                Err y -> ({model | error = (httpErrorString y)}, Cmd.none)
+                Ok  y -> ({model | filmesIdConsulta = y}, cmdInsereFilmesCad)
+        
+        SubmitInsereFilmesCad ->
+            (model, Cmd.none)
+        
+        ResponseInsereFilmesCad x ->
+            (model, Cmd.none)
 
 view : Model -> Html Message
 view model =
@@ -237,15 +267,16 @@ view model =
       [
         div [class "input-field inline"]
         [
-        input [type_ "text", class "validate", placeholder "nome do filme que deseja buscar", required True, onInput NomeFilme] []
-        ,button [class "btn green waves-effect", onClick Submit] [text "BUSCAR!"]
+         input [type_ "text", class "validate", placeholder "nome do filme que deseja buscar", required True, onInput NomeFilme] []
+        ,button [class "btn green waves-effect", onClick SubmitBusca] [text "BUSCAR!"]
         ]
       ]
       ,div [class "center-align"]
       [
-        div [style [("color", "red")]] [text <| toString model.error]
-        --,div [] [text <| toString model.nomeFilme]
+         div [style [("color", "red")]] [text <| toString model.error]
         ,div [] [viewFilme model.resultadoBusca]
+        ,label [] [text <| "id do filme (nossa base): "++toString model.filmesIdConsulta]
+        ,label [] [text <| "cadastro logado: "++toString model.idCadLogado]
       ]
     ]
 

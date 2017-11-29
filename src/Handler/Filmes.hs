@@ -19,5 +19,8 @@ postFilmesR = do
     
 getConsultaFilmesR  :: Int -> Handler TypedContent
 getConsultaFilmesR idApi  = do
-    filme <- runDB $ selectList [FilmesIdapi ==. idApi] []    
-    sendStatusJSON created201 $ Retorno 0 (toJSON filme)
+    filme <- runDB $ selectList [FilmesIdapi ==. idApi] []   
+    case filme of
+        [] -> sendStatusJSON notFound404 $ object(["resp" .= (show "Não encontrado")])
+        [x] -> sendStatusJSON created201 $ toJSON x
+    

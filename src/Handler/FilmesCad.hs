@@ -10,6 +10,9 @@ import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 import Utils
 
+data Favorito = Favorito {favorito::Bool} deriving Generic
+instance ToJSON Favorito where
+instance FromJSON Favorito where
 
 postFilmesCadR :: Handler TypedContent
 postFilmesCadR = do
@@ -40,3 +43,11 @@ getListarAssistidosR idCad = do
     filmesIds <- return $ fmap filmesCadIdFilme lista'
     filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds 
     sendStatusJSON ok200 (object ["resp" .= (toJSON filmes)])
+    
+patchAlterarFavoritosR :: FilmesCadId -> Handler Value
+patchAlterarFavoritosR idFilmesCad = do
+    _ <- runDB $ get404 idFilmesCad
+    novoFav <- requireJsonBody :: Handler Favorito
+    runDB $ update idFilmesCad [FilmesCadFavorito =. (favorito novoFav)] 
+    sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey idFilmesCad))])
+

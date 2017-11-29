@@ -1,0 +1,84 @@
+var _user$project$ConsultaFilme$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{ctor: '[]'});
+};
+var _user$project$ConsultaFilme$Model = F3(
+	function (a, b, c) {
+		return {resp: a, error: b, idAPI: c};
+	});
+var _user$project$ConsultaFilme$ConsultaFilme = function (a) {
+	return {filmesID: a};
+};
+var _user$project$ConsultaFilme$init = A3(
+	_user$project$ConsultaFilme$Model,
+	_user$project$ConsultaFilme$ConsultaFilme(0),
+	'',
+	0);
+var _user$project$ConsultaFilme$decodeConsultaFilme = A2(
+	_elm_lang$core$Json_Decode$map,
+	_user$project$ConsultaFilme$ConsultaFilme,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'id',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int));
+var _user$project$ConsultaFilme$ResponseConsultaFilme = function (a) {
+	return {ctor: 'ResponseConsultaFilme', _0: a};
+};
+var _user$project$ConsultaFilme$getConsultaFilmes = function (idAPI) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmes/consultaFilme/',
+		_elm_lang$core$Basics$toString(idAPI));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$ConsultaFilme$ResponseConsultaFilme,
+		A2(_elm_lang$http$Http$get, url, _user$project$ConsultaFilme$decodeConsultaFilme));
+};
+var _user$project$ConsultaFilme$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'SubmitConsultaFilme') {
+			return {
+				ctor: '_Tuple2',
+				_0: model,
+				_1: _user$project$ConsultaFilme$getConsultaFilmes(model.idAPI)
+			};
+		} else {
+			var _p1 = _p0._0;
+			if (_p1.ctor === 'Err') {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							error: _elm_lang$core$Basics$toString(_p1._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{resp: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			}
+		}
+	});
+var _user$project$ConsultaFilme$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _user$project$ConsultaFilme$init, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$ConsultaFilme$view,
+		update: _user$project$ConsultaFilme$update,
+		subscriptions: function (_p2) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
+var _user$project$ConsultaFilme$SubmitConsultaFilme = {ctor: 'SubmitConsultaFilme'};
