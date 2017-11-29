@@ -14,6 +14,10 @@ data Favorito = Favorito {favorito::Bool} deriving Generic
 instance ToJSON Favorito where
 instance FromJSON Favorito where
 
+data Assistido = Assistido {assistido::Bool} deriving Generic
+instance ToJSON Assistido where
+instance FromJSON Assistido where
+
 postFilmesCadR :: Handler TypedContent
 postFilmesCadR = do
     filmCad <- requireJsonBody :: Handler FilmesCad
@@ -49,5 +53,12 @@ patchAlterarFavoritosR idFilmesCad = do
     _ <- runDB $ get404 idFilmesCad
     newFav <- requireJsonBody :: Handler Favorito
     runDB $ update idFilmesCad [FilmesCadFavorito =. (favorito newFav)] 
+    sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey idFilmesCad))])
+    
+patchAlterarAssistidosR :: FilmesCadId -> Handler Value
+patchAlterarAssistidosR idFilmesCad = do
+    _ <- runDB $ get404 idFilmesCad
+    newAssistidos <- requireJsonBody :: Handler Assistido
+    runDB $ update idFilmesCad [FilmesCadAssistido =. (assistido newAssistidos)] 
     sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey idFilmesCad))])
 

@@ -18,3 +18,4 @@
 /filmescad/listarfavoritos/#CadastrosId     ListarFavoritosR      GET
 /filmescad/listarassistidos/#CadastrosId    ListarAssistidosR     GET
 /filmescad/alterarfavoritos/#FilmesCadId    AlterarFavoritosR     PATCH
+/filmescad/alterarassistidos/#FilmesCadId   AlterarAssistidosR    PATCH
