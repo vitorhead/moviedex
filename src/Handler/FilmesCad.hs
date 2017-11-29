@@ -47,7 +47,7 @@ getListarAssistidosR idCad = do
 patchAlterarFavoritosR :: FilmesCadId -> Handler Value
 patchAlterarFavoritosR idFilmesCad = do
     _ <- runDB $ get404 idFilmesCad
-    novoFav <- requireJsonBody :: Handler Favorito
-    runDB $ update idFilmesCad [FilmesCadFavorito =. (favorito novoFav)] 
+    newFav <- requireJsonBody :: Handler Favorito
+    runDB $ update idFilmesCad [FilmesCadFavorito =. (favorito newFav)] 
     sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey idFilmesCad))])
 
