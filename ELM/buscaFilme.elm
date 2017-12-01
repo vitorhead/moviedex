@@ -81,7 +81,7 @@ formatFilmeResult fr =
       img [class "responsive-img",src linhaFoto] []
      ,div []
      [
-        button [class "btn btn-filme", onClick <| SubmitConsultaFilme fr.id] 
+        button [class "btn btn-filme", onClick <| SubmitConsultaFilme fr] 
         [ 
          i [class "material-icons small"] [text "add"]
         ]
@@ -142,10 +142,42 @@ type Message =
       NomeFilme String
     | SubmitBusca
     | ResponseBusca (Result Http.Error Filme)
-    | SubmitConsultaFilme Int
-    | ResponseConsultaFilme (Result Http.Error Int)
-    | SubmitInsereFilmesCad
+    | SubmitConsultaFilme FilmeResult
+    | ResponseConsultaFilme (Result Http.Error FilmeHaskellAPI)
+    | SubmitInsereFilmesCad FilmesCad
     | ResponseInsereFilmesCad (Result Http.Error Int)
+    --ResponseInsereFilme nao tem submit pq ele é ativado com o ResponseInsereFilmesCad e dps da trigger no SubmitInsereFilmesCad
+    | ResponseInsereFilme (Result Http.Error Int)
+
+
+
+encodeFilme : FilmeResult -> Encode.Value
+encodeFilme fr =
+    let
+        urlPoster = case fr.poster_path of
+                        Just x -> x
+                        Nothing -> ""
+        lstFR =
+        [
+         ("idapi", Encode.int <| fr.id)
+        ,("title", Encode.string <| fr.title)
+        ,("vote_average", Encode.float <| fr.vote_average)
+        ,("poster_path", Encode.string <| urlPoster)
+        ,("overview", Encode.string <| fr.overview)
+        ,("release_date", Encode.string <| fr.release_date)
+        ]
+    in
+        Encode.object <| lstFR
+
+
+postInsereFilme : FilmeResult -> Cmd Message
+postInsereFilme fr = 
+    let 
+        url = "https://haskelleta-romefeller.c9users.io/filmes/inserir"
+        requestBody = Http.jsonBody <| encodeFilme fr
+    in
+        Http.send ResponseInsereFilme <| 
+                      Http.post url requestBody (at ["mensagem"] Decode.int)
 
 
 encodeFilmesCad : FilmesCad -> Encode.Value
@@ -171,21 +203,36 @@ postInsereFilmesCad fc =
         Http.send ResponseInsereFilmesCad <|
                             Http.post url requestBody Decode.int --o retorno do POST é um ID só
 
+
+
 type alias Model =
     {
      nomeFilme          : String
     ,error              : String
     ,resultadoBusca     : Filme
-    ,filmesIdConsulta   : Int
     ,idCadLogado        : Int
+    ,filmeEscolhido     : FilmeResult
+    }
+    
+-- Teve que usar um type diferente do FilmeResult pq o Haskell volta o id da tabela + id da api...
+type alias FilmeHaskellAPI = 
+    {
+     overview     : String
+    ,vote_average : Float
+    ,release_date : String
+    ,id           : Int
+    ,idapi        : Int
+    ,poster_path  : String
+    ,title        : String
     }
 
 init : Model
 init =
     let
         initFilme = Filme 0 0 0 []   
+        initFilmeEscolhido = FilmeResult 0 "" 0.0 (Just "") "" ""
     in
-        Model "" "" initFilme 0 0
+        Model "" "" initFilme 0 initFilmeEscolhido
 
 --DECODER DA API DE FILMES
 decodeFilmeResult : Decoder FilmeResult
@@ -213,8 +260,15 @@ getFilme nomefilme =
 
 
 -- DECODE PRO GET DO CONSULTA FILMES
-decodeConsultaFilme : Decoder Int
-decodeConsultaFilme = (at ["id"] Decode.int)
+decodeConsultaFilme : Decoder FilmeHaskellAPI
+decodeConsultaFilme = map7 FilmeHaskellAPI  (at ["overview"] Decode.string)
+                                            (at ["vote_average"] Decode.float)
+                                            (at ["release_date"] Decode.string)
+                                            (at ["id"] Decode.int)
+                                            (at ["idapi"] Decode.int)
+                                            (at ["poster_path"] Decode.string)
+                                            (at ["title"] Decode.string)
+                        
 
 -- FUNÇÃO PRA FAZER O GET NA TABELA FILMES E VER SE EXISTE NO BANCO
 getConsultaFilmes : Int -> Cmd Message
@@ -241,23 +295,38 @@ update msg model =
                 Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
                 Ok  y -> ({ model | resultadoBusca = y }, Cmd.none)
                 
-        SubmitConsultaFilme idAPI ->
-            (model, getConsultaFilmes idAPI)
+        SubmitConsultaFilme fr ->
+            ({model | filmeEscolhido = fr}, getConsultaFilmes fr.id)
             
         ResponseConsultaFilme x ->
-            let
-              cadInserir = FilmesCad model.filmesIdConsulta model.idCadLogado False False
-              cmdInsereFilmesCad = postInsereFilmesCad cadInserir
-            in
             case x of
-                Err y -> ({model | error = (httpErrorString y)}, Cmd.none)
-                Ok  y -> ({model | filmesIdConsulta = y}, cmdInsereFilmesCad)
+                Err y -> 
+                    let
+                        cmdInsereFilme = postInsereFilme model.filmeEscolhido
+                    in
+                    (model, cmdInsereFilme)
+                Ok  y -> 
+                    let
+                        cadInserirFilmesCad = FilmesCad y.id model.idCadLogado False False
+                        cmdInsereFilmesCad = postInsereFilmesCad cadInserirFilmesCad  
+                    in
+                    (model, cmdInsereFilmesCad)
         
-        SubmitInsereFilmesCad ->
-            (model, Cmd.none)
+        SubmitInsereFilmesCad filmeCad ->
+            (model, postInsereFilmesCad filmeCad)
         
         ResponseInsereFilmesCad x ->
             (model, Cmd.none)
+            
+        ResponseInsereFilme x ->
+            case x of
+                Err y -> ({model | error = "AEAEAEAE PASSOU NO ERRO"}, Cmd.none)
+                Ok y -> 
+                    let
+                        inserirFilmesCad =  postInsereFilmesCad (FilmesCad y model.idCadLogado False False)
+                    in
+                    ({model | error = "ASDADADAD PASSOU"}, inserirFilmesCad)
+
 
 view : Model -> Html Message
 view model =
@@ -275,7 +344,7 @@ view model =
       [
          div [style [("color", "red")]] [text <| toString model.error]
         ,div [] [viewFilme model.resultadoBusca]
-        ,label [] [text <| "id do filme (nossa base): "++toString model.filmesIdConsulta]
+        --,label [] [text <| "id do filme (nossa base): "++toString model.filmesIdConsulta]
         ,label [] [text <| "cadastro logado: "++toString model.idCadLogado]
       ]
     ]

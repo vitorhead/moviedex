@@ -1,11 +1,3 @@
-var _user$project$BuscaFilme$decodeConsultaFilme = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'id',
-		_1: {ctor: '[]'}
-	},
-	_elm_lang$core$Json_Decode$int);
 var _user$project$BuscaFilme$encodeFilmesCad = function (fc) {
 	var lstFC = {
 		ctor: '::',
@@ -42,6 +34,66 @@ var _user$project$BuscaFilme$encodeFilmesCad = function (fc) {
 	};
 	return _elm_lang$core$Json_Encode$object(lstFC);
 };
+var _user$project$BuscaFilme$encodeFilme = function (fr) {
+	var urlPoster = function () {
+		var _p0 = fr.poster_path;
+		if (_p0.ctor === 'Just') {
+			return _p0._0;
+		} else {
+			return '';
+		}
+	}();
+	var lstFR = {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple2',
+			_0: 'idapi',
+			_1: _elm_lang$core$Json_Encode$int(fr.id)
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'title',
+				_1: _elm_lang$core$Json_Encode$string(fr.title)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'vote_average',
+					_1: _elm_lang$core$Json_Encode$float(fr.vote_average)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'poster_path',
+						_1: _elm_lang$core$Json_Encode$string(urlPoster)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'overview',
+							_1: _elm_lang$core$Json_Encode$string(fr.overview)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'release_date',
+								_1: _elm_lang$core$Json_Encode$string(fr.release_date)
+							},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	};
+	return _elm_lang$core$Json_Encode$object(lstFR);
+};
 var _user$project$BuscaFilme$formatarNome = function (nome) {
 	return A2(
 		_elm_lang$core$String$join,
@@ -50,10 +102,10 @@ var _user$project$BuscaFilme$formatarNome = function (nome) {
 };
 var _user$project$BuscaFilme$urlFoto = 'http://image.tmdb.org/t/p/w154/';
 var _user$project$BuscaFilme$httpErrorString = function (error) {
-	var _p0 = error;
-	switch (_p0.ctor) {
+	var _p1 = error;
+	switch (_p1.ctor) {
 		case 'BadUrl':
-			return A2(_elm_lang$core$Basics_ops['++'], '[ERRO HTTP] Bad Url: ', _p0._0);
+			return A2(_elm_lang$core$Basics_ops['++'], '[ERRO HTTP] Bad Url: ', _p1._0);
 		case 'Timeout':
 			return '[ERRO HTTP] Timeout';
 		case 'NetworkError':
@@ -62,20 +114,20 @@ var _user$project$BuscaFilme$httpErrorString = function (error) {
 			return A2(
 				_elm_lang$core$Basics_ops['++'],
 				'[ERRO HTTP] Status: ',
-				_elm_lang$core$Basics$toString(_p0._0.status.code));
+				_elm_lang$core$Basics$toString(_p1._0.status.code));
 		default:
 			return A2(
 				_elm_lang$core$Basics_ops['++'],
 				'[ERRO HTTP] Payload incorreto: ',
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(_p0._0),
+					_elm_lang$core$Basics$toString(_p1._0),
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'(',
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(_p0._1.status.code),
+							_elm_lang$core$Basics$toString(_p1._1.status.code),
 							')'))));
 	}
 };
@@ -180,17 +232,111 @@ var _user$project$BuscaFilme$FilmesCad = F4(
 	});
 var _user$project$BuscaFilme$Model = F5(
 	function (a, b, c, d, e) {
-		return {nomeFilme: a, error: b, resultadoBusca: c, filmesIdConsulta: d, idCadLogado: e};
+		return {nomeFilme: a, error: b, resultadoBusca: c, idCadLogado: d, filmeEscolhido: e};
 	});
 var _user$project$BuscaFilme$init = function () {
+	var initFilmeEscolhido = A6(
+		_user$project$BuscaFilme$FilmeResult,
+		0,
+		'',
+		0.0,
+		_elm_lang$core$Maybe$Just(''),
+		'',
+		'');
 	var initFilme = A4(
 		_user$project$BuscaFilme$Filme,
 		0,
 		0,
 		0,
 		{ctor: '[]'});
-	return A5(_user$project$BuscaFilme$Model, '', '', initFilme, 0, 0);
+	return A5(_user$project$BuscaFilme$Model, '', '', initFilme, 0, initFilmeEscolhido);
 }();
+var _user$project$BuscaFilme$FilmeHaskellAPI = F7(
+	function (a, b, c, d, e, f, g) {
+		return {overview: a, vote_average: b, release_date: c, id: d, idapi: e, poster_path: f, title: g};
+	});
+var _user$project$BuscaFilme$decodeConsultaFilme = A8(
+	_elm_lang$core$Json_Decode$map7,
+	_user$project$BuscaFilme$FilmeHaskellAPI,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'overview',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'vote_average',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$float),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'release_date',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'id',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'idapi',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'poster_path',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'title',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string));
+var _user$project$BuscaFilme$ResponseInsereFilme = function (a) {
+	return {ctor: 'ResponseInsereFilme', _0: a};
+};
+var _user$project$BuscaFilme$postInsereFilme = function (fr) {
+	var requestBody = _elm_lang$http$Http$jsonBody(
+		_user$project$BuscaFilme$encodeFilme(fr));
+	var url = 'https://haskelleta-romefeller.c9users.io/filmes/inserir';
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$BuscaFilme$ResponseInsereFilme,
+		A3(
+			_elm_lang$http$Http$post,
+			url,
+			requestBody,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'mensagem',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$int)));
+};
 var _user$project$BuscaFilme$ResponseInsereFilmesCad = function (a) {
 	return {ctor: 'ResponseInsereFilmesCad', _0: a};
 };
@@ -203,7 +349,9 @@ var _user$project$BuscaFilme$postInsereFilmesCad = function (fc) {
 		_user$project$BuscaFilme$ResponseInsereFilmesCad,
 		A3(_elm_lang$http$Http$post, url, requestBody, _elm_lang$core$Json_Decode$int));
 };
-var _user$project$BuscaFilme$SubmitInsereFilmesCad = {ctor: 'SubmitInsereFilmesCad'};
+var _user$project$BuscaFilme$SubmitInsereFilmesCad = function (a) {
+	return {ctor: 'SubmitInsereFilmesCad', _0: a};
+};
 var _user$project$BuscaFilme$ResponseConsultaFilme = function (a) {
 	return {ctor: 'ResponseConsultaFilme', _0: a};
 };
@@ -222,11 +370,11 @@ var _user$project$BuscaFilme$SubmitConsultaFilme = function (a) {
 };
 var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 	var linhaFoto = function () {
-		var _p1 = fr.poster_path;
-		if (_p1.ctor === 'Nothing') {
+		var _p2 = fr.poster_path;
+		if (_p2.ctor === 'Nothing') {
 			return '---';
 		} else {
-			return A2(_elm_lang$core$Basics_ops['++'], _user$project$BuscaFilme$urlFoto, _p1._0);
+			return A2(_elm_lang$core$Basics_ops['++'], _user$project$BuscaFilme$urlFoto, _p2._0);
 		}
 	}();
 	return A2(
@@ -265,7 +413,7 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$BuscaFilme$SubmitConsultaFilme(fr.id)),
+										_user$project$BuscaFilme$SubmitConsultaFilme(fr)),
 									_1: {ctor: '[]'}
 								}
 							},
@@ -414,15 +562,15 @@ var _user$project$BuscaFilme$getFilme = function (nomefilme) {
 };
 var _user$project$BuscaFilme$update = F2(
 	function (msg, model) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
 			case 'NomeFilme':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							nomeFilme: _user$project$BuscaFilme$formatarNome(_p2._0)
+							nomeFilme: _user$project$BuscaFilme$formatarNome(_p3._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -443,36 +591,7 @@ var _user$project$BuscaFilme$update = F2(
 					_1: _user$project$BuscaFilme$getFilme(model.nomeFilme)
 				};
 			case 'ResponseBusca':
-				var _p3 = _p2._0;
-				if (_p3.ctor === 'Err') {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								error: _user$project$BuscaFilme$httpErrorString(_p3._0)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{resultadoBusca: _p3._0}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'SubmitConsultaFilme':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$BuscaFilme$getConsultaFilmes(_p2._0)
-				};
-			case 'ResponseConsultaFilme':
-				var cadInserir = A4(_user$project$BuscaFilme$FilmesCad, model.filmesIdConsulta, model.idCadLogado, false, false);
-				var cmdInsereFilmesCad = _user$project$BuscaFilme$postInsereFilmesCad(cadInserir);
-				var _p4 = _p2._0;
+				var _p4 = _p3._0;
 				if (_p4.ctor === 'Err') {
 					return {
 						ctor: '_Tuple2',
@@ -488,14 +607,58 @@ var _user$project$BuscaFilme$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{filmesIdConsulta: _p4._0}),
-						_1: cmdInsereFilmesCad
+							{resultadoBusca: _p4._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
+			case 'SubmitConsultaFilme':
+				var _p5 = _p3._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{filmeEscolhido: _p5}),
+					_1: _user$project$BuscaFilme$getConsultaFilmes(_p5.id)
+				};
+			case 'ResponseConsultaFilme':
+				var _p6 = _p3._0;
+				if (_p6.ctor === 'Err') {
+					var cmdInsereFilme = _user$project$BuscaFilme$postInsereFilme(model.filmeEscolhido);
+					return {ctor: '_Tuple2', _0: model, _1: cmdInsereFilme};
+				} else {
+					var cadInserirFilmesCad = A4(_user$project$BuscaFilme$FilmesCad, _p6._0.id, model.idCadLogado, false, false);
+					var cmdInsereFilmesCad = _user$project$BuscaFilme$postInsereFilmesCad(cadInserirFilmesCad);
+					return {ctor: '_Tuple2', _0: model, _1: cmdInsereFilmesCad};
+				}
 			case 'SubmitInsereFilmesCad':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$BuscaFilme$postInsereFilmesCad(_p3._0)
+				};
+			case 'ResponseInsereFilmesCad':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				var _p7 = _p3._0;
+				if (_p7.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{error: 'AEAEAEAE PASSOU NO ERRO'}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					var inserirFilmesCad = _user$project$BuscaFilme$postInsereFilmesCad(
+						A4(_user$project$BuscaFilme$FilmesCad, _p7._0, model.idCadLogado, false, false));
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{error: 'ASDADADAD PASSOU'}),
+						_1: inserirFilmesCad
+					};
+				}
 		}
 	});
 var _user$project$BuscaFilme$SubmitBusca = {ctor: 'SubmitBusca'};
@@ -626,26 +789,11 @@ var _user$project$BuscaFilme$view = function (model) {
 										_0: _elm_lang$html$Html$text(
 											A2(
 												_elm_lang$core$Basics_ops['++'],
-												'id do filme (nossa base): ',
-												_elm_lang$core$Basics$toString(model.filmesIdConsulta))),
+												'cadastro logado: ',
+												_elm_lang$core$Basics$toString(model.idCadLogado))),
 										_1: {ctor: '[]'}
 									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$label,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													'cadastro logado: ',
-													_elm_lang$core$Basics$toString(model.idCadLogado))),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
+								_1: {ctor: '[]'}
 							}
 						}
 					}),
@@ -658,7 +806,7 @@ var _user$project$BuscaFilme$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$BuscaFilme$init, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$BuscaFilme$view,
 		update: _user$project$BuscaFilme$update,
-		subscriptions: function (_p5) {
+		subscriptions: function (_p8) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
