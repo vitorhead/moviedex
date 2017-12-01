@@ -62,3 +62,8 @@ patchAlterarAssistidosR idFilmesCad = do
     runDB $ update idFilmesCad [FilmesCadAssistido =. (assistido newAssistidos)] 
     sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey idFilmesCad))])
 
+deletarFilmesCadR :: FilmesCadId -> Handler Value
+deletarFilmesCadR idFilmesCad = do
+    _ <- runDB $ get404 idFilmesCad
+    runDB $ delete idFilmesCad
+    sendStatusJSON noContent204 (object ["resp" .= ("deletado" ++ show (fromSqlKey idFilmesCad))])
