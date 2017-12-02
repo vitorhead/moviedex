@@ -314,6 +314,7 @@ var _user$project$BuscaFilme$decodeConsultaFilme = A8(
 			_1: {ctor: '[]'}
 		},
 		_elm_lang$core$Json_Decode$string));
+var _user$project$BuscaFilme$GoBack = {ctor: 'GoBack'};
 var _user$project$BuscaFilme$FilmeDetalhe = function (a) {
 	return {ctor: 'FilmeDetalhe', _0: a};
 };
@@ -667,12 +668,29 @@ var _user$project$BuscaFilme$update = F2(
 						_1: inserirFilmesCad
 					};
 				}
-			default:
+			case 'FilmeDetalhe':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{filmeEscolhido: _p3._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							filmeEscolhido: A6(
+								_user$project$BuscaFilme$FilmeResult,
+								0,
+								'',
+								0.0,
+								_elm_lang$core$Maybe$Just(''),
+								'',
+								'')
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
@@ -684,7 +702,11 @@ var _user$project$BuscaFilme$NomeFilme = function (a) {
 var _user$project$BuscaFilme$view = function (model) {
 	var filmeDetalhe = A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('center-align'),
+			_1: {ctor: '[]'}
+		},
 		{
 			ctor: '::',
 			_0: A2(
@@ -746,7 +768,26 @@ var _user$project$BuscaFilme$view = function (model) {
 										A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhido.overview)),
 									_1: {ctor: '[]'}
 								}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('btn red'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$GoBack),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Voltar'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}

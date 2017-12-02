@@ -147,6 +147,7 @@ type Message =
     --ResponseInsereFilme nao tem submit pq ele é ativado com o ResponseInsereFilmesCad e dps da trigger no SubmitInsereFilmesCad
     | ResponseInsereFilme (Result Http.Error Int)
     | FilmeDetalhe FilmeResult
+    | GoBack
 
 
 
@@ -327,6 +328,7 @@ update msg model =
                     ({model | error = "ASDADADAD PASSOU"}, inserirFilmesCad)
 
         FilmeDetalhe x -> ({model | filmeEscolhido = x}, Cmd.none)
+        GoBack -> ({model | filmeEscolhido = (FilmeResult -0 "" 0.0 (Just "") "" "")}, Cmd.none)
 
 
 view : Model -> Html Message
@@ -352,13 +354,14 @@ view model =
                   ]
                 ]
       filmeDetalhe : Html Message
-      filmeDetalhe = div []
+      filmeDetalhe = div [ class "center-align"]
                     [
                       p [] [text <| "ID: "++(toString model.filmeEscolhido.id)]
                      ,p [] [text <| "Titulo: "++ model.filmeEscolhido.title]
                      ,p [] [text <| "Nota:"++(toString model.filmeEscolhido.vote_average)]
                      ,p [] [text <| "Data de lancamento:"++ model.filmeEscolhido.release_date]
                      ,p [] [text <| "Sinopse: "++ model.filmeEscolhido.overview]
+                     , button [class "btn red", onClick GoBack] [text "Voltar"]
                     ]
     in
     if model.filmeEscolhido.id == 0 then
