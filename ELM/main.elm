@@ -3,22 +3,27 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
+import Http exposing (send, get)
+import Json.Decode as Decode exposing (bool, at)
 import Login as ModuloLogin
 import Cadastro as ModuloCadastro
 import BuscaFilme as ModuloBuscaFilme
---import ConsultaFilme as ModuloConsultaFilme
-
 
 type Pagina = Cadastro
             | Login
+            | BuscaFilme
             | Root
+
+type Click =  Busca
+            | MeusFilmes
 
 type Message =
       PgCadastro ModuloCadastro.Message
     | PgLogin ModuloLogin.Message
     | PgBuscaFilme ModuloBuscaFilme.Message
     | Mudar Pagina
-    -- | IdCadLogado Int
+    | SubmitAutenticacao Click
+    | ResponseAutenticacao (Result Http.Error Bool)
 
 
 type alias Model =
@@ -27,21 +32,24 @@ type alias Model =
     ,cadastro   : ModuloCadastro.Model
     ,buscaFilme : ModuloBuscaFilme.Model
     ,janela     : Pagina
+    ,acao       : Click
     }
 
 init : (Model, Cmd Message)
--- init = let 
---         login = ModuloLogin.Model "" "" "" (ModuloLogin.Cadastro "" "" "" "" "")  
---         cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "" 
---         janela = Root
---       in
-        --Model login cadastro janela, 
 init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Retorno 0 (ModuloLogin.Mensagem "" 0 "")),
          cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
          buscaFilme = ModuloBuscaFilme.init,
-         janela = Root}, Cmd.none)
+         janela = Root,
+         acao = MeusFilmes}, Cmd.none)
       
         
+getValidaAutenticacao : String -> Cmd Message
+getValidaAutenticacao auth =
+    let
+        url = ("https://haskelleta-romefeller.c9users.io/cadastro/autenticacao/"++auth)
+    in
+        Http.send ResponseAutenticacao <| Http.get url (at ["resp"] Decode.bool)
+
 
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
@@ -69,14 +77,76 @@ update msg model =
             newBF = {oldModelBuscaFilme | idCadLogado = model.login.ret.mensagem.idcadastro}
           in
             ({model | buscaFilme = newBF}, Cmd.map PgBuscaFilme <| Tuple.second updt)
-            
-        -- IdCadLogado s ->
-        --   let
-        --     oldIdCadastro = model.buscaFilme
-        --     newIdCadastro = { oldIdCadastro | idCadLogado = s }
-        --   in
-        --   ({model | buscaFilme = newIdCadastro}, Cmd.none)
-      
+        
+        SubmitAutenticacao clicado ->
+          ({model | acao = clicado}, getValidaAutenticacao <| String.filter (\x -> x /= '"') model.login.ret.mensagem.autenticacao)
+          
+        ResponseAutenticacao resp ->
+          case resp of
+            Err y -> ({model | janela = Root}, Cmd.none)
+            Ok y -> 
+              case y of
+                True -> 
+                      let
+                        clicado = 
+                          case model.acao of
+                            Busca -> BuscaFilme
+                            
+                            MeusFilmes -> Root
+                      in  
+                        ({model | janela = clicado}, Cmd.none)    
+                False ->
+                        ({model | janela = Root}, Cmd.none)    
+        
+
+viewMainPage : Html Message
+viewMainPage =  
+       div [class "row"] 
+        [
+          div [class "sidebar col s12 m4 l3"]
+          [
+            div [class "lateral-principal"] 
+            [
+              ul []
+              [
+                li [] [text "NOME CHAMPS"]
+                ,li [] 
+                [
+                  a [class "btn green", onClick <| SubmitAutenticacao Busca] [text "Buscar Filmes"]
+                  -- a [class "btn green", onClick <| SubmitAutenticacao << (Mudar BuscaFilme)] [text "Buscar Filmes"]
+                ]
+                ,li [] 
+                [
+                  a [class "btn red"] [text "Deslogar"]
+                ]
+              ]
+            ]
+          ]
+          ,div [class "col s12 m8 l9"] 
+          [
+            section []
+            [
+              h1 [] [text "NOME LISTA"]
+              ,ul [class "lista"]
+              [
+                li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
+                [
+                  div [class "poster-filme"] 
+                  [
+                    img [src "" ] []
+                  ]
+                ]
+                ,li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
+                [
+                  div [class "poster-filme"] 
+                  [
+                    img [src "" ] []
+                  ]
+                ]
+              ] -- fim ul
+            ] -- fim section
+          ]
+        ]
 
 
 viewRoot : Html Message
@@ -125,7 +195,8 @@ viewRoot =  div []
 view : Model -> Html Message
 view model =
     let 
-      escolhido =
+      deslogado : Html Message      
+      deslogado =
         case model.janela of
             Login -> Html.map PgLogin <| ModuloLogin.view model.login
 
@@ -133,19 +204,28 @@ view model =
 
             Root -> viewRoot
             
+            BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme 
+            
+      logado : Html Message      
+      logado =
+          case model.janela of
+            Login -> viewMainPage
+
+            Cadastro -> viewMainPage
+
+            Root -> viewMainPage
+            
+            BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme     
     in
-      if model.login.ret.mensagem.autenticacao == "" then
-        escolhido
-      else
-        let
-          logado = div [] 
-            [
-               --button [] [onClick <| IdCadLogado model.login.ret.mensagem.idcadastro],
-               Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme 
-            ]
-        in
+     if model.login.ret.mensagem.autenticacao == "" then
+      deslogado
+     else
+      div [] [
+        text <| toString model.janela ++ " - " ++toString model.acao,
         logado
-        
+      ] 
+ 
+ 
 main = program
     { init = init
     , view = view

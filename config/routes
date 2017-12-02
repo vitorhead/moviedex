@@ -11,6 +11,7 @@
 /cadastro/autenticacao/#Text                ValidaAuthR           GET
 
 
+
 /filmes/inserir                             FilmesR               POST
 /filmes/consultaFilme/#Int                  ConsultaFilmesR       GET
 

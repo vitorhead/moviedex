@@ -13209,11 +13209,15 @@ var _user$project$Login$main = _elm_lang$html$Html$program(
 		}
 	})();
 
-var _user$project$Main$Model = F4(
-	function (a, b, c, d) {
-		return {login: a, cadastro: b, buscaFilme: c, janela: d};
+var _user$project$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {login: a, cadastro: b, buscaFilme: c, janela: d, acao: e};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
+var _user$project$Main$BuscaFilme = {ctor: 'BuscaFilme'};
+var _user$project$Main$Login = {ctor: 'Login'};
+var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
+var _user$project$Main$MeusFilmes = {ctor: 'MeusFilmes'};
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -13236,12 +13240,230 @@ var _user$project$Main$init = {
 			A2(_user$project$Cadastro$Retorno, 0, 0),
 			''),
 		buscaFilme: _user$project$BuscaFilme$init,
-		janela: _user$project$Main$Root
+		janela: _user$project$Main$Root,
+		acao: _user$project$Main$MeusFilmes
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _user$project$Main$Login = {ctor: 'Login'};
-var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
+var _user$project$Main$Busca = {ctor: 'Busca'};
+var _user$project$Main$ResponseAutenticacao = function (a) {
+	return {ctor: 'ResponseAutenticacao', _0: a};
+};
+var _user$project$Main$getValidaAutenticacao = function (auth) {
+	var url = A2(_elm_lang$core$Basics_ops['++'], 'https://haskelleta-romefeller.c9users.io/cadastro/autenticacao/', auth);
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Main$ResponseAutenticacao,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$bool)));
+};
+var _user$project$Main$SubmitAutenticacao = function (a) {
+	return {ctor: 'SubmitAutenticacao', _0: a};
+};
+var _user$project$Main$viewMainPage = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('row'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('sidebar col s12 m4 l3'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('lateral-principal'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$ul,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$li,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('NOME CHAMPS'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$li,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$a,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('btn green'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Main$SubmitAutenticacao(_user$project$Main$Busca)),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Buscar Filmes'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$li,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$a,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('btn red'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Deslogar'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$section,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h1,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('NOME LISTA'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$ul,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('lista'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$li,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$img,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$src(''),
+																_1: {ctor: '[]'}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$li,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$div,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$img,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$src(''),
+																	_1: {ctor: '[]'}
+																},
+																{ctor: '[]'}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
 var _user$project$Main$Mudar = function (a) {
 	return {ctor: 'Mudar', _0: a};
 };
@@ -13573,7 +13795,7 @@ var _user$project$Main$update = F2(
 						_user$project$Main$PgCadastro,
 						_elm_lang$core$Tuple$second(updt))
 				};
-			default:
+			case 'PgBuscaFilme':
 				var updt = A2(_user$project$BuscaFilme$update, _p0._0, model.buscaFilme);
 				var oldModelBuscaFilme = _elm_lang$core$Tuple$first(updt);
 				var newBF = _elm_lang$core$Native_Utils.update(
@@ -13589,12 +13811,82 @@ var _user$project$Main$update = F2(
 						_user$project$Main$PgBuscaFilme,
 						_elm_lang$core$Tuple$second(updt))
 				};
+			case 'SubmitAutenticacao':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{acao: _p0._0}),
+					_1: _user$project$Main$getValidaAutenticacao(
+						A2(
+							_elm_lang$core$String$filter,
+							function (x) {
+								return !_elm_lang$core$Native_Utils.eq(
+									x,
+									_elm_lang$core$Native_Utils.chr('\"'));
+							},
+							model.login.ret.mensagem.autenticacao))
+				};
+			default:
+				var _p1 = _p0._0;
+				if (_p1.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{janela: _user$project$Main$Root}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					var _p2 = _p1._0;
+					if (_p2 === true) {
+						var clicado = function () {
+							var _p3 = model.acao;
+							if (_p3.ctor === 'Busca') {
+								return _user$project$Main$BuscaFilme;
+							} else {
+								return _user$project$Main$Root;
+							}
+						}();
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{janela: clicado}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					} else {
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{janela: _user$project$Main$Root}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					}
+				}
 		}
 	});
 var _user$project$Main$view = function (model) {
-	var escolhido = function () {
-		var _p1 = model.janela;
-		switch (_p1.ctor) {
+	var logado = function () {
+		var _p4 = model.janela;
+		switch (_p4.ctor) {
+			case 'Login':
+				return _user$project$Main$viewMainPage;
+			case 'Cadastro':
+				return _user$project$Main$viewMainPage;
+			case 'Root':
+				return _user$project$Main$viewMainPage;
+			default:
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgBuscaFilme,
+					_user$project$BuscaFilme$view(model.buscaFilme));
+		}
+	}();
+	var deslogado = function () {
+		var _p5 = model.janela;
+		switch (_p5.ctor) {
 			case 'Login':
 				return A2(
 					_elm_lang$html$Html$map,
@@ -13605,33 +13897,41 @@ var _user$project$Main$view = function (model) {
 					_elm_lang$html$Html$map,
 					_user$project$Main$PgCadastro,
 					_user$project$Cadastro$view(model.cadastro));
-			default:
+			case 'Root':
 				return _user$project$Main$viewRoot;
-		}
-	}();
-	if (_elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '')) {
-		return escolhido;
-	} else {
-		var logado = A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
+			default:
+				return A2(
 					_elm_lang$html$Html$map,
 					_user$project$Main$PgBuscaFilme,
-					_user$project$BuscaFilme$view(model.buscaFilme)),
+					_user$project$BuscaFilme$view(model.buscaFilme));
+		}
+	}();
+	return _elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '') ? deslogado : A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(model.janela),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						' - ',
+						_elm_lang$core$Basics$toString(model.acao)))),
+			_1: {
+				ctor: '::',
+				_0: logado,
 				_1: {ctor: '[]'}
-			});
-		return logado;
-	}
+			}
+		});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _user$project$Main$init,
 		view: _user$project$Main$view,
 		update: _user$project$Main$update,
-		subscriptions: function (_p2) {
+		subscriptions: function (_p6) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();

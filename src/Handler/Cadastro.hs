@@ -74,9 +74,9 @@ getValidaAuthR auth = do
             now <- liftIO $ getCurrentTime
             --60 pq volta secs
             case ( (diffUTCTime now (autenticacaoDtGerada ret)) < (40*60) ) of
-                True ->  sendStatusJSON created201 $ object(["resp" .= (show "Valido!")])
-                False -> sendStatusJSON notFound404 $ object(["resp" .= (show "Invalido!")])
-
+                True ->  sendStatusJSON created201 $ object(["resp" .= (True)])
+                False -> sendStatusJSON notFound404 $ object(["resp" .= (False)])
+                
 
 -- -- Define our data that will be used for creating the form.
 -- data FileForm = FileForm
