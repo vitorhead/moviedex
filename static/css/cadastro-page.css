@@ -12,6 +12,17 @@ img{
 footer{
   text-align: center;
 }
+/*Home logada INICIO*/
+.sidebar{
+  padding: 1em;
+}
+.lista{
+  display: flex;
+}
+li{  /*talvez restringir para as lis das */
+  padding: 1em;
+}
+/*Home logada FIM */
 .login{
   width: 50%;
   margin: auto;
