@@ -78,6 +78,17 @@ getValidaAuthR auth = do
                 False -> sendStatusJSON notFound404 $ object(["resp" .= (False)])
                 
 
+
+    
+getBuscaAuthR :: Text -> Handler TypedContent
+getBuscaAuthR auth = do
+    lista <- runDB $ selectList [AutenticacaoAuth ==. auth] []
+    lista' <- return $ fmap (\(Entity _ autenticacaoColuna) -> autenticacaoColuna) lista 
+    cadastrosId <- return $ fmap autenticacaoIdCadastro lista'
+    autent <- sequence $ fmap (\cid -> runDB $ get404 cid) cadastrosId
+    sendStatusJSON ok200 (object ["resp" .= (toJSON autent)])
+    
+
 -- -- Define our data that will be used for creating the form.
 -- data FileForm = FileForm
 --     { fileInfo :: FileInfo
@@ -134,3 +145,5 @@ getValidaAuthR auth = do
 
 -- commentIds :: (Text, Text, Text)
 -- commentIds = ("js-commentForm", "js-createCommentTextarea", "js-commentList")
+
+
