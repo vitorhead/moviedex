@@ -5,10 +5,8 @@ grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 .info-filme{
 padding: 1em;
-} 
-.div-btn-filme{
-    display: flex;
 }
+
 .btn-filme{
     margin-right: 5px;
 }

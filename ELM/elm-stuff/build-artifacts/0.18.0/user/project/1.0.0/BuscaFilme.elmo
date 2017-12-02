@@ -314,6 +314,9 @@ var _user$project$BuscaFilme$decodeConsultaFilme = A8(
 			_1: {ctor: '[]'}
 		},
 		_elm_lang$core$Json_Decode$string));
+var _user$project$BuscaFilme$FilmeDetalhe = function (a) {
+	return {ctor: 'FilmeDetalhe', _0: a};
+};
 var _user$project$BuscaFilme$ResponseInsereFilme = function (a) {
 	return {ctor: 'ResponseInsereFilme', _0: a};
 };
@@ -440,7 +443,12 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$BuscaFilme$FilmeDetalhe(fr)),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
@@ -638,7 +646,7 @@ var _user$project$BuscaFilme$update = F2(
 				};
 			case 'ResponseInsereFilmesCad':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			default:
+			case 'ResponseInsereFilme':
 				var _p7 = _p3._0;
 				if (_p7.ctor === 'Err') {
 					return {
@@ -659,6 +667,14 @@ var _user$project$BuscaFilme$update = F2(
 						_1: inserirFilmesCad
 					};
 				}
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{filmeEscolhido: _p3._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _user$project$BuscaFilme$SubmitBusca = {ctor: 'SubmitBusca'};
@@ -666,7 +682,77 @@ var _user$project$BuscaFilme$NomeFilme = function (a) {
 	return {ctor: 'NomeFilme', _0: a};
 };
 var _user$project$BuscaFilme$view = function (model) {
-	return A2(
+	var filmeDetalhe = A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'ID: ',
+							_elm_lang$core$Basics$toString(model.filmeEscolhido.id))),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(_elm_lang$core$Basics_ops['++'], 'Titulo: ', model.filmeEscolhido.title)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'Nota:',
+									_elm_lang$core$Basics$toString(model.filmeEscolhido.vote_average))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(_elm_lang$core$Basics_ops['++'], 'Data de lancamento:', model.filmeEscolhido.release_date)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhido.overview)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		});
+	var pgBusca = A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
@@ -800,6 +886,7 @@ var _user$project$BuscaFilme$view = function (model) {
 				_1: {ctor: '[]'}
 			}
 		});
+	return _elm_lang$core$Native_Utils.eq(model.filmeEscolhido.id, 0) ? pgBusca : filmeDetalhe;
 };
 var _user$project$BuscaFilme$main = _elm_lang$html$Html$program(
 	{

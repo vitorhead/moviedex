@@ -68,32 +68,30 @@ urlFoto = "http://image.tmdb.org/t/p/w154/"
 formatarNome : String -> String
 formatarNome nome = String.split " " nome |> String.join "%20"
 
+
+
 formatFilmeResult : FilmeResult -> Html Message
 formatFilmeResult fr =
     let
         linhaFoto = case fr.poster_path of
                         Nothing -> "---"
                         Just x  -> urlFoto++x
-        
+
     in
     div [class "info-filme"]
     [
-      img [class "responsive-img",src linhaFoto] []
+      img [class "responsive-img",src linhaFoto] [] --poster
      ,div []
      [
-        button [class "btn btn-filme", onClick <| SubmitConsultaFilme fr] 
-        [ 
+        button [class "btn btn-filme", onClick <| SubmitConsultaFilme fr]
+        [
          i [class "material-icons small"] [text "add"]
         ]
-       ,button [class "btn btn-filme"]
+       ,button [class "btn btn-filme", onClick (FilmeDetalhe fr)]
         [
          i [class "material-icons small"] [text "dehaze"]
         ]
-    --   p [] [text <| "ID: "++(toString fr.id)]
-    --  ,p [] [text <| "Titulo: "++fr.title]
-    --  ,p [] [text <| "Nota:"++(toString fr.vote_average)]
-    --  ,p [] [text <| "Data de lancamento:"++fr.release_date]
-    --  ,p [] [text <| "Sinopse: "++fr.overview]
+
      ]
     ]
 
@@ -120,7 +118,7 @@ type alias FilmeResult =
     ,poster_path         : Maybe String
     ,overview            : String
     ,release_date        : String
-    } 
+    }
 
 type alias Filme =
     {
@@ -130,7 +128,7 @@ type alias Filme =
     ,results        : List(FilmeResult)
     }
 
-type alias FilmesCad = 
+type alias FilmesCad =
     {
      idFilme : Int
     ,idCadastro : Int
@@ -148,6 +146,7 @@ type Message =
     | ResponseInsereFilmesCad (Result Http.Error Int)
     --ResponseInsereFilme nao tem submit pq ele é ativado com o ResponseInsereFilmesCad e dps da trigger no SubmitInsereFilmesCad
     | ResponseInsereFilme (Result Http.Error Int)
+    | FilmeDetalhe FilmeResult
 
 
 
@@ -171,12 +170,12 @@ encodeFilme fr =
 
 
 postInsereFilme : FilmeResult -> Cmd Message
-postInsereFilme fr = 
-    let 
+postInsereFilme fr =
+    let
         url = "https://haskelleta-romefeller.c9users.io/filmes/inserir"
         requestBody = Http.jsonBody <| encodeFilme fr
     in
-        Http.send ResponseInsereFilme <| 
+        Http.send ResponseInsereFilme <|
                       Http.post url requestBody (at ["mensagem"] Decode.int)
 
 
@@ -213,9 +212,9 @@ type alias Model =
     ,idCadLogado        : Int
     ,filmeEscolhido     : FilmeResult
     }
-    
+
 -- Teve que usar um type diferente do FilmeResult pq o Haskell volta o id da tabela + id da api...
-type alias FilmeHaskellAPI = 
+type alias FilmeHaskellAPI =
     {
      overview     : String
     ,vote_average : Float
@@ -229,7 +228,7 @@ type alias FilmeHaskellAPI =
 init : Model
 init =
     let
-        initFilme = Filme 0 0 0 []   
+        initFilme = Filme 0 0 0 []
         initFilmeEscolhido = FilmeResult 0 "" 0.0 (Just "") "" ""
     in
         Model "" "" initFilme 0 initFilmeEscolhido
@@ -249,7 +248,7 @@ decodeFilme = map4 Filme (at ["page"] Decode.int)
                          (at ["total_results"] Decode.int)
                          (at ["total_pages"] Decode.int)
                          (at ["results"] (Decode.list decodeFilmeResult))
-                         
+
 --GET NA API DE FILMES
 getFilme : String -> Cmd Message
 getFilme nomefilme =
@@ -268,11 +267,11 @@ decodeConsultaFilme = map7 FilmeHaskellAPI  (at ["overview"] Decode.string)
                                             (at ["idapi"] Decode.int)
                                             (at ["poster_path"] Decode.string)
                                             (at ["title"] Decode.string)
-                        
+
 
 -- FUNÇÃO PRA FAZER O GET NA TABELA FILMES E VER SE EXISTE NO BANCO
 getConsultaFilmes : Int -> Cmd Message
-getConsultaFilmes idAPI = 
+getConsultaFilmes idAPI =
     let
         url = ("https://haskelleta-romefeller.c9users.io/filmes/consultaFilme/"++ toString idAPI)
     in
@@ -284,71 +283,88 @@ update msg model =
     case msg of
         NomeFilme x ->
             ({model | nomeFilme = formatarNome x}, Cmd.none)
-        
+
 
         SubmitBusca ->
             ({model | resultadoBusca = (Filme 0 0 0 []),
                       error = ""}, getFilme model.nomeFilme)
-                      
+
         ResponseBusca x ->
             case x of
                 Err y -> ({ model | error = (httpErrorString y) }, Cmd.none)
                 Ok  y -> ({ model | resultadoBusca = y }, Cmd.none)
-                
+
         SubmitConsultaFilme fr ->
             ({model | filmeEscolhido = fr}, getConsultaFilmes fr.id)
-            
+
         ResponseConsultaFilme x ->
             case x of
-                Err y -> 
+                Err y ->
                     let
                         cmdInsereFilme = postInsereFilme model.filmeEscolhido
                     in
                     (model, cmdInsereFilme)
-                Ok  y -> 
+                Ok  y ->
                     let
                         cadInserirFilmesCad = FilmesCad y.id model.idCadLogado False False
-                        cmdInsereFilmesCad = postInsereFilmesCad cadInserirFilmesCad  
+                        cmdInsereFilmesCad = postInsereFilmesCad cadInserirFilmesCad
                     in
                     (model, cmdInsereFilmesCad)
-        
+
         SubmitInsereFilmesCad filmeCad ->
             (model, postInsereFilmesCad filmeCad)
-        
+
         ResponseInsereFilmesCad x ->
             (model, Cmd.none)
-            
+
         ResponseInsereFilme x ->
             case x of
                 Err y -> ({model | error = "AEAEAEAE PASSOU NO ERRO"}, Cmd.none)
-                Ok y -> 
+                Ok y ->
                     let
                         inserirFilmesCad =  postInsereFilmesCad (FilmesCad y model.idCadLogado False False)
                     in
                     ({model | error = "ASDADADAD PASSOU"}, inserirFilmesCad)
 
+        FilmeDetalhe x -> ({model | filmeEscolhido = x}, Cmd.none)
+
 
 view : Model -> Html Message
 view model =
-    div [class "divGeral"]
-    [
-      div [class "container center-align"]
-      [
-        div [class "input-field inline"]
-        [
-         input [type_ "text", class "validate", placeholder "nome do filme que deseja buscar", required True, onInput NomeFilme] []
-        ,button [class "btn green waves-effect", onClick SubmitBusca] [text "BUSCAR!"]
-        ]
-      ]
-      ,div [class "center-align"]
-      [
-         div [style [("color", "red")]] [text <| toString model.error]
-        ,div [] [viewFilme model.resultadoBusca]
-        --,label [] [text <| "id do filme (nossa base): "++toString model.filmesIdConsulta]
-        ,label [] [text <| "cadastro logado: "++toString model.idCadLogado]
-      ]
-    ]
-
+    let
+      pgBusca : Html Message
+      pgBusca = div [class "divGeral"]
+                [
+                  div [class "container center-align"]
+                  [
+                    div [class "input-field inline"]
+                    [
+                     input [type_ "text", class "validate", placeholder "nome do filme que deseja buscar", required True, onInput NomeFilme] []
+                    ,button [class "btn green waves-effect", onClick SubmitBusca] [text "BUSCAR!"]
+                    ]
+                  ]
+                  ,div [class "center-align"]
+                  [
+                     div [style [("color", "red")]] [text <| toString model.error]
+                    ,div [] [viewFilme model.resultadoBusca]
+                    --,label [] [text <| "id do filme (nossa base): "++toString model.filmesIdConsulta]
+                    ,label [] [text <| "cadastro logado: "++toString model.idCadLogado]
+                  ]
+                ]
+      filmeDetalhe : Html Message
+      filmeDetalhe = div []
+                    [
+                      p [] [text <| "ID: "++(toString model.filmeEscolhido.id)]
+                     ,p [] [text <| "Titulo: "++ model.filmeEscolhido.title]
+                     ,p [] [text <| "Nota:"++(toString model.filmeEscolhido.vote_average)]
+                     ,p [] [text <| "Data de lancamento:"++ model.filmeEscolhido.release_date]
+                     ,p [] [text <| "Sinopse: "++ model.filmeEscolhido.overview]
+                    ]
+    in
+    if model.filmeEscolhido.id == 0 then
+      pgBusca
+    else
+      filmeDetalhe
 
 main =
   program
