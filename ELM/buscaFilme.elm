@@ -330,7 +330,7 @@ update msg model =
 
         FilmeDetalhe x -> ({model | filmeEscolhidoDetalhe = x}, Cmd.none)
         
-        GoBack -> ({model | filmeEscolhidoDetalhe = (FilmeResult -1 "" 0.0 (Just "") "" "")}, Cmd.none)
+        GoBack -> ({model | filmeEscolhidoDetalhe = (FilmeResult 0 "" 0.0 (Just "") "" "")}, Cmd.none)
 
 
 view : Model -> Html Message

@@ -1,6 +1,6 @@
-var _user$project$Main$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {login: a, cadastro: b, buscaFilme: c, meusFilmes: d, janela: e, acao: f};
+var _user$project$Main$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {login: a, cadastro: b, buscaFilme: c, meusFilmes: d, upcoming: e, janela: f, acao: g};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
 var _user$project$Main$MeusFilmes = {ctor: 'MeusFilmes'};
@@ -8,6 +8,28 @@ var _user$project$Main$BuscaFilme = {ctor: 'BuscaFilme'};
 var _user$project$Main$Login = {ctor: 'Login'};
 var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
 var _user$project$Main$Nada = {ctor: 'Nada'};
+var _user$project$Main$MeusFilmesClick = {ctor: 'MeusFilmesClick'};
+var _user$project$Main$BuscaClick = {ctor: 'BuscaClick'};
+var _user$project$Main$ResponseUpcoming = function (a) {
+	return {ctor: 'ResponseUpcoming', _0: a};
+};
+var _user$project$Main$getUpcoming = function () {
+	var url = 'https://api.themoviedb.org/3/movie/upcoming?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&page=1';
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Main$ResponseUpcoming,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'results',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$BuscaFilme$decodeFilmeResult))));
+}();
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -31,13 +53,17 @@ var _user$project$Main$init = {
 			''),
 		buscaFilme: _user$project$BuscaFilme$init,
 		meusFilmes: _user$project$MeusFilmes$init,
+		upcoming: {ctor: '[]'},
 		janela: _user$project$Main$Root,
 		acao: _user$project$Main$Nada
 	},
-	_1: _elm_lang$core$Platform_Cmd$none
+	_1: _elm_lang$core$Platform_Cmd$batch(
+		{
+			ctor: '::',
+			_0: _user$project$Main$getUpcoming,
+			_1: {ctor: '[]'}
+		})
 };
-var _user$project$Main$MeusFilmesClick = {ctor: 'MeusFilmesClick'};
-var _user$project$Main$BuscaClick = {ctor: 'BuscaClick'};
 var _user$project$Main$ResponseAutenticacao = function (a) {
 	return {ctor: 'ResponseAutenticacao', _0: a};
 };
@@ -62,6 +88,43 @@ var _user$project$Main$SubmitAutenticacao = function (a) {
 	return {ctor: 'SubmitAutenticacao', _0: a};
 };
 var _user$project$Main$viewMainPage = function (model) {
+	var montaUpcoming = function (mf) {
+		var poster = function () {
+			var _p0 = mf.poster_path;
+			if (_p0.ctor === 'Nothing') {
+				return '--';
+			} else {
+				return _p0._0;
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$li,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$img,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$src(
+									A2(_elm_lang$core$Basics_ops['++'], 'http://image.tmdb.org/t/p/w342/', poster)),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	};
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -183,7 +246,43 @@ var _user$project$Main$viewMainPage = function (model) {
 							}),
 						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$section,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h1,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Lançamentos: '),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$ul,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('lista'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											A2(_elm_lang$core$List$map, montaUpcoming, model.upcoming)),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -483,18 +582,18 @@ var _user$project$Main$PgCadastro = function (a) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'Mudar':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{janela: _p0._0}),
+						{janela: _p1._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'PgLogin':
-				var updt = A2(_user$project$Login$update, _p0._0, model.login);
+				var updt = A2(_user$project$Login$update, _p1._0, model.login);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -508,7 +607,7 @@ var _user$project$Main$update = F2(
 						_elm_lang$core$Tuple$second(updt))
 				};
 			case 'PgCadastro':
-				var updt = A2(_user$project$Cadastro$update, _p0._0, model.cadastro);
+				var updt = A2(_user$project$Cadastro$update, _p1._0, model.cadastro);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -522,7 +621,7 @@ var _user$project$Main$update = F2(
 						_elm_lang$core$Tuple$second(updt))
 				};
 			case 'PgBuscaFilme':
-				var updt = A2(_user$project$BuscaFilme$update, _p0._0, model.buscaFilme);
+				var updt = A2(_user$project$BuscaFilme$update, _p1._0, model.buscaFilme);
 				var oldModelBuscaFilme = _elm_lang$core$Tuple$first(updt);
 				var newBF = _elm_lang$core$Native_Utils.update(
 					oldModelBuscaFilme,
@@ -538,7 +637,7 @@ var _user$project$Main$update = F2(
 						_elm_lang$core$Tuple$second(updt))
 				};
 			case 'PgMeusFilmes':
-				var updt = A2(_user$project$MeusFilmes$update, _p0._0, model.meusFilmes);
+				var updt = A2(_user$project$MeusFilmes$update, _p1._0, model.meusFilmes);
 				var oldMeusFilmes = _elm_lang$core$Tuple$first(updt);
 				var newMeusFilmes = _elm_lang$core$Native_Utils.update(
 					oldMeusFilmes,
@@ -558,7 +657,7 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{acao: _p0._0}),
+						{acao: _p1._0}),
 					_1: _user$project$Main$getValidaAutenticacao(
 						A2(
 							_elm_lang$core$String$filter,
@@ -569,9 +668,9 @@ var _user$project$Main$update = F2(
 							},
 							model.login.ret.mensagem.autenticacao))
 				};
-			default:
-				var _p1 = _p0._0;
-				if (_p1.ctor === 'Err') {
+			case 'ResponseAutenticacao':
+				var _p2 = _p1._0;
+				if (_p2.ctor === 'Err') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
@@ -580,11 +679,11 @@ var _user$project$Main$update = F2(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
-					var _p2 = _p1._0;
-					if (_p2 === true) {
+					var _p3 = _p2._0;
+					if (_p3 === true) {
 						var clicado = function () {
-							var _p3 = model.acao;
-							switch (_p3.ctor) {
+							var _p4 = model.acao;
+							switch (_p4.ctor) {
 								case 'BuscaClick':
 									return _user$project$Main$BuscaFilme;
 								case 'MeusFilmesClick':
@@ -610,12 +709,33 @@ var _user$project$Main$update = F2(
 						};
 					}
 				}
+			default:
+				var _p5 = _p1._0;
+				if (_p5.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								upcoming: {ctor: '[]'}
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{upcoming: _p5._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
 		}
 	});
 var _user$project$Main$view = function (model) {
 	var logado = function () {
-		var _p4 = model.janela;
-		switch (_p4.ctor) {
+		var _p6 = model.janela;
+		switch (_p6.ctor) {
 			case 'Login':
 				return _user$project$Main$viewMainPage(model);
 			case 'Cadastro':
@@ -635,8 +755,8 @@ var _user$project$Main$view = function (model) {
 		}
 	}();
 	var deslogado = function () {
-		var _p5 = model.janela;
-		switch (_p5.ctor) {
+		var _p7 = model.janela;
+		switch (_p7.ctor) {
 			case 'Login':
 				return A2(
 					_elm_lang$html$Html$map,
@@ -668,7 +788,7 @@ var _user$project$Main$main = _elm_lang$html$Html$program(
 		init: _user$project$Main$init,
 		view: _user$project$Main$view,
 		update: _user$project$Main$update,
-		subscriptions: function (_p6) {
+		subscriptions: function (_p8) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();

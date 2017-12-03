@@ -28,8 +28,7 @@ type Message =
     | Mudar Pagina
     | SubmitAutenticacao Click
     | ResponseAutenticacao (Result Http.Error Bool)
-    -- | SubmitMeusFilmes
-    -- | ResponseListarMeusFilmes (Result Http.Error (List(MeusFilmes)))
+    | ResponseUpcoming (Result Http.Error (List(ModuloBuscaFilme.FilmeResult)))
 
 type alias Model =
     {
@@ -38,6 +37,7 @@ type alias Model =
     ,buscaFilme : ModuloBuscaFilme.Model
     -- ,meusFilmes : List(MeusFilmes)
     ,meusFilmes : ModuloMeusFilmes.Model
+    ,upcoming   : List(ModuloBuscaFilme.FilmeResult)
     ,janela     : Pagina
     ,acao       : Click
     }
@@ -47,8 +47,9 @@ init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Retorno 0 (ModuloLogin.
          cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
          buscaFilme = ModuloBuscaFilme.init,
          meusFilmes = ModuloMeusFilmes.init,
+         upcoming = [], 
          janela = Root,
-         acao = Nada}, Cmd.none)
+         acao = Nada}, Cmd.batch [getUpcoming])
      
 
 getValidaAutenticacao : String -> Cmd Message
@@ -57,6 +58,13 @@ getValidaAutenticacao auth =
         url = ("https://haskelleta-romefeller.c9users.io/cadastro/autenticacao/"++auth)
     in
         Http.send ResponseAutenticacao <| Http.get url (at ["resp"] Decode.bool)
+
+getUpcoming : Cmd Message
+getUpcoming =
+  let
+    url = "https://api.themoviedb.org/3/movie/upcoming?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&page=1"
+  in  
+    Http.send ResponseUpcoming <| Http.get url (at ["results"] <| Decode.list ModuloBuscaFilme.decodeFilmeResult)
 
 
 update : Message -> Model -> (Model, Cmd Message)
@@ -120,17 +128,31 @@ update msg model =
                 False ->
                         ({model | janela = Root}, Cmd.none)    
         
-        -- SubmitMeusFilmes ->
-        --   (model, getListarMeusFilmes model.login.ret.mensagem.idcadastro)
-          
-        -- ResponseListarMeusFilmes x ->
-        --     case x of 
-        --         Err y -> ({model | acao = BuscaClick}, Cmd.none)
-        --         Ok y -> ({model | meusFilmes = y}, Cmd.none)
-        
-
+        ResponseUpcoming resp ->
+          case resp of
+            Err y -> ({model | upcoming = []}, Cmd.none)
+            Ok y -> ({model | upcoming = y}, Cmd.none)
+            
+  
 viewMainPage : Model -> Html Message
 viewMainPage model =  
+  let
+    montaUpcoming : ModuloBuscaFilme.FilmeResult -> Html Message
+    montaUpcoming mf = 
+      let
+         poster = case mf.poster_path of
+                    Nothing -> "--"
+                    Just x -> x
+      in
+                li [] 
+                [
+                  div [class "poster-filme"] 
+                  [
+                    img [src ("http://image.tmdb.org/t/p/w342/"++poster)] []
+                  ]
+                ]  
+  in
+
        div [class "row"] 
         [
           div [class "sidebar col s12 m4 l3"]
@@ -151,10 +173,20 @@ viewMainPage model =
               ]
             ]
           ]
+          
           ,div [class "col s12 m8 l9"] 
           [
             div [onClick <| SubmitAutenticacao MeusFilmesClick] [text "MEUS FILMES"]
-          ] -- fim section
+          ] 
+          
+          ,section []
+          [
+            h1 [] [text <|"Lançamentos: "]
+            ,ul [class "lista"]
+            [
+              div [] (List.map montaUpcoming model.upcoming)
+            ]
+          ]
         ]
 
 

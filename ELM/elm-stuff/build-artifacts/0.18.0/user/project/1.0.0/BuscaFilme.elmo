@@ -684,7 +684,7 @@ var _user$project$BuscaFilme$update = F2(
 						{
 							filmeEscolhidoDetalhe: A6(
 								_user$project$BuscaFilme$FilmeResult,
-								-1,
+								0,
 								'',
 								0.0,
 								_elm_lang$core$Maybe$Just(''),
