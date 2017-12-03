@@ -18,6 +18,7 @@ data Assistido = Assistido {assistido::Bool} deriving Generic
 instance ToJSON Assistido where
 instance FromJSON Assistido where
 
+
 postFilmesCadR :: Handler TypedContent
 postFilmesCadR = do
     filmCad <- requireJsonBody :: Handler FilmesCad
@@ -27,11 +28,12 @@ postFilmesCadR = do
 getListarFilmesR :: CadastrosId -> Handler TypedContent
 getListarFilmesR idCad =  do
     lista <- runDB $ selectList [FilmesCadIdCadastro ==. idCad] []
-    lista' <- return $ fmap (\(Entity _ filmesCad) -> filmesCad) lista 
-    filmesIds <- return $ fmap filmesCadIdFilme lista' --extrair todos os IDs 
-    filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds --o sequence vai fazer uma ação pra todos
-    sendStatusJSON ok200 (object ["resp" .= (toJSON filmes)])
-    
+    lista' <- return $ fmap (\(Entity pkFilmesCad filmesCad) -> (fromSqlKey pkFilmesCad, filmesCad)) lista 
+    filmesIds <- return $ fmap (filmesCadIdFilme . snd) lista'
+    filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds 
+    lstPKFilmesCad <- return $ fmap (id . fst) lista'
+    sendStatusJSON ok200  (object ["resp" .= (object ["filmes" .= (toJSON filmes), "pks" .= (toJSON lstPKFilmesCad)]) ])
+
 getListarFavoritosR :: CadastrosId -> Handler TypedContent
 getListarFavoritosR idCad = do
     lista <- runDB $ selectList [FilmesCadIdCadastro ==. idCad, FilmesCadFavorito ==. True] []
@@ -39,6 +41,24 @@ getListarFavoritosR idCad = do
     filmesIds <- return $ fmap filmesCadIdFilme lista'
     filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds 
     sendStatusJSON ok200 (object ["resp" .= (toJSON filmes)])
+
+{-
+getListarFavoritosR :: CadastrosId -> Handler TypedContent
+getListarFavoritosR idCad = 
+    -- let 
+    --     concatlista :: [a] -> [a] -> [a]
+    --     concatlista [] ys = ys
+    --     concatlista xs [] = xs
+    --     concatlista (x:xs) (y:ys) = x : y : concatlista xs y
+    -- in
+    do
+    lista <- runDB $ selectList [FilmesCadIdCadastro ==. idCad, FilmesCadFavorito ==. True] []
+    lista' <- return $ fmap (\(Entity pkFilmesCad filmesCad) -> (fromSqlKey pkFilmesCad, filmesCad)) lista 
+    filmesIds <- return $ fmap (filmesCadIdFilme . snd) lista'
+    filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds 
+    lstPKFilmesCad <- return $ fmap (id . fst) lista'
+    sendStatusJSON ok200  (object ["resp" .= (object ["filmes" .= (toJSON filmes), "pks" .= (toJSON lstPKFilmesCad)]) ])
+-}
     
 getListarAssistidosR:: CadastrosId -> Handler TypedContent
 getListarAssistidosR idCad = do

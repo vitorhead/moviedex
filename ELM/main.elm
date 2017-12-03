@@ -161,22 +161,17 @@ viewMainPage model =
             [
               ul []
               [
-                li [] [text "NOME CHAMPS"]
-                ,li []
+                --li [] [text "NOME CHAMPS"],
+                li []
                 [
                   a [class "btn green", onClick <| SubmitAutenticacao BuscaClick] [text "Buscar Filmes"]
                 ]
                 ,li []
                 [
-                  button [class "btn red"] [text "Deslogar"]
+                  a [class "btn blue", onClick <| SubmitAutenticacao MeusFilmesClick] [text "Meus Filmes"]
                 ]
               ]
             ]
-          ]
-
-          ,div [class "col s12 m8 l9"]
-          [
-            h1 [onClick <| SubmitAutenticacao MeusFilmesClick] [text "MEUS FILMES"]
           ]
 
           ,section []

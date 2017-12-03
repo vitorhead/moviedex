@@ -20,7 +20,8 @@ type alias MeusFilmes =
 
 type alias Model =
     {
-      resp        : List(MeusFilmes)   --meusfilmes
+      -- resp        : List(MeusFilmes)   --meusfilmes
+      respMeusFilmes : Resp
      ,favoritos   : List(MeusFilmes)
      ,assistidos  : List(MeusFilmes)
      ,idCadLogado : Int
@@ -28,10 +29,10 @@ type alias Model =
     }
 
 init : Model
-init = Model [] [] [] 0 ""
+init = Model (Resp [] []) [] [] 0 ""
 
 type Message =  SubmitListarMeusFilmes
-              | ResponseListarMeusFilmes (Result Http.Error (List(MeusFilmes)))
+              | ResponseListarMeusFilmes (Result Http.Error Resp)
               | SubmitListarFavoritos
               | ResponseListarFavoritos (Result Http.Error (List(MeusFilmes)))
               | SubmitListarAssistidos
@@ -55,8 +56,19 @@ getListarMeusFilmes idcad =
   let
     url = ("https://haskelleta-romefeller.c9users.io/filmescad/listarfilmes/"++ toString idcad)
   in
-    Http.send ResponseListarMeusFilmes <| Http.get url (at ["resp"] (Json.Decode.list decodeListarMeusFilmes))
+    Http.send ResponseListarMeusFilmes <| Http.get url (at ["resp"] decodeResp) 
 
+
+type alias Resp =
+  {
+    pks : List(Int),
+    filmes : List(MeusFilmes)
+  }
+
+decodeResp : Decoder Resp
+decodeResp = map2 Resp  (at ["pks"] (Json.Decode.list Json.Decode.int))
+                        (at ["filmes"] (Json.Decode.list decodeListarMeusFilmes))
+                       
 
 getListarFavoritos : Int -> Cmd Message
 getListarFavoritos idcad =
@@ -83,7 +95,7 @@ update msg model =
         ResponseListarMeusFilmes x ->
             case x of
                 Err y -> ({model | error = toString y} , Cmd.none)
-                Ok y -> ({model | resp = y}, Cmd.none)
+                Ok y -> ({model | respMeusFilmes = y}, Cmd.none)
 
         SubmitListarFavoritos ->
             (model, getListarFavoritos model.idCadLogado)
@@ -113,6 +125,29 @@ montaItemFilme mf =
             ]
 
 
+mostraSingleResp : Int -> MeusFilmes -> Html Message
+mostraSingleResp i f = --i é a PK do filmescad, da pra dar update com isso...
+    li []
+    [
+      div [class "poster-filme", class "center-align"]
+      [
+         img [src (urlFoto++f.poster_path)] []
+         ,div [class "lista"] 
+         [
+          button [class "btn btn-filme"]
+          [
+           Html.i [class "material-icons small"] [text "star_border"]
+          ]
+          
+          ,button [class "btn btn-filme"]
+          [
+           Html.i [class "material-icons small"] [text "check"]
+          ]
+        ]
+      ]
+    ]
+
+
 view : Model -> Html Message
 view model =
   div [class "row"]
@@ -124,7 +159,8 @@ view model =
           h1 [onClick SubmitListarMeusFilmes] [text <|"Todos os filmes"++model.error]
           ,div []
           [
-            ul [class "lista"] (List.map montaItemFilme model.resp)
+            -- div [class "lista"] (List.map montaItemFilme model.resp)
+            ul [class "lista"] (List.map2 mostraSingleResp model.respMeusFilmes.pks model.respMeusFilmes.filmes)
           ]
 
           ,h1 [onClick SubmitListarFavoritos] [text <|"Favoritos"++model.error]

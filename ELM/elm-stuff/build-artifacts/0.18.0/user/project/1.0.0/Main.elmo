@@ -162,7 +162,23 @@ var _user$project$Main$viewMainPage = function (model) {
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('NOME CHAMPS'),
+											_0: A2(
+												_elm_lang$html$Html$a,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('btn green'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Main$SubmitAutenticacao(_user$project$Main$BuscaClick)),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Buscar Filmes'),
+													_1: {ctor: '[]'}
+												}),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -180,40 +196,18 @@ var _user$project$Main$viewMainPage = function (model) {
 														_1: {
 															ctor: '::',
 															_0: _elm_lang$html$Html_Events$onClick(
-																_user$project$Main$SubmitAutenticacao(_user$project$Main$BuscaClick)),
+																_user$project$Main$SubmitAutenticacao(_user$project$Main$MeusFilmesClick)),
 															_1: {ctor: '[]'}
 														}
 													},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Buscar Filmes'),
+														_0: _elm_lang$html$Html$text('Meus Filmes'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {ctor: '[]'}
 											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$li,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$button,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('btn red'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Deslogar'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}
+										_1: {ctor: '[]'}
 									}
 								}),
 							_1: {ctor: '[]'}
@@ -223,66 +217,39 @@ var _user$project$Main$viewMainPage = function (model) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
-						_1: {ctor: '[]'}
-					},
+					_elm_lang$html$Html$section,
+					{ctor: '[]'},
 					{
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Main$SubmitAutenticacao(_user$project$Main$MeusFilmesClick)),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('MEUS FILMES'),
+								_0: _elm_lang$html$Html$text('Lançamentos: '),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$section,
-						{ctor: '[]'},
-						{
+						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h1,
+								_elm_lang$html$Html$ul,
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Lançamentos: '),
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
+											_1: {ctor: '[]'}
+										},
+										A2(_elm_lang$core$List$map, montaUpcoming, model.upcoming)),
 									_1: {ctor: '[]'}
 								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$ul,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
-												_1: {ctor: '[]'}
-											},
-											A2(_elm_lang$core$List$map, montaUpcoming, model.upcoming)),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
-				}
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
 			}
 		});
 };
@@ -399,7 +366,7 @@ var _user$project$Main$viewRoot = A2(
 								_elm_lang$html$Html$a,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$href(''),
+									_0: _elm_lang$html$Html_Attributes$href('https://github.com/guimon23'),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$class('col s12 m6'),
@@ -418,7 +385,7 @@ var _user$project$Main$viewRoot = A2(
 												_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$alt('Ramon Github'),
+													_0: _elm_lang$html$Html_Attributes$alt('Github Ramon'),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -437,7 +404,7 @@ var _user$project$Main$viewRoot = A2(
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?'),
+										_0: _elm_lang$html$Html$text('Ramon Gaspar, XX anos, músico e positividade'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -477,7 +444,7 @@ var _user$project$Main$viewRoot = A2(
 													_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$alt('Vitor Github'),
+														_0: _elm_lang$html$Html_Attributes$alt('Github Vitor'),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -496,7 +463,7 @@ var _user$project$Main$viewRoot = A2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?'),
+											_0: _elm_lang$html$Html$text('Vitor Stipanich, XX anos, nos compiuters e jogos online'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {ctor: '[]'}
@@ -536,7 +503,7 @@ var _user$project$Main$viewRoot = A2(
 														_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$alt('Github Ramon'),
+															_0: _elm_lang$html$Html_Attributes$alt('Github Yohann'),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -555,7 +522,7 @@ var _user$project$Main$viewRoot = A2(
 											},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet,'),
+												_0: _elm_lang$html$Html$text('Yohann Castilho, 23 anos, avido jogador de Skyrom e Fifa'),
 												_1: {ctor: '[]'}
 											}),
 										_1: {ctor: '[]'}

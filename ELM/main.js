@@ -13367,6 +13367,103 @@ var _user$project$MeusFilmes$montaItemFilme = function (mf) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$MeusFilmes$mostraSingleResp = F2(
+	function (i, f) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('center-align'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$img,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$src(
+									A2(_elm_lang$core$Basics_ops['++'], _user$project$MeusFilmes$urlFoto, f.poster_path)),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('lista'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$i,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('material-icons small'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('star_border'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$i,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('material-icons small'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('check'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
 var _user$project$MeusFilmes$MeusFilmes = F6(
 	function (a, b, c, d, e, f) {
 		return {id: a, title: b, vote_average: c, poster_path: d, overview: e, release_date: f};
@@ -13424,15 +13521,41 @@ var _user$project$MeusFilmes$decodeListarMeusFilmes = A7(
 		_elm_lang$core$Json_Decode$string));
 var _user$project$MeusFilmes$Model = F5(
 	function (a, b, c, d, e) {
-		return {resp: a, favoritos: b, assistidos: c, idCadLogado: d, error: e};
+		return {respMeusFilmes: a, favoritos: b, assistidos: c, idCadLogado: d, error: e};
+	});
+var _user$project$MeusFilmes$Resp = F2(
+	function (a, b) {
+		return {pks: a, filmes: b};
 	});
 var _user$project$MeusFilmes$init = A5(
 	_user$project$MeusFilmes$Model,
-	{ctor: '[]'},
+	A2(
+		_user$project$MeusFilmes$Resp,
+		{ctor: '[]'},
+		{ctor: '[]'}),
 	{ctor: '[]'},
 	{ctor: '[]'},
 	0,
 	'');
+var _user$project$MeusFilmes$decodeResp = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$MeusFilmes$Resp,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'pks',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int)),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'filmes',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes)));
 var _user$project$MeusFilmes$ResponseListarAssistidos = function (a) {
 	return {ctor: 'ResponseListarAssistidos', _0: a};
 };
@@ -13502,7 +13625,7 @@ var _user$project$MeusFilmes$getListarMeusFilmes = function (idcad) {
 					_0: 'resp',
 					_1: {ctor: '[]'}
 				},
-				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+				_user$project$MeusFilmes$decodeResp)));
 };
 var _user$project$MeusFilmes$update = F2(
 	function (msg, model) {
@@ -13531,7 +13654,7 @@ var _user$project$MeusFilmes$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{resp: _p1._0}),
+							{respMeusFilmes: _p1._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
@@ -13643,7 +13766,7 @@ var _user$project$MeusFilmes$view = function (model) {
 												_0: _elm_lang$html$Html_Attributes$class('lista'),
 												_1: {ctor: '[]'}
 											},
-											A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.resp)),
+											A3(_elm_lang$core$List$map2, _user$project$MeusFilmes$mostraSingleResp, model.respMeusFilmes.pks, model.respMeusFilmes.filmes)),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
@@ -13896,7 +14019,23 @@ var _user$project$Main$viewMainPage = function (model) {
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('NOME CHAMPS'),
+											_0: A2(
+												_elm_lang$html$Html$a,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('btn green'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Main$SubmitAutenticacao(_user$project$Main$BuscaClick)),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Buscar Filmes'),
+													_1: {ctor: '[]'}
+												}),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -13914,40 +14053,18 @@ var _user$project$Main$viewMainPage = function (model) {
 														_1: {
 															ctor: '::',
 															_0: _elm_lang$html$Html_Events$onClick(
-																_user$project$Main$SubmitAutenticacao(_user$project$Main$BuscaClick)),
+																_user$project$Main$SubmitAutenticacao(_user$project$Main$MeusFilmesClick)),
 															_1: {ctor: '[]'}
 														}
 													},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Buscar Filmes'),
+														_0: _elm_lang$html$Html$text('Meus Filmes'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {ctor: '[]'}
 											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$li,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$button,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('btn red'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Deslogar'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}
+										_1: {ctor: '[]'}
 									}
 								}),
 							_1: {ctor: '[]'}
@@ -13957,66 +14074,39 @@ var _user$project$Main$viewMainPage = function (model) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
-						_1: {ctor: '[]'}
-					},
+					_elm_lang$html$Html$section,
+					{ctor: '[]'},
 					{
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Main$SubmitAutenticacao(_user$project$Main$MeusFilmesClick)),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('MEUS FILMES'),
+								_0: _elm_lang$html$Html$text('Lançamentos: '),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$section,
-						{ctor: '[]'},
-						{
+						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h1,
+								_elm_lang$html$Html$ul,
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Lançamentos: '),
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
+											_1: {ctor: '[]'}
+										},
+										A2(_elm_lang$core$List$map, montaUpcoming, model.upcoming)),
 									_1: {ctor: '[]'}
 								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$ul,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
-												_1: {ctor: '[]'}
-											},
-											A2(_elm_lang$core$List$map, montaUpcoming, model.upcoming)),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
-				}
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
 			}
 		});
 };
@@ -14133,7 +14223,7 @@ var _user$project$Main$viewRoot = A2(
 								_elm_lang$html$Html$a,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$href(''),
+									_0: _elm_lang$html$Html_Attributes$href('https://github.com/guimon23'),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$class('col s12 m6'),
@@ -14152,7 +14242,7 @@ var _user$project$Main$viewRoot = A2(
 												_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$alt('Ramon Github'),
+													_0: _elm_lang$html$Html_Attributes$alt('Github Ramon'),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -14171,7 +14261,7 @@ var _user$project$Main$viewRoot = A2(
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?'),
+										_0: _elm_lang$html$Html$text('Ramon Gaspar, XX anos, músico e positividade'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -14211,7 +14301,7 @@ var _user$project$Main$viewRoot = A2(
 													_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$alt('Vitor Github'),
+														_0: _elm_lang$html$Html_Attributes$alt('Github Vitor'),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -14230,7 +14320,7 @@ var _user$project$Main$viewRoot = A2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?'),
+											_0: _elm_lang$html$Html$text('Vitor Stipanich, XX anos, nos compiuters e jogos online'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {ctor: '[]'}
@@ -14270,7 +14360,7 @@ var _user$project$Main$viewRoot = A2(
 														_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$alt('Github Ramon'),
+															_0: _elm_lang$html$Html_Attributes$alt('Github Yohann'),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -14289,7 +14379,7 @@ var _user$project$Main$viewRoot = A2(
 											},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet,'),
+												_0: _elm_lang$html$Html$text('Yohann Castilho, 23 anos, avido jogador de Skyrom e Fifa'),
 												_1: {ctor: '[]'}
 											}),
 										_1: {ctor: '[]'}
