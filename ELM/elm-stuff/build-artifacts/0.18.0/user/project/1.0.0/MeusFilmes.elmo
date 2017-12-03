@@ -293,12 +293,12 @@ var _user$project$MeusFilmes$view = function (model) {
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$ul,
+									_elm_lang$html$Html$div,
 									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$div,
+											_elm_lang$html$Html$ul,
 											{
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$class('lista'),
@@ -325,12 +325,12 @@ var _user$project$MeusFilmes$view = function (model) {
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$ul,
+											_elm_lang$html$Html$div,
 											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$div,
+													_elm_lang$html$Html$ul,
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html_Attributes$class('lista'),
@@ -357,12 +357,12 @@ var _user$project$MeusFilmes$view = function (model) {
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$ul,
+													_elm_lang$html$Html$div,
 													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$div,
+															_elm_lang$html$Html$ul,
 															{
 																ctor: '::',
 																_0: _elm_lang$html$Html_Attributes$class('lista'),

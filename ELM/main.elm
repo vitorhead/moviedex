@@ -168,7 +168,7 @@ viewMainPage model =
                 ]
                 ,li []
                 [
-                  a [class "btn red"] [text "Deslogar"]
+                  button [class "btn red"] [text "Deslogar"]
                 ]
               ]
             ]
@@ -176,7 +176,7 @@ viewMainPage model =
 
           ,div [class "col s12 m8 l9"]
           [
-            div [onClick <| SubmitAutenticacao MeusFilmesClick] [text "MEUS FILMES"]
+            h1 [onClick <| SubmitAutenticacao MeusFilmesClick] [text "MEUS FILMES"]
           ]
 
           ,section []
@@ -208,27 +208,27 @@ viewRoot =
       [
         div [class "row center-align"]
         [
-          a [href "", class "col s12 m6"]
+          a [href "https://github.com/guimon23", class "col s12 m6"]
            [
-            img [src "", class "responsive-img circle", alt "Ramon Github"] []
+            img [src "", class "responsive-img circle", alt "Github Ramon"] []
           ]
-          ,p [class "col s12 m6"] [text "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?"]
+          ,p [class "col s12 m6"] [text "Ramon Gaspar, XX anos, músico e positividade"]
         ]
         ,div [class "row center-align"]
       [
         a [href "https://github.com/vitorhead", class "col s12 m6"]
         [
-          img [src "../static/images/vitor.jpeg", class "responsive-img circle", alt "Vitor Github"] []
+          img [src "../static/images/vitor.jpeg", class "responsive-img circle", alt "Github Vitor"] []
         ]
-        ,p [class "col s12 m6"] [text "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium sapiente recusandae quas quam natus veniam officia sit architecto nisi aspernatur?"]
+        ,p [class "col s12 m6"] [text "Vitor Stipanich, XX anos, nos compiuters e jogos online"]
       ]
         ,div [class "row center-align"]
       [
         a [href "https://github.com/castylho", class "col s12 m6"]
         [
-          img [src "../static/images/Yohann.jpg", class "responsive-img circle", alt "Github Ramon"] []
+          img [src "../static/images/Yohann.jpg", class "responsive-img circle", alt "Github Yohann"] []
         ]
-        ,p [class "col s12 m6"] [text "Lorem ipsum dolor sit amet,"]
+        ,p [class "col s12 m6"] [text "Yohann Castilho, 23 anos, avido jogador de Skyrom e Fifa"]
       ]
       ]
   ]

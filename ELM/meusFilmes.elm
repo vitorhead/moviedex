@@ -122,21 +122,21 @@ view model =
       section []
       [
           h1 [onClick SubmitListarMeusFilmes] [text <|"Todos os filmes"++model.error]
-          ,ul []
+          ,div []
           [
-            div [class "lista"] (List.map montaItemFilme model.resp)
+            ul [class "lista"] (List.map montaItemFilme model.resp)
           ]
 
           ,h1 [onClick SubmitListarFavoritos] [text <|"Favoritos"++model.error]
-          ,ul []
+          ,div []
           [
-            div [class "lista"] (List.map montaItemFilme model.favoritos)
+            ul [class "lista"] (List.map montaItemFilme model.favoritos)
           ]
 
           ,h1 [onClick SubmitListarAssistidos] [text <|"Assistidos"++model.error]
-          ,ul []
+          ,div []
           [
-            div [class "lista"] (List.map montaItemFilme model.assistidos)
+            ul [class "lista"] (List.map montaItemFilme model.assistidos)
           ]
       ]
     ]

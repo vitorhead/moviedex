@@ -199,7 +199,7 @@ var _user$project$Main$viewMainPage = function (model) {
 												{
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$a,
+														_elm_lang$html$Html$button,
 														{
 															ctor: '::',
 															_0: _elm_lang$html$Html_Attributes$class('btn red'),
@@ -232,7 +232,7 @@ var _user$project$Main$viewMainPage = function (model) {
 					{
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$div,
+							_elm_lang$html$Html$h1,
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html_Events$onClick(

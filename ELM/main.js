@@ -12638,7 +12638,7 @@ var _user$project$Cadastro$view = function (model) {
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Name'),
+										_0: _elm_lang$html$Html$text('Nome'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -12738,7 +12738,7 @@ var _user$project$Cadastro$view = function (model) {
 											},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Password'),
+												_0: _elm_lang$html$Html$text('Senha'),
 												_1: {ctor: '[]'}
 											}),
 										_1: {ctor: '[]'}
@@ -13206,7 +13206,7 @@ var _user$project$Login$view = function (model) {
 								_elm_lang$html$Html$input,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('text'),
+									_0: _elm_lang$html$Html_Attributes$type_('email'),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$required(true),
@@ -13233,7 +13233,7 @@ var _user$project$Login$view = function (model) {
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Name'),
+										_0: _elm_lang$html$Html$text('Email'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -13281,7 +13281,7 @@ var _user$project$Login$view = function (model) {
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Password'),
+											_0: _elm_lang$html$Html$text('Senha'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {ctor: '[]'}
@@ -13632,12 +13632,12 @@ var _user$project$MeusFilmes$view = function (model) {
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$ul,
+									_elm_lang$html$Html$div,
 									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$div,
+											_elm_lang$html$Html$ul,
 											{
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$class('lista'),
@@ -13664,12 +13664,12 @@ var _user$project$MeusFilmes$view = function (model) {
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$ul,
+											_elm_lang$html$Html$div,
 											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$div,
+													_elm_lang$html$Html$ul,
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html_Attributes$class('lista'),
@@ -13696,12 +13696,12 @@ var _user$project$MeusFilmes$view = function (model) {
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$ul,
+													_elm_lang$html$Html$div,
 													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$div,
+															_elm_lang$html$Html$ul,
 															{
 																ctor: '::',
 																_0: _elm_lang$html$Html_Attributes$class('lista'),
@@ -13933,7 +13933,7 @@ var _user$project$Main$viewMainPage = function (model) {
 												{
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$a,
+														_elm_lang$html$Html$button,
 														{
 															ctor: '::',
 															_0: _elm_lang$html$Html_Attributes$class('btn red'),
@@ -13966,7 +13966,7 @@ var _user$project$Main$viewMainPage = function (model) {
 					{
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$div,
+							_elm_lang$html$Html$h1,
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html_Events$onClick(

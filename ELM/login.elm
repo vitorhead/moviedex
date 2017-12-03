@@ -17,7 +17,7 @@ httpErrorString error =
         Timeout ->
             "[ERRO HTTP] Timeout"
 
-        NetworkError -> 
+        NetworkError ->
             "[ERRO HTTP] Network Error"
 
         BadStatus response ->
@@ -87,7 +87,7 @@ decodeMensagem = map3 Mensagem  (at ["autenticacao"] string)
 decodeRetorno : Decoder Retorno
 decodeRetorno = map2 Retorno (at ["codigo"] int)
                              (at ["mensagem"] decodeMensagem)
-                            
+
 
 
 getLogin : String -> String -> Cmd Message
@@ -133,13 +133,13 @@ view model =
       [
         div [class "input-field"] --NOME
         [
-          input [type_ "text", required True, class "validate", onInput Login] []
-          ,label [class "active"] [text "Name"]
+          input [type_ "email", required True, class "validate", onInput Login] []
+          ,label [class "active"] [text "Email"]
         ]
         ,div [class "input-field"] --SENHA
         [
           input [type_ "password", required True,class "validate", onInput Senha] []
-          ,label [class "active"] [text "Password"]
+          ,label [class "active"] [text "Senha"]
         ]
         ,button [class "btn waves-effect green", id "btnEnviar", onClick Submit] [text "Login"]
       ]

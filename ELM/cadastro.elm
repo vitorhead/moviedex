@@ -153,7 +153,7 @@ view model =
         div [class "input-field"] --NOME
         [
           input [type_ "text", required True, class "validate", onInput Nome] []
-          ,label [class "active"] [text "Name"]
+          ,label [class "active"] [text "Nome"]
         ]
         ,div [class "input-field"] --EMAIL
         [
@@ -163,7 +163,7 @@ view model =
         ,div [class "input-field"] --SENHA
         [
           input [type_ "password", required True,class "validate", onInput Senha] []
-          ,label [class "active"] [text "Password"]
+          ,label [class "active"] [text "Senha"]
         ]
         ,div [class "input-field"] --DATA NASCIMENTO
         [
