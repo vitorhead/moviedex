@@ -300,18 +300,18 @@ update msg model =
             ({model | filmeEscolhido = fr}, getConsultaFilmes fr.id)
 
         ResponseConsultaFilme x ->
+            let
+                cmdInsereFilme = postInsereFilme model.filmeEscolhido
+            in
             case x of
                 Err y ->
-                    let
-                        cmdInsereFilme = postInsereFilme model.filmeEscolhido
-                    in
                     (model, cmdInsereFilme)
                 Ok  y ->
                     let
                         cadInserirFilmesCad = FilmesCad y.id model.idCadLogado False False
                         cmdInsereFilmesCad = postInsereFilmesCad cadInserirFilmesCad
                     in
-                    (model, cmdInsereFilmesCad)
+                    (model, if y.id == 0 then cmdInsereFilme else cmdInsereFilmesCad)
 
         SubmitInsereFilmesCad filmeCad ->
             (model, postInsereFilmesCad filmeCad)

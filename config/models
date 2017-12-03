@@ -29,5 +29,10 @@ Autenticacao json
     dtGerada       UTCTime
     deriving Show
     
+Generos
+	numGenero	Int
+	idCadastro	CadastrosId
+	deriving Show
+    
 
 

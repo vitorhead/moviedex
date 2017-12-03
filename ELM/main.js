@@ -12030,14 +12030,19 @@ var _user$project$BuscaFilme$update = F2(
 					_1: _user$project$BuscaFilme$getConsultaFilmes(_p5.id)
 				};
 			case 'ResponseConsultaFilme':
+				var cmdInsereFilme = _user$project$BuscaFilme$postInsereFilme(model.filmeEscolhido);
 				var _p6 = _p3._0;
 				if (_p6.ctor === 'Err') {
-					var cmdInsereFilme = _user$project$BuscaFilme$postInsereFilme(model.filmeEscolhido);
 					return {ctor: '_Tuple2', _0: model, _1: cmdInsereFilme};
 				} else {
-					var cadInserirFilmesCad = A4(_user$project$BuscaFilme$FilmesCad, _p6._0.id, model.idCadLogado, false, false);
+					var _p7 = _p6._0;
+					var cadInserirFilmesCad = A4(_user$project$BuscaFilme$FilmesCad, _p7.id, model.idCadLogado, false, false);
 					var cmdInsereFilmesCad = _user$project$BuscaFilme$postInsereFilmesCad(cadInserirFilmesCad);
-					return {ctor: '_Tuple2', _0: model, _1: cmdInsereFilmesCad};
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: _elm_lang$core$Native_Utils.eq(_p7.id, 0) ? cmdInsereFilme : cmdInsereFilmesCad
+					};
 				}
 			case 'SubmitInsereFilmesCad':
 				return {
@@ -12048,8 +12053,8 @@ var _user$project$BuscaFilme$update = F2(
 			case 'ResponseInsereFilmesCad':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'ResponseInsereFilme':
-				var _p7 = _p3._0;
-				if (_p7.ctor === 'Err') {
+				var _p8 = _p3._0;
+				if (_p8.ctor === 'Err') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
@@ -12059,7 +12064,7 @@ var _user$project$BuscaFilme$update = F2(
 					};
 				} else {
 					var inserirFilmesCad = _user$project$BuscaFilme$postInsereFilmesCad(
-						A4(_user$project$BuscaFilme$FilmesCad, _p7._0, model.idCadLogado, false, false));
+						A4(_user$project$BuscaFilme$FilmesCad, _p8._0, model.idCadLogado, false, false));
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
@@ -12334,7 +12339,7 @@ var _user$project$BuscaFilme$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$BuscaFilme$init, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$BuscaFilme$view,
 		update: _user$project$BuscaFilme$update,
-		subscriptions: function (_p8) {
+		subscriptions: function (_p9) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
@@ -14049,7 +14054,7 @@ var _user$project$Main$viewMainPage = function (model) {
 													_elm_lang$html$Html$a,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('btn green'),
+														_0: _elm_lang$html$Html_Attributes$class('btn blue'),
 														_1: {
 															ctor: '::',
 															_0: _elm_lang$html$Html_Events$onClick(
@@ -14142,7 +14147,7 @@ var _user$project$Main$viewRoot = A2(
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil.'),
+							_0: _elm_lang$html$Html$text('Tópicos especiais em informática - Professor Ms. Alexandre Garcia'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -14236,7 +14241,7 @@ var _user$project$Main$viewRoot = A2(
 										_elm_lang$html$Html$img,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$src(''),
+											_0: _elm_lang$html$Html_Attributes$src('../static/images/ramon.jpg'),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
@@ -14261,7 +14266,7 @@ var _user$project$Main$viewRoot = A2(
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Ramon Gaspar, XX anos, músico e positividade'),
+										_0: _elm_lang$html$Html$text('Ramon Gaspar, 20 anos, músico e positividade'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -14320,7 +14325,7 @@ var _user$project$Main$viewRoot = A2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Vitor Stipanich, XX anos, nos compiuters e jogos online'),
+											_0: _elm_lang$html$Html$text('Vitor Stipanich, 20 anos, nos compiuters e jogos online'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {ctor: '[]'}
