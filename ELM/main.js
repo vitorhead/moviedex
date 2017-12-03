@@ -13633,16 +13633,16 @@ var _user$project$MeusFilmes$view = function (model) {
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$ul,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('lista'),
-										_1: {ctor: '[]'}
-									},
+									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: A2(
 											_elm_lang$html$Html$div,
-											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('lista'),
+												_1: {ctor: '[]'}
+											},
 											A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.resp)),
 										_1: {ctor: '[]'}
 									}),
@@ -13665,16 +13665,16 @@ var _user$project$MeusFilmes$view = function (model) {
 										ctor: '::',
 										_0: A2(
 											_elm_lang$html$Html$ul,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('lista'),
-												_1: {ctor: '[]'}
-											},
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A2(
 													_elm_lang$html$Html$div,
-													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('lista'),
+														_1: {ctor: '[]'}
+													},
 													A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.favoritos)),
 												_1: {ctor: '[]'}
 											}),
@@ -13697,16 +13697,16 @@ var _user$project$MeusFilmes$view = function (model) {
 												ctor: '::',
 												_0: A2(
 													_elm_lang$html$Html$ul,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('lista'),
-														_1: {ctor: '[]'}
-													},
+													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A2(
 															_elm_lang$html$Html$div,
-															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('lista'),
+																_1: {ctor: '[]'}
+															},
 															A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.assistidos)),
 														_1: {ctor: '[]'}
 													}),
@@ -13999,16 +13999,16 @@ var _user$project$Main$viewMainPage = function (model) {
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$ul,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('lista'),
-										_1: {ctor: '[]'}
-									},
+									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: A2(
 											_elm_lang$html$Html$div,
-											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
+												_1: {ctor: '[]'}
+											},
 											A2(_elm_lang$core$List$map, montaUpcoming, model.upcoming)),
 										_1: {ctor: '[]'}
 									}),

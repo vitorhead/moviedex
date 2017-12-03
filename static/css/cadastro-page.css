@@ -19,6 +19,9 @@ footer{
 .lista{
   display: flex;
 }
+.wrap{
+  flex-wrap: wrap;
+}
 li{  /*talvez restringir para as lis das */
   padding: 1em;
 }

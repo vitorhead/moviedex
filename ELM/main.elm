@@ -47,10 +47,10 @@ init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Retorno 0 (ModuloLogin.
          cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
          buscaFilme = ModuloBuscaFilme.init,
          meusFilmes = ModuloMeusFilmes.init,
-         upcoming = [], 
+         upcoming = [],
          janela = Root,
          acao = Nada}, Cmd.batch [getUpcoming])
-     
+
 
 getValidaAutenticacao : String -> Cmd Message
 getValidaAutenticacao auth =
@@ -63,7 +63,7 @@ getUpcoming : Cmd Message
 getUpcoming =
   let
     url = "https://api.themoviedb.org/3/movie/upcoming?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&page=1"
-  in  
+  in
     Http.send ResponseUpcoming <| Http.get url (at ["results"] <| Decode.list ModuloBuscaFilme.decodeFilmeResult)
 
 
@@ -73,17 +73,17 @@ update msg model =
         Mudar p -> ({model | janela = p}, Cmd.none)
 
         PgLogin p ->
-          let 
+          let
             updt = ModuloLogin.update p model.login
           in
             ({model | login = Tuple.first updt}, Cmd.map PgLogin <| Tuple.second updt)
 
-        PgCadastro p -> 
+        PgCadastro p ->
           let
             updt = ModuloCadastro.update p model.cadastro
           in
             ({model | cadastro = Tuple.first updt}, Cmd.map PgCadastro <| Tuple.second updt)
-            
+
 
         PgBuscaFilme p ->
           let
@@ -94,8 +94,8 @@ update msg model =
             newBF = {oldModelBuscaFilme | idCadLogado = model.login.ret.mensagem.idcadastro}
           in
             ({model | buscaFilme = newBF}, Cmd.map PgBuscaFilme <| Tuple.second updt)
-            
-            
+
+
         PgMeusFilmes p ->
           let
             updt = ModuloMeusFilmes.update p model.meusFilmes
@@ -104,94 +104,94 @@ update msg model =
             --passando idCadastro do model do main pro model do buscaFilme
             newMeusFilmes = {oldMeusFilmes | idCadLogado = model.login.ret.mensagem.idcadastro}
           in
-            ({model | meusFilmes = newMeusFilmes}, Cmd.map PgMeusFilmes <| Tuple.second updt)          
-        
+            ({model | meusFilmes = newMeusFilmes}, Cmd.map PgMeusFilmes <| Tuple.second updt)
+
         SubmitAutenticacao clicado ->
           ({model | acao = clicado}, getValidaAutenticacao <| String.filter (\x -> x /= '"') model.login.ret.mensagem.autenticacao)
-          
+
         ResponseAutenticacao resp ->
           case resp of
             Err y -> ({model | janela = Root}, Cmd.none)
-            Ok y -> 
+            Ok y ->
               case y of
-                True -> 
+                True ->
                       let
-                        clicado = 
+                        clicado =
                           case model.acao of
                             BuscaClick -> BuscaFilme
-                            
+
                             MeusFilmesClick -> MeusFilmes
-                            
+
                             Nada -> Root
-                      in  
-                        ({model | janela = clicado}, Cmd.none)    
+                      in
+                        ({model | janela = clicado}, Cmd.none)
                 False ->
-                        ({model | janela = Root}, Cmd.none)    
-        
+                        ({model | janela = Root}, Cmd.none)
+
         ResponseUpcoming resp ->
           case resp of
             Err y -> ({model | upcoming = []}, Cmd.none)
             Ok y -> ({model | upcoming = y}, Cmd.none)
-            
-  
+
+
 viewMainPage : Model -> Html Message
-viewMainPage model =  
+viewMainPage model =
   let
     montaUpcoming : ModuloBuscaFilme.FilmeResult -> Html Message
-    montaUpcoming mf = 
+    montaUpcoming mf =
       let
          poster = case mf.poster_path of
                     Nothing -> "--"
                     Just x -> x
       in
-                li [] 
+                li []
                 [
-                  div [class "poster-filme"] 
+                  div [class "poster-filme"]
                   [
                     img [src ("http://image.tmdb.org/t/p/w342/"++poster)] []
                   ]
-                ]  
+                ]
   in
 
-       div [class "row"] 
+       div [class "row"]
         [
           div [class "sidebar col s12 m4 l3"]
           [
-            div [class "lateral-principal"] 
+            div [class "lateral-principal"]
             [
               ul []
               [
                 li [] [text "NOME CHAMPS"]
-                ,li [] 
+                ,li []
                 [
                   a [class "btn green", onClick <| SubmitAutenticacao BuscaClick] [text "Buscar Filmes"]
                 ]
-                ,li [] 
+                ,li []
                 [
                   a [class "btn red"] [text "Deslogar"]
                 ]
               ]
             ]
           ]
-          
-          ,div [class "col s12 m8 l9"] 
+
+          ,div [class "col s12 m8 l9"]
           [
             div [onClick <| SubmitAutenticacao MeusFilmesClick] [text "MEUS FILMES"]
-          ] 
-          
+          ]
+
           ,section []
           [
             h1 [] [text <|"Lançamentos: "]
-            ,ul [class "lista"]
+            ,ul []
             [
-              div [] (List.map montaUpcoming model.upcoming)
+              div [class "lista wrap"] (List.map montaUpcoming model.upcoming)
             ]
           ]
         ]
 
 
 viewRoot : Html Message
-viewRoot = 
+viewRoot =
   div []
   [
      section [class "apresentacao"]
@@ -236,8 +236,8 @@ viewRoot =
 
 view : Model -> Html Message
 view model =
-    let 
-      deslogado : Html Message      
+    let
+      deslogado : Html Message
       deslogado =
         case model.janela of
             Login -> Html.map PgLogin <| ModuloLogin.view model.login
@@ -245,13 +245,13 @@ view model =
             Cadastro -> Html.map PgCadastro <| ModuloCadastro.view model.cadastro
 
             Root -> viewRoot
-            
-            BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme 
-          
+
+            BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme
+
             MeusFilmes -> Html.map PgMeusFilmes <| ModuloMeusFilmes.view model.meusFilmes
-            
-            
-      logado : Html Message      
+
+
+      logado : Html Message
       logado =
           case model.janela of
             Login -> viewMainPage model
@@ -259,19 +259,19 @@ view model =
             Cadastro -> viewMainPage model
 
             Root -> viewMainPage model
-            
-            BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme     
-            
-            MeusFilmes -> Html.map PgMeusFilmes <| ModuloMeusFilmes.view model.meusFilmes   
-            
+
+            BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme
+
+            MeusFilmes -> Html.map PgMeusFilmes <| ModuloMeusFilmes.view model.meusFilmes
+
 
     in
      if model.login.ret.mensagem.autenticacao == "" then
       deslogado
      else
       logado
- 
- 
+
+
 main = program
     { init = init
     , view = view
