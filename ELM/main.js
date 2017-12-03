@@ -11630,9 +11630,9 @@ var _user$project$BuscaFilme$FilmesCad = F4(
 	function (a, b, c, d) {
 		return {idFilme: a, idCadastro: b, assistido: c, favorito: d};
 	});
-var _user$project$BuscaFilme$Model = F5(
-	function (a, b, c, d, e) {
-		return {nomeFilme: a, error: b, resultadoBusca: c, idCadLogado: d, filmeEscolhido: e};
+var _user$project$BuscaFilme$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {nomeFilme: a, error: b, resultadoBusca: c, idCadLogado: d, filmeEscolhido: e, filmeEscolhidoDetalhe: f};
 	});
 var _user$project$BuscaFilme$init = function () {
 	var initFilmeEscolhido = A6(
@@ -11649,7 +11649,7 @@ var _user$project$BuscaFilme$init = function () {
 		0,
 		0,
 		{ctor: '[]'});
-	return A5(_user$project$BuscaFilme$Model, '', '', initFilme, 0, initFilmeEscolhido);
+	return A6(_user$project$BuscaFilme$Model, '', '', initFilme, 0, initFilmeEscolhido, initFilmeEscolhido);
 }();
 var _user$project$BuscaFilme$FilmeHaskellAPI = F7(
 	function (a, b, c, d, e, f, g) {
@@ -11714,6 +11714,10 @@ var _user$project$BuscaFilme$decodeConsultaFilme = A8(
 			_1: {ctor: '[]'}
 		},
 		_elm_lang$core$Json_Decode$string));
+var _user$project$BuscaFilme$GoBack = {ctor: 'GoBack'};
+var _user$project$BuscaFilme$FilmeDetalhe = function (a) {
+	return {ctor: 'FilmeDetalhe', _0: a};
+};
 var _user$project$BuscaFilme$ResponseInsereFilme = function (a) {
 	return {ctor: 'ResponseInsereFilme', _0: a};
 };
@@ -11840,7 +11844,12 @@ var _user$project$BuscaFilme$formatFilmeResult = function (fr) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$BuscaFilme$FilmeDetalhe(fr)),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
@@ -11953,7 +11962,7 @@ var _user$project$BuscaFilme$ResponseBusca = function (a) {
 var _user$project$BuscaFilme$getFilme = function (nomefilme) {
 	var url = A2(
 		_elm_lang$core$Basics_ops['++'],
-		'https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=en-US&query=',
+		'https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&query=',
 		A2(_elm_lang$core$Basics_ops['++'], nomefilme, '&page=1&include_adult=false'));
 	return A2(
 		_elm_lang$http$Http$send,
@@ -12038,7 +12047,7 @@ var _user$project$BuscaFilme$update = F2(
 				};
 			case 'ResponseInsereFilmesCad':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			default:
+			case 'ResponseInsereFilme':
 				var _p7 = _p3._0;
 				if (_p7.ctor === 'Err') {
 					return {
@@ -12059,6 +12068,31 @@ var _user$project$BuscaFilme$update = F2(
 						_1: inserirFilmesCad
 					};
 				}
+			case 'FilmeDetalhe':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{filmeEscolhidoDetalhe: _p3._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							filmeEscolhidoDetalhe: A6(
+								_user$project$BuscaFilme$FilmeResult,
+								-1,
+								'',
+								0.0,
+								_elm_lang$core$Maybe$Just(''),
+								'',
+								'')
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _user$project$BuscaFilme$SubmitBusca = {ctor: 'SubmitBusca'};
@@ -12066,7 +12100,100 @@ var _user$project$BuscaFilme$NomeFilme = function (a) {
 	return {ctor: 'NomeFilme', _0: a};
 };
 var _user$project$BuscaFilme$view = function (model) {
-	return A2(
+	var filmeDetalhe = A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('center-align'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'ID: ',
+							_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.id))),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(_elm_lang$core$Basics_ops['++'], 'Titulo: ', model.filmeEscolhidoDetalhe.title)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'Nota:',
+									_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.vote_average))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(_elm_lang$core$Basics_ops['++'], 'Data de lancamento:', model.filmeEscolhidoDetalhe.release_date)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhidoDetalhe.overview)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('btn red'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$GoBack),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Voltar'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+	var pgBusca = A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
@@ -12200,6 +12327,7 @@ var _user$project$BuscaFilme$view = function (model) {
 				_1: {ctor: '[]'}
 			}
 		});
+	return _elm_lang$core$Native_Utils.eq(model.filmeEscolhidoDetalhe.id, 0) ? pgBusca : filmeDetalhe;
 };
 var _user$project$BuscaFilme$main = _elm_lang$html$Html$program(
 	{
@@ -13209,15 +13337,411 @@ var _user$project$Login$main = _elm_lang$html$Html$program(
 		}
 	})();
 
-var _user$project$Main$Model = F5(
+var _user$project$MeusFilmes$urlFoto = 'http://image.tmdb.org/t/p/w342/';
+var _user$project$MeusFilmes$montaItemFilme = function (mf) {
+	return A2(
+		_elm_lang$html$Html$li,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$img,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src(
+								A2(_elm_lang$core$Basics_ops['++'], _user$project$MeusFilmes$urlFoto, mf.poster_path)),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$MeusFilmes$MeusFilmes = F6(
+	function (a, b, c, d, e, f) {
+		return {id: a, title: b, vote_average: c, poster_path: d, overview: e, release_date: f};
+	});
+var _user$project$MeusFilmes$decodeListarMeusFilmes = A7(
+	_elm_lang$core$Json_Decode$map6,
+	_user$project$MeusFilmes$MeusFilmes,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'idapi',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'title',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'vote_average',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$float),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'poster_path',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'overview',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'release_date',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string));
+var _user$project$MeusFilmes$Model = F5(
 	function (a, b, c, d, e) {
-		return {login: a, cadastro: b, buscaFilme: c, janela: d, acao: e};
+		return {resp: a, favoritos: b, assistidos: c, idCadLogado: d, error: e};
+	});
+var _user$project$MeusFilmes$init = A5(
+	_user$project$MeusFilmes$Model,
+	{ctor: '[]'},
+	{ctor: '[]'},
+	{ctor: '[]'},
+	0,
+	'');
+var _user$project$MeusFilmes$ResponseListarAssistidos = function (a) {
+	return {ctor: 'ResponseListarAssistidos', _0: a};
+};
+var _user$project$MeusFilmes$getListarAssistidos = function (idcad) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmescad/listarassistidos/',
+		_elm_lang$core$Basics$toString(idcad));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$MeusFilmes$ResponseListarAssistidos,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+};
+var _user$project$MeusFilmes$SubmitListarAssistidos = {ctor: 'SubmitListarAssistidos'};
+var _user$project$MeusFilmes$ResponseListarFavoritos = function (a) {
+	return {ctor: 'ResponseListarFavoritos', _0: a};
+};
+var _user$project$MeusFilmes$getListarFavoritos = function (idcad) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmescad/listarfavoritos/',
+		_elm_lang$core$Basics$toString(idcad));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$MeusFilmes$ResponseListarFavoritos,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+};
+var _user$project$MeusFilmes$SubmitListarFavoritos = {ctor: 'SubmitListarFavoritos'};
+var _user$project$MeusFilmes$ResponseListarMeusFilmes = function (a) {
+	return {ctor: 'ResponseListarMeusFilmes', _0: a};
+};
+var _user$project$MeusFilmes$getListarMeusFilmes = function (idcad) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmescad/listarfilmes/',
+		_elm_lang$core$Basics$toString(idcad));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$MeusFilmes$ResponseListarMeusFilmes,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+};
+var _user$project$MeusFilmes$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'SubmitListarMeusFilmes':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarMeusFilmes(model.idCadLogado)
+				};
+			case 'ResponseListarMeusFilmes':
+				var _p1 = _p0._0;
+				if (_p1.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p1._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{resp: _p1._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SubmitListarFavoritos':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarFavoritos(model.idCadLogado)
+				};
+			case 'ResponseListarFavoritos':
+				var _p2 = _p0._0;
+				if (_p2.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p2._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{favoritos: _p2._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SubmitListarAssistidos':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarAssistidos(model.idCadLogado)
+				};
+			default:
+				var _p3 = _p0._0;
+				if (_p3.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p3._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{assistidos: _p3._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _user$project$MeusFilmes$SubmitListarMeusFilmes = {ctor: 'SubmitListarMeusFilmes'};
+var _user$project$MeusFilmes$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('row'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$section,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h1,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$MeusFilmes$SubmitListarMeusFilmes),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Basics_ops['++'], 'Todos os filmes', model.error)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$ul,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('lista'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.resp)),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$h1,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$MeusFilmes$SubmitListarFavoritos),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												A2(_elm_lang$core$Basics_ops['++'], 'Favoritos', model.error)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$ul,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('lista'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.favoritos)),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$h1,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$MeusFilmes$SubmitListarAssistidos),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														A2(_elm_lang$core$Basics_ops['++'], 'Assistidos', model.error)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$ul,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('lista'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{ctor: '[]'},
+															A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.assistidos)),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$MeusFilmes$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _user$project$MeusFilmes$init, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$MeusFilmes$view,
+		update: _user$project$MeusFilmes$update,
+		subscriptions: function (_p4) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
+
+var _user$project$Main$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {login: a, cadastro: b, buscaFilme: c, meusFilmes: d, janela: e, acao: f};
 	});
 var _user$project$Main$Root = {ctor: 'Root'};
+var _user$project$Main$MeusFilmes = {ctor: 'MeusFilmes'};
 var _user$project$Main$BuscaFilme = {ctor: 'BuscaFilme'};
 var _user$project$Main$Login = {ctor: 'Login'};
 var _user$project$Main$Cadastro = {ctor: 'Cadastro'};
-var _user$project$Main$MeusFilmes = {ctor: 'MeusFilmes'};
+var _user$project$Main$Nada = {ctor: 'Nada'};
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -13240,12 +13764,14 @@ var _user$project$Main$init = {
 			A2(_user$project$Cadastro$Retorno, 0, 0),
 			''),
 		buscaFilme: _user$project$BuscaFilme$init,
+		meusFilmes: _user$project$MeusFilmes$init,
 		janela: _user$project$Main$Root,
-		acao: _user$project$Main$MeusFilmes
+		acao: _user$project$Main$Nada
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _user$project$Main$Busca = {ctor: 'Busca'};
+var _user$project$Main$MeusFilmesClick = {ctor: 'MeusFilmesClick'};
+var _user$project$Main$BuscaClick = {ctor: 'BuscaClick'};
 var _user$project$Main$ResponseAutenticacao = function (a) {
 	return {ctor: 'ResponseAutenticacao', _0: a};
 };
@@ -13269,70 +13795,45 @@ var _user$project$Main$getValidaAutenticacao = function (auth) {
 var _user$project$Main$SubmitAutenticacao = function (a) {
 	return {ctor: 'SubmitAutenticacao', _0: a};
 };
-var _user$project$Main$viewMainPage = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('row'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('sidebar col s12 m4 l3'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('lateral-principal'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$ul,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$li,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('NOME CHAMPS'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
+var _user$project$Main$viewMainPage = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('row'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('sidebar col s12 m4 l3'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('lateral-principal'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$ul,
+								{ctor: '[]'},
+								{
 									ctor: '::',
 									_0: A2(
 										_elm_lang$html$Html$li,
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$a,
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('btn green'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(
-															_user$project$Main$SubmitAutenticacao(_user$project$Main$Busca)),
-														_1: {ctor: '[]'}
-													}
-												},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Buscar Filmes'),
-													_1: {ctor: '[]'}
-												}),
+											_0: _elm_lang$html$Html$text('NOME CHAMPS'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -13346,81 +13847,17 @@ var _user$project$Main$viewMainPage = A2(
 													_elm_lang$html$Html$a,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('btn red'),
-														_1: {ctor: '[]'}
+														_0: _elm_lang$html$Html_Attributes$class('btn green'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(
+																_user$project$Main$SubmitAutenticacao(_user$project$Main$BuscaClick)),
+															_1: {ctor: '[]'}
+														}
 													},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Deslogar'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$section,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$h1,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('NOME LISTA'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$ul,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('lista'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$li,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$div,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$img,
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$src(''),
-																_1: {ctor: '[]'}
-															},
-															{ctor: '[]'}),
+														_0: _elm_lang$html$Html$text('Buscar Filmes'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {ctor: '[]'}
@@ -13433,37 +13870,57 @@ var _user$project$Main$viewMainPage = A2(
 												{
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$div,
+														_elm_lang$html$Html$a,
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+															_0: _elm_lang$html$Html_Attributes$class('btn red'),
 															_1: {ctor: '[]'}
 														},
 														{
 															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$img,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$src(''),
-																	_1: {ctor: '[]'}
-																},
-																{ctor: '[]'}),
+															_0: _elm_lang$html$Html$text('Deslogar'),
 															_1: {ctor: '[]'}
 														}),
 													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
 										}
-									}),
-								_1: {ctor: '[]'}
-							}
+									}
+								}),
+							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
 				}),
-			_1: {ctor: '[]'}
-		}
-	});
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Main$SubmitAutenticacao(_user$project$Main$MeusFilmesClick)),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('MEUS FILMES'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _user$project$Main$Mudar = function (a) {
 	return {ctor: 'Mudar', _0: a};
 };
@@ -13746,6 +14203,9 @@ var _user$project$Main$viewRoot = A2(
 			_1: {ctor: '[]'}
 		}
 	});
+var _user$project$Main$PgMeusFilmes = function (a) {
+	return {ctor: 'PgMeusFilmes', _0: a};
+};
 var _user$project$Main$PgBuscaFilme = function (a) {
 	return {ctor: 'PgBuscaFilme', _0: a};
 };
@@ -13811,6 +14271,22 @@ var _user$project$Main$update = F2(
 						_user$project$Main$PgBuscaFilme,
 						_elm_lang$core$Tuple$second(updt))
 				};
+			case 'PgMeusFilmes':
+				var updt = A2(_user$project$MeusFilmes$update, _p0._0, model.meusFilmes);
+				var oldMeusFilmes = _elm_lang$core$Tuple$first(updt);
+				var newMeusFilmes = _elm_lang$core$Native_Utils.update(
+					oldMeusFilmes,
+					{idCadLogado: model.login.ret.mensagem.idcadastro});
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{meusFilmes: newMeusFilmes}),
+					_1: A2(
+						_elm_lang$core$Platform_Cmd$map,
+						_user$project$Main$PgMeusFilmes,
+						_elm_lang$core$Tuple$second(updt))
+				};
 			case 'SubmitAutenticacao':
 				return {
 					ctor: '_Tuple2',
@@ -13842,10 +14318,13 @@ var _user$project$Main$update = F2(
 					if (_p2 === true) {
 						var clicado = function () {
 							var _p3 = model.acao;
-							if (_p3.ctor === 'Busca') {
-								return _user$project$Main$BuscaFilme;
-							} else {
-								return _user$project$Main$Root;
+							switch (_p3.ctor) {
+								case 'BuscaClick':
+									return _user$project$Main$BuscaFilme;
+								case 'MeusFilmesClick':
+									return _user$project$Main$MeusFilmes;
+								default:
+									return _user$project$Main$Root;
 							}
 						}();
 						return {
@@ -13872,16 +14351,21 @@ var _user$project$Main$view = function (model) {
 		var _p4 = model.janela;
 		switch (_p4.ctor) {
 			case 'Login':
-				return _user$project$Main$viewMainPage;
+				return _user$project$Main$viewMainPage(model);
 			case 'Cadastro':
-				return _user$project$Main$viewMainPage;
+				return _user$project$Main$viewMainPage(model);
 			case 'Root':
-				return _user$project$Main$viewMainPage;
-			default:
+				return _user$project$Main$viewMainPage(model);
+			case 'BuscaFilme':
 				return A2(
 					_elm_lang$html$Html$map,
 					_user$project$Main$PgBuscaFilme,
 					_user$project$BuscaFilme$view(model.buscaFilme));
+			default:
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgMeusFilmes,
+					_user$project$MeusFilmes$view(model.meusFilmes));
 		}
 	}();
 	var deslogado = function () {
@@ -13899,32 +14383,19 @@ var _user$project$Main$view = function (model) {
 					_user$project$Cadastro$view(model.cadastro));
 			case 'Root':
 				return _user$project$Main$viewRoot;
-			default:
+			case 'BuscaFilme':
 				return A2(
 					_elm_lang$html$Html$map,
 					_user$project$Main$PgBuscaFilme,
 					_user$project$BuscaFilme$view(model.buscaFilme));
+			default:
+				return A2(
+					_elm_lang$html$Html$map,
+					_user$project$Main$PgMeusFilmes,
+					_user$project$MeusFilmes$view(model.meusFilmes));
 		}
 	}();
-	return _elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '') ? deslogado : A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(model.janela),
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						' - ',
-						_elm_lang$core$Basics$toString(model.acao)))),
-			_1: {
-				ctor: '::',
-				_0: logado,
-				_1: {ctor: '[]'}
-			}
-		});
+	return _elm_lang$core$Native_Utils.eq(model.login.ret.mensagem.autenticacao, '') ? deslogado : logado;
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{
@@ -13952,6 +14423,10 @@ if (typeof _user$project$Login$main !== 'undefined') {
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
     _user$project$Main$main(Elm['Main'], 'Main', undefined);
+}
+Elm['MeusFilmes'] = Elm['MeusFilmes'] || {};
+if (typeof _user$project$MeusFilmes$main !== 'undefined') {
+    _user$project$MeusFilmes$main(Elm['MeusFilmes'], 'MeusFilmes', undefined);
 }
 
 if (typeof define === "function" && define['amd'])

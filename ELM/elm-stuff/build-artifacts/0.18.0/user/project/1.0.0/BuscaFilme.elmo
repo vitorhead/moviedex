@@ -230,9 +230,9 @@ var _user$project$BuscaFilme$FilmesCad = F4(
 	function (a, b, c, d) {
 		return {idFilme: a, idCadastro: b, assistido: c, favorito: d};
 	});
-var _user$project$BuscaFilme$Model = F5(
-	function (a, b, c, d, e) {
-		return {nomeFilme: a, error: b, resultadoBusca: c, idCadLogado: d, filmeEscolhido: e};
+var _user$project$BuscaFilme$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {nomeFilme: a, error: b, resultadoBusca: c, idCadLogado: d, filmeEscolhido: e, filmeEscolhidoDetalhe: f};
 	});
 var _user$project$BuscaFilme$init = function () {
 	var initFilmeEscolhido = A6(
@@ -249,7 +249,7 @@ var _user$project$BuscaFilme$init = function () {
 		0,
 		0,
 		{ctor: '[]'});
-	return A5(_user$project$BuscaFilme$Model, '', '', initFilme, 0, initFilmeEscolhido);
+	return A6(_user$project$BuscaFilme$Model, '', '', initFilme, 0, initFilmeEscolhido, initFilmeEscolhido);
 }();
 var _user$project$BuscaFilme$FilmeHaskellAPI = F7(
 	function (a, b, c, d, e, f, g) {
@@ -562,7 +562,7 @@ var _user$project$BuscaFilme$ResponseBusca = function (a) {
 var _user$project$BuscaFilme$getFilme = function (nomefilme) {
 	var url = A2(
 		_elm_lang$core$Basics_ops['++'],
-		'https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=en-US&query=',
+		'https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&query=',
 		A2(_elm_lang$core$Basics_ops['++'], nomefilme, '&page=1&include_adult=false'));
 	return A2(
 		_elm_lang$http$Http$send,
@@ -673,7 +673,7 @@ var _user$project$BuscaFilme$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{filmeEscolhido: _p3._0}),
+						{filmeEscolhidoDetalhe: _p3._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
@@ -682,9 +682,9 @@ var _user$project$BuscaFilme$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							filmeEscolhido: A6(
+							filmeEscolhidoDetalhe: A6(
 								_user$project$BuscaFilme$FilmeResult,
-								0,
+								-1,
 								'',
 								0.0,
 								_elm_lang$core$Maybe$Just(''),
@@ -718,7 +718,7 @@ var _user$project$BuscaFilme$view = function (model) {
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							'ID: ',
-							_elm_lang$core$Basics$toString(model.filmeEscolhido.id))),
+							_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.id))),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
@@ -729,7 +729,7 @@ var _user$project$BuscaFilme$view = function (model) {
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(
-							A2(_elm_lang$core$Basics_ops['++'], 'Titulo: ', model.filmeEscolhido.title)),
+							A2(_elm_lang$core$Basics_ops['++'], 'Titulo: ', model.filmeEscolhidoDetalhe.title)),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -743,7 +743,7 @@ var _user$project$BuscaFilme$view = function (model) {
 								A2(
 									_elm_lang$core$Basics_ops['++'],
 									'Nota:',
-									_elm_lang$core$Basics$toString(model.filmeEscolhido.vote_average))),
+									_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.vote_average))),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -754,7 +754,7 @@ var _user$project$BuscaFilme$view = function (model) {
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
-									A2(_elm_lang$core$Basics_ops['++'], 'Data de lancamento:', model.filmeEscolhido.release_date)),
+									A2(_elm_lang$core$Basics_ops['++'], 'Data de lancamento:', model.filmeEscolhidoDetalhe.release_date)),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -765,7 +765,7 @@ var _user$project$BuscaFilme$view = function (model) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html$text(
-										A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhido.overview)),
+										A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhidoDetalhe.overview)),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -927,7 +927,7 @@ var _user$project$BuscaFilme$view = function (model) {
 				_1: {ctor: '[]'}
 			}
 		});
-	return _elm_lang$core$Native_Utils.eq(model.filmeEscolhido.id, 0) ? pgBusca : filmeDetalhe;
+	return _elm_lang$core$Native_Utils.eq(model.filmeEscolhidoDetalhe.id, 0) ? pgBusca : filmeDetalhe;
 };
 var _user$project$BuscaFilme$main = _elm_lang$html$Html$program(
 	{

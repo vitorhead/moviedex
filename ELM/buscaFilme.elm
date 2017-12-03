@@ -212,6 +212,7 @@ type alias Model =
     ,resultadoBusca     : Filme
     ,idCadLogado        : Int
     ,filmeEscolhido     : FilmeResult
+    ,filmeEscolhidoDetalhe : FilmeResult
     }
 
 -- Teve que usar um type diferente do FilmeResult pq o Haskell volta o id da tabela + id da api...
@@ -232,7 +233,7 @@ init =
         initFilme = Filme 0 0 0 []
         initFilmeEscolhido = FilmeResult 0 "" 0.0 (Just "") "" ""
     in
-        Model "" "" initFilme 0 initFilmeEscolhido
+        Model "" "" initFilme 0 initFilmeEscolhido initFilmeEscolhido
 
 --DECODER DA API DE FILMES
 decodeFilmeResult : Decoder FilmeResult
@@ -254,7 +255,7 @@ decodeFilme = map4 Filme (at ["page"] Decode.int)
 getFilme : String -> Cmd Message
 getFilme nomefilme =
     let
-        url = ("https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=en-US&query="++nomefilme++"&page=1&include_adult=false")
+        url = ("https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&query="++nomefilme++"&page=1&include_adult=false")
     in
         send ResponseBusca <| Http.get url decodeFilme
 
@@ -327,8 +328,9 @@ update msg model =
                     in
                     ({model | error = "ASDADADAD PASSOU"}, inserirFilmesCad)
 
-        FilmeDetalhe x -> ({model | filmeEscolhido = x}, Cmd.none)
-        GoBack -> ({model | filmeEscolhido = (FilmeResult -0 "" 0.0 (Just "") "" "")}, Cmd.none)
+        FilmeDetalhe x -> ({model | filmeEscolhidoDetalhe = x}, Cmd.none)
+        
+        GoBack -> ({model | filmeEscolhidoDetalhe = (FilmeResult -1 "" 0.0 (Just "") "" "")}, Cmd.none)
 
 
 view : Model -> Html Message
@@ -356,15 +358,15 @@ view model =
       filmeDetalhe : Html Message
       filmeDetalhe = div [ class "center-align"]
                     [
-                      p [] [text <| "ID: "++(toString model.filmeEscolhido.id)]
-                     ,p [] [text <| "Titulo: "++ model.filmeEscolhido.title]
-                     ,p [] [text <| "Nota:"++(toString model.filmeEscolhido.vote_average)]
-                     ,p [] [text <| "Data de lancamento:"++ model.filmeEscolhido.release_date]
-                     ,p [] [text <| "Sinopse: "++ model.filmeEscolhido.overview]
+                      p [] [text <| "ID: "++(toString model.filmeEscolhidoDetalhe.id)]
+                     ,p [] [text <| "Titulo: "++ model.filmeEscolhidoDetalhe.title]
+                     ,p [] [text <| "Nota:"++(toString model.filmeEscolhidoDetalhe.vote_average)]
+                     ,p [] [text <| "Data de lancamento:"++ model.filmeEscolhidoDetalhe.release_date]
+                     ,p [] [text <| "Sinopse: "++ model.filmeEscolhidoDetalhe.overview]
                      , button [class "btn red", onClick GoBack] [text "Voltar"]
                     ]
     in
-    if model.filmeEscolhido.id == 0 then
+    if model.filmeEscolhidoDetalhe.id == 0 then
       pgBusca
     else
       filmeDetalhe

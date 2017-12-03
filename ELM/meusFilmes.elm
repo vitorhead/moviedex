@@ -7,77 +7,141 @@ import Http exposing (..)
 import Json.Decode exposing (..)
 import BuscaFilme as BF exposing(..)
 
-type alias Model =
+type alias MeusFilmes = 
     {
-     meusFilmes : MeusFilmes
+     id                   : Int
+    ,title               : String
+    ,vote_average        : Float
+    ,poster_path         : String
+    ,overview            : String
+    ,release_date        : String
     }
 
-type alias MeusFilmes =
+
+type alias Model =
     {
-        resp : List (BF.FilmeResult)
+      resp        : List(MeusFilmes)   --meusfilmes
+     ,favoritos   : List(MeusFilmes)
+     ,assistidos  : List(MeusFilmes)
+     ,idCadLogado : Int
+     ,error       : String
     }
 
 init : Model
-init = Model <| []
+init = Model [] [] [] 0 ""
+    
+type Message =  SubmitListarMeusFilmes
+              | ResponseListarMeusFilmes (Result Http.Error (List(MeusFilmes)))
+              | SubmitListarFavoritos
+              | ResponseListarFavoritos (Result Http.Error (List(MeusFilmes)))
+              | SubmitListarAssistidos
+              | ResponseListarAssistidos (Result Http.Error (List(MeusFilmes)))
+              
+urlFoto : String
+urlFoto = "http://image.tmdb.org/t/p/w342/"
 
 
-decodeMeusFilmes : Decoder MeusFilmes
-decodeMeusFilmes = Json.Decode.map MeusFilmes (at ["resp"] (Json.Decode.list BF.decodeFilmeResult))
+decodeListarMeusFilmes : Decoder MeusFilmes
+decodeListarMeusFilmes = map6 MeusFilmes (at ["idapi"] int)
+                                         (at ["title"] string)
+                                         (at ["vote_average"] float)
+                                         (at ["poster_path"] string)
+                                         (at ["overview"] string)
+                                         (at ["release_date"] string)
 
-getMeusFilmes : String -> Cmd Message
-getMeusFilmes idcad =
-    let
-        url = ("https://haskelleta-romefeller.c9users.io/filmescad/listarfilmes/"++idcad)
-    in
-        send Response <| Http.get url decodeMeusFilmes
+
+getListarMeusFilmes : Int -> Cmd Message
+getListarMeusFilmes idcad = 
+  let
+    url = ("https://haskelleta-romefeller.c9users.io/filmescad/listarfilmes/"++ toString idcad)
+  in
+    Http.send ResponseListarMeusFilmes <| Http.get url (at ["resp"] (Json.Decode.list decodeListarMeusFilmes))
+
+
+getListarFavoritos : Int -> Cmd Message
+getListarFavoritos idcad = 
+  let
+    url = ("https://haskelleta-romefeller.c9users.io/filmescad/listarfavoritos/"++ toString idcad)
+  in
+    Http.send ResponseListarFavoritos <| Http.get url (at ["resp"] (Json.Decode.list decodeListarMeusFilmes))
+
+
+getListarAssistidos : Int -> Cmd Message
+getListarAssistidos idcad = 
+  let
+    url = ("https://haskelleta-romefeller.c9users.io/filmescad/listarassistidos/"++ toString idcad)
+  in
+    Http.send ResponseListarAssistidos <| Http.get url (at ["resp"] (Json.Decode.list decodeListarMeusFilmes))
+
+              
+update : Message -> Model -> (Model, Cmd Message)
+update msg model =
+    case msg of
+        SubmitListarMeusFilmes ->
+            (model, getListarMeusFilmes model.idCadLogado)
+            
+        ResponseListarMeusFilmes x ->
+            case x of 
+                Err y -> ({model | error = toString y} , Cmd.none)
+                Ok y -> ({model | resp = y}, Cmd.none)
+                
+        SubmitListarFavoritos ->
+            (model, getListarFavoritos model.idCadLogado)
+            
+        ResponseListarFavoritos x ->
+            case x of 
+                Err y -> ({model | error = toString y} , Cmd.none)
+                Ok y -> ({model | favoritos = y}, Cmd.none)
+                
+        SubmitListarAssistidos ->
+            (model, getListarAssistidos model.idCadLogado)
+            
+        ResponseListarAssistidos x ->
+            case x of 
+                Err y -> ({model | error = toString y} , Cmd.none)
+                Ok y -> ({model | assistidos = y}, Cmd.none)
+            
+
+montaItemFilme : MeusFilmes -> Html Message
+montaItemFilme mf = 
+            li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
+            [
+              div [class "poster-filme"] 
+              [
+                img [src (urlFoto++mf.poster_path)] []
+              ]
+            ]
+
 
 view : Model -> Html Message
 view model =
   div [class "row"]
   [
-    div [class "sidebar col s12 m4 l3"]
-    [
-      div [class "lateral-principal"]
-      [
-        ul []
-        [
-          li [] [text "NOME CHAMPS"]
-          ,li []
-          [
-            a [class "btn green"] [text "Buscar Filmes"]
-          ]
-          ,li []
-          [
-            a [class "btn red"] [text "Deslogar"]
-          ]
-        ]
-      ]
-    ]
-    ,div [class "col s12 m8 l9"]
+    div [class "col s12 m8 l9"]
     [
       section []
       [
-        h1 [] [text "NOME LISTA"]
-        ,ul [class "lista"]
-        [
-          li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
+          h1 [onClick SubmitListarMeusFilmes] [text <|"Todos os filmes"++model.error]
+          ,ul [class "lista"]
           [
-            div [class "poster-filme"]
-            [
-              img [onClick ] [] --Mudar Pg-DETALHES
-            ]
+            div [] (List.map montaItemFilme model.resp)
           ]
-          ,li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
+          
+          ,h1 [onClick SubmitListarFavoritos] [text <|"Favoritos"++model.error]
+          ,ul [class "lista"]
           [
-            div [class "poster-filme"]
-            [
-              img [onClick ] [] --Mudar Pg-DETALHES
-            ]
+            div [] (List.map montaItemFilme model.favoritos)
           ]
-        ] -- fim ul
-      ] -- fim section
-    ]
+          
+          ,h1 [onClick SubmitListarAssistidos] [text <|"Assistidos"++model.error]
+          ,ul [class "lista"]
+          [
+            div [] (List.map montaItemFilme model.assistidos)
+          ]
+      ]
+    ] 
   ]
+
 
 
 main =

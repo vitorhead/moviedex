@@ -4,33 +4,40 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Http exposing (send, get)
-import Json.Decode as Decode exposing (bool, at)
+import Json.Decode as Decode exposing (..)
 import Login as ModuloLogin
 import Cadastro as ModuloCadastro
 import BuscaFilme as ModuloBuscaFilme
+import MeusFilmes as ModuloMeusFilmes
 
 type Pagina = Cadastro
             | Login
             | BuscaFilme
+            | MeusFilmes
             | Root
 
-type Click =  Busca
-            | MeusFilmes
+type Click =  BuscaClick
+            | MeusFilmesClick
+            | Nada
 
 type Message =
       PgCadastro ModuloCadastro.Message
     | PgLogin ModuloLogin.Message
     | PgBuscaFilme ModuloBuscaFilme.Message
+    | PgMeusFilmes ModuloMeusFilmes.Message
     | Mudar Pagina
     | SubmitAutenticacao Click
     | ResponseAutenticacao (Result Http.Error Bool)
-
+    -- | SubmitMeusFilmes
+    -- | ResponseListarMeusFilmes (Result Http.Error (List(MeusFilmes)))
 
 type alias Model =
     {
      login      : ModuloLogin.Model
     ,cadastro   : ModuloCadastro.Model
     ,buscaFilme : ModuloBuscaFilme.Model
+    -- ,meusFilmes : List(MeusFilmes)
+    ,meusFilmes : ModuloMeusFilmes.Model
     ,janela     : Pagina
     ,acao       : Click
     }
@@ -39,10 +46,11 @@ init : (Model, Cmd Message)
 init = ({login = ModuloLogin.Model "" "" "" (ModuloLogin.Retorno 0 (ModuloLogin.Mensagem "" 0 "")),
          cadastro = ModuloCadastro.Model "" "" "" "" "" (ModuloCadastro.Retorno 0 0) "",
          buscaFilme = ModuloBuscaFilme.init,
+         meusFilmes = ModuloMeusFilmes.init,
          janela = Root,
-         acao = MeusFilmes}, Cmd.none)
-      
-        
+         acao = Nada}, Cmd.none)
+     
+
 getValidaAutenticacao : String -> Cmd Message
 getValidaAutenticacao auth =
     let
@@ -67,7 +75,8 @@ update msg model =
             updt = ModuloCadastro.update p model.cadastro
           in
             ({model | cadastro = Tuple.first updt}, Cmd.map PgCadastro <| Tuple.second updt)
-        
+            
+
         PgBuscaFilme p ->
           let
             updt = ModuloBuscaFilme.update p model.buscaFilme
@@ -77,6 +86,17 @@ update msg model =
             newBF = {oldModelBuscaFilme | idCadLogado = model.login.ret.mensagem.idcadastro}
           in
             ({model | buscaFilme = newBF}, Cmd.map PgBuscaFilme <| Tuple.second updt)
+            
+            
+        PgMeusFilmes p ->
+          let
+            updt = ModuloMeusFilmes.update p model.meusFilmes
+            --pegando model antigo
+            oldMeusFilmes = Tuple.first updt
+            --passando idCadastro do model do main pro model do buscaFilme
+            newMeusFilmes = {oldMeusFilmes | idCadLogado = model.login.ret.mensagem.idcadastro}
+          in
+            ({model | meusFilmes = newMeusFilmes}, Cmd.map PgMeusFilmes <| Tuple.second updt)          
         
         SubmitAutenticacao clicado ->
           ({model | acao = clicado}, getValidaAutenticacao <| String.filter (\x -> x /= '"') model.login.ret.mensagem.autenticacao)
@@ -90,17 +110,27 @@ update msg model =
                       let
                         clicado = 
                           case model.acao of
-                            Busca -> BuscaFilme
+                            BuscaClick -> BuscaFilme
                             
-                            MeusFilmes -> Root
+                            MeusFilmesClick -> MeusFilmes
+                            
+                            Nada -> Root
                       in  
                         ({model | janela = clicado}, Cmd.none)    
                 False ->
                         ({model | janela = Root}, Cmd.none)    
         
+        -- SubmitMeusFilmes ->
+        --   (model, getListarMeusFilmes model.login.ret.mensagem.idcadastro)
+          
+        -- ResponseListarMeusFilmes x ->
+        --     case x of 
+        --         Err y -> ({model | acao = BuscaClick}, Cmd.none)
+        --         Ok y -> ({model | meusFilmes = y}, Cmd.none)
+        
 
-viewMainPage : Html Message
-viewMainPage =  
+viewMainPage : Model -> Html Message
+viewMainPage model =  
        div [class "row"] 
         [
           div [class "sidebar col s12 m4 l3"]
@@ -112,8 +142,7 @@ viewMainPage =
                 li [] [text "NOME CHAMPS"]
                 ,li [] 
                 [
-                  a [class "btn green", onClick <| SubmitAutenticacao Busca] [text "Buscar Filmes"]
-                  -- a [class "btn green", onClick <| SubmitAutenticacao << (Mudar BuscaFilme)] [text "Buscar Filmes"]
+                  a [class "btn green", onClick <| SubmitAutenticacao BuscaClick] [text "Buscar Filmes"]
                 ]
                 ,li [] 
                 [
@@ -124,33 +153,14 @@ viewMainPage =
           ]
           ,div [class "col s12 m8 l9"] 
           [
-            section []
-            [
-              h1 [] [text "NOME LISTA"]
-              ,ul [class "lista"]
-              [
-                li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
-                [
-                  div [class "poster-filme"] 
-                  [
-                    img [src "" ] []
-                  ]
-                ]
-                ,li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
-                [
-                  div [class "poster-filme"] 
-                  [
-                    img [src "" ] []
-                  ]
-                ]
-              ] -- fim ul
-            ] -- fim section
-          ]
+            div [onClick <| SubmitAutenticacao MeusFilmesClick] [text "MEUS FILMES"]
+          ] -- fim section
         ]
 
 
 viewRoot : Html Message
-viewRoot =  div []
+viewRoot = 
+  div []
   [
      section [class "apresentacao"]
       [
@@ -205,25 +215,29 @@ view model =
             Root -> viewRoot
             
             BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme 
+          
+            MeusFilmes -> Html.map PgMeusFilmes <| ModuloMeusFilmes.view model.meusFilmes
+            
             
       logado : Html Message      
       logado =
           case model.janela of
-            Login -> viewMainPage
+            Login -> viewMainPage model
 
-            Cadastro -> viewMainPage
+            Cadastro -> viewMainPage model
 
-            Root -> viewMainPage
+            Root -> viewMainPage model
             
             BuscaFilme -> Html.map PgBuscaFilme <| ModuloBuscaFilme.view model.buscaFilme     
+            
+            MeusFilmes -> Html.map PgMeusFilmes <| ModuloMeusFilmes.view model.meusFilmes   
+            
+
     in
      if model.login.ret.mensagem.autenticacao == "" then
       deslogado
      else
-      div [] [
-        text <| toString model.janela ++ " - " ++toString model.acao,
-        logado
-      ] 
+      logado
  
  
 main = program

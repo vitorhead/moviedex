@@ -1,0 +1,394 @@
+var _user$project$MeusFilmes$urlFoto = 'http://image.tmdb.org/t/p/w342/';
+var _user$project$MeusFilmes$montaItemFilme = function (mf) {
+	return A2(
+		_elm_lang$html$Html$li,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$img,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src(
+								A2(_elm_lang$core$Basics_ops['++'], _user$project$MeusFilmes$urlFoto, mf.poster_path)),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$MeusFilmes$MeusFilmes = F6(
+	function (a, b, c, d, e, f) {
+		return {id: a, title: b, vote_average: c, poster_path: d, overview: e, release_date: f};
+	});
+var _user$project$MeusFilmes$decodeListarMeusFilmes = A7(
+	_elm_lang$core$Json_Decode$map6,
+	_user$project$MeusFilmes$MeusFilmes,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'idapi',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'title',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'vote_average',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$float),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'poster_path',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'overview',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'release_date',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string));
+var _user$project$MeusFilmes$Model = F5(
+	function (a, b, c, d, e) {
+		return {resp: a, favoritos: b, assistidos: c, idCadLogado: d, error: e};
+	});
+var _user$project$MeusFilmes$init = A5(
+	_user$project$MeusFilmes$Model,
+	{ctor: '[]'},
+	{ctor: '[]'},
+	{ctor: '[]'},
+	0,
+	'');
+var _user$project$MeusFilmes$ResponseListarAssistidos = function (a) {
+	return {ctor: 'ResponseListarAssistidos', _0: a};
+};
+var _user$project$MeusFilmes$getListarAssistidos = function (idcad) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmescad/listarassistidos/',
+		_elm_lang$core$Basics$toString(idcad));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$MeusFilmes$ResponseListarAssistidos,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+};
+var _user$project$MeusFilmes$SubmitListarAssistidos = {ctor: 'SubmitListarAssistidos'};
+var _user$project$MeusFilmes$ResponseListarFavoritos = function (a) {
+	return {ctor: 'ResponseListarFavoritos', _0: a};
+};
+var _user$project$MeusFilmes$getListarFavoritos = function (idcad) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmescad/listarfavoritos/',
+		_elm_lang$core$Basics$toString(idcad));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$MeusFilmes$ResponseListarFavoritos,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+};
+var _user$project$MeusFilmes$SubmitListarFavoritos = {ctor: 'SubmitListarFavoritos'};
+var _user$project$MeusFilmes$ResponseListarMeusFilmes = function (a) {
+	return {ctor: 'ResponseListarMeusFilmes', _0: a};
+};
+var _user$project$MeusFilmes$getListarMeusFilmes = function (idcad) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://haskelleta-romefeller.c9users.io/filmescad/listarfilmes/',
+		_elm_lang$core$Basics$toString(idcad));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$MeusFilmes$ResponseListarMeusFilmes,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'resp',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes))));
+};
+var _user$project$MeusFilmes$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'SubmitListarMeusFilmes':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarMeusFilmes(model.idCadLogado)
+				};
+			case 'ResponseListarMeusFilmes':
+				var _p1 = _p0._0;
+				if (_p1.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p1._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{resp: _p1._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SubmitListarFavoritos':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarFavoritos(model.idCadLogado)
+				};
+			case 'ResponseListarFavoritos':
+				var _p2 = _p0._0;
+				if (_p2.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p2._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{favoritos: _p2._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SubmitListarAssistidos':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarAssistidos(model.idCadLogado)
+				};
+			default:
+				var _p3 = _p0._0;
+				if (_p3.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p3._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{assistidos: _p3._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _user$project$MeusFilmes$SubmitListarMeusFilmes = {ctor: 'SubmitListarMeusFilmes'};
+var _user$project$MeusFilmes$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('row'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$section,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h1,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$MeusFilmes$SubmitListarMeusFilmes),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Basics_ops['++'], 'Todos os filmes', model.error)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$ul,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('lista'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.resp)),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$h1,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$MeusFilmes$SubmitListarFavoritos),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												A2(_elm_lang$core$Basics_ops['++'], 'Favoritos', model.error)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$ul,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('lista'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.favoritos)),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$h1,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$MeusFilmes$SubmitListarAssistidos),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														A2(_elm_lang$core$Basics_ops['++'], 'Assistidos', model.error)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$ul,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('lista'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{ctor: '[]'},
+															A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.assistidos)),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$MeusFilmes$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _user$project$MeusFilmes$init, _1: _elm_lang$core$Platform_Cmd$none},
+		view: _user$project$MeusFilmes$view,
+		update: _user$project$MeusFilmes$update,
+		subscriptions: function (_p4) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
