@@ -62,7 +62,7 @@ getListarMeusFilmes idcad =
   let
     url = ("https://haskelleta-romefeller.c9users.io/filmescad/listarfilmes/"++ toString idcad)
   in
-    Http.send ResponseListarMeusFilmes <| Http.get url (at ["resp"] decodeResp) 
+    Http.send ResponseListarMeusFilmes <| Http.get url (at ["resp"] decodeResp)
 
 
 type alias Resp =
@@ -74,7 +74,7 @@ type alias Resp =
 decodeResp : Decoder Resp
 decodeResp = map2 Resp  (at ["pks"] (Json.Decode.list Json.Decode.int))
                         (at ["filmes"] (Json.Decode.list decodeListarMeusFilmes))
-                       
+
 
 getListarFavoritos : Int -> Cmd Message
 getListarFavoritos idcad =
@@ -96,26 +96,26 @@ getListarAssistidos idcad =
 patchAtualizarFilme : Atualizar -> Int -> Bool -> Cmd Message
 patchAtualizarFilme atualizar idfilmescad booleano =
     case atualizar of
-        Favorito -> 
+        Favorito ->
             let
                 url = ("https://haskelleta-romefeller.c9users.io/filmescad/alterarfavoritos/"++ toString idfilmescad)
                 obj = [("favorito", Json.Encode.bool booleano)]
                 body = Http.jsonBody <| Json.Encode.object obj
             in
-            Http.send ResponseAtualizar <| 
+            Http.send ResponseAtualizar <|
                         Http.post url body (at ["resp"] Json.Decode.string)
-        
+
         Assistido ->
             let
                 url = ("https://haskelleta-romefeller.c9users.io/filmescad/alterarassistidos/"++ toString idfilmescad)
                 obj = [("assistido", Json.Encode.bool booleano)]
                 body = Http.jsonBody <| Json.Encode.object obj
             in
-            Http.send ResponseAtualizar <| 
+            Http.send ResponseAtualizar <|
                         Http.post url body (at ["resp"] Json.Decode.string)
-            
 
-            
+
+
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
     case msg of
@@ -142,12 +142,12 @@ update msg model =
             case x of
                 Err y -> ({model | error = toString y} , Cmd.none)
                 Ok y -> ({model | assistidos = y}, Cmd.none)
-                
+
         SubmitAtualizar att id booleano->
             case att of
                 Assistido -> (model, patchAtualizarFilme Assistido id booleano)
                 Favorito -> (model, patchAtualizarFilme Favorito id booleano)
-                
+
         ResponseAtualizar resp ->
             case resp of
                 Err y -> (model, Cmd.none)
@@ -158,7 +158,7 @@ montaItemFilme : MeusFilmes -> Html Message
 montaItemFilme mf =
             li []  -- CRIAR UM LI NESSE ESTILO PARA CADA FILME
             [
-              div [class "poster-filme"]
+              div [class "poster-filme", class "center-align"]
               [
                 img [src (urlFoto++mf.poster_path)] []
               ]
@@ -172,13 +172,13 @@ mostraSingleResp pkFilmesCad f = --PK do filmescad, da pra dar update com isso..
       div [class "poster-filme", class "center-align"]
       [
          img [src (urlFoto++f.poster_path)] []
-         ,div [class "lista"] 
+         ,div [class "center-align"]
          [
           button [class "btn btn-filme", onClick <| SubmitAtualizar Favorito pkFilmesCad True]
           [
            i [class "material-icons small"] [text "star_border"]
           ]
-          
+
           ,button [class "btn btn-filme", onClick <| SubmitAtualizar Assistido pkFilmesCad True]
           [
            i [class "material-icons small"] [text "check"]
@@ -192,7 +192,7 @@ view : Model -> Html Message
 view model =
   div [class "row"]
   [
-    div [class "col s12 m8 l9"]
+    div [class "col s12"]
     [
       section []
       [
@@ -200,19 +200,19 @@ view model =
           ,div []
           [
             -- div [class "lista"] (List.map montaItemFilme model.resp)
-            ul [class "lista"] (List.map2 mostraSingleResp model.respMeusFilmes.pks model.respMeusFilmes.filmes)
-          ]
+            ul [class "lista wrap"] (List.map2 mostraSingleResp model.respMeusFilmes.pks model.respMeusFilmes.filmes)
+            ]
 
           ,h1 [onClick SubmitListarFavoritos] [text <|"Favoritos"++model.error]
           ,div []
           [
-            ul [class "lista"] (List.map montaItemFilme model.favoritos)
+            ul [class "lista wrap"] (List.map montaItemFilme model.favoritos)
           ]
 
           ,h1 [onClick SubmitListarAssistidos] [text <|"Assistidos"++model.error]
           ,div []
           [
-            ul [class "lista"] (List.map montaItemFilme model.assistidos)
+            ul [class "lista wrap"] (List.map montaItemFilme model.assistidos)
           ]
       ]
     ]

@@ -285,7 +285,7 @@ var _user$project$Main$viewRoot = A2(
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Tópicos especiais em informática - Professor Ms. Alexandre Garcia'),
+							_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil.'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -379,7 +379,7 @@ var _user$project$Main$viewRoot = A2(
 										_elm_lang$html$Html$img,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$src('../static/images/ramon.jpg'),
+											_0: _elm_lang$html$Html_Attributes$src(''),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
@@ -404,7 +404,7 @@ var _user$project$Main$viewRoot = A2(
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Ramon Gaspar, 20 anos, músico e positividade'),
+										_0: _elm_lang$html$Html$text('Ramon Gaspar, XX anos, músico e positividade'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -463,7 +463,7 @@ var _user$project$Main$viewRoot = A2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Vitor Stipanich, 20 anos, nos compiuters e jogos online'),
+											_0: _elm_lang$html$Html$text('Vitor Stipanich, XX anos, nos compiuters e jogos online'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {ctor: '[]'}

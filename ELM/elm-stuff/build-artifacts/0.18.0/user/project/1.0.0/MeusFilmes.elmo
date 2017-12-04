@@ -10,7 +10,11 @@ var _user$project$MeusFilmes$montaItemFilme = function (mf) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('center-align'),
+						_1: {ctor: '[]'}
+					}
 				},
 				{
 					ctor: '::',
@@ -231,7 +235,7 @@ var _user$project$MeusFilmes$mostraSingleResp = F2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('lista'),
+									_0: _elm_lang$html$Html_Attributes$class('center-align'),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -500,7 +504,7 @@ var _user$project$MeusFilmes$view = function (model) {
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
+					_0: _elm_lang$html$Html_Attributes$class('col s12'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -534,7 +538,7 @@ var _user$project$MeusFilmes$view = function (model) {
 											_elm_lang$html$Html$ul,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('lista'),
+												_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
 												_1: {ctor: '[]'}
 											},
 											A3(_elm_lang$core$List$map2, _user$project$MeusFilmes$mostraSingleResp, model.respMeusFilmes.pks, model.respMeusFilmes.filmes)),
@@ -566,7 +570,7 @@ var _user$project$MeusFilmes$view = function (model) {
 													_elm_lang$html$Html$ul,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('lista'),
+														_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
 														_1: {ctor: '[]'}
 													},
 													A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.favoritos)),
@@ -598,7 +602,7 @@ var _user$project$MeusFilmes$view = function (model) {
 															_elm_lang$html$Html$ul,
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('lista'),
+																_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
 																_1: {ctor: '[]'}
 															},
 															A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.assistidos)),

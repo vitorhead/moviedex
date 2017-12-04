@@ -192,7 +192,7 @@ viewRoot =
      section [class "apresentacao"]
       [
         h2 [] [text "MovieDex"]
-        ,p [] [text "Tópicos especiais em informática - Professor Ms. Alexandre Garcia"]
+        ,p [] [text "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil."]
         ,div []
         [
           a [onClick (Mudar Cadastro) ,class "btn green"] [text "Cadastro"]
@@ -205,9 +205,9 @@ viewRoot =
         [
           a [href "https://github.com/guimon23", class "col s12 m6"]
            [
-            img [src "../static/images/ramon.jpg", class "responsive-img circle", alt "Github Ramon"] []
+            img [src "", class "responsive-img circle", alt "Github Ramon"] []
           ]
-          ,p [class "col s12 m6"] [text "Ramon Gaspar, 20 anos, músico e positividade"]
+          ,p [class "col s12 m6"] [text "Ramon Gaspar, XX anos, músico e positividade"]
         ]
         ,div [class "row center-align"]
       [
@@ -215,7 +215,7 @@ viewRoot =
         [
           img [src "../static/images/vitor.jpeg", class "responsive-img circle", alt "Github Vitor"] []
         ]
-        ,p [class "col s12 m6"] [text "Vitor Stipanich, 20 anos, nos compiuters e jogos online"]
+        ,p [class "col s12 m6"] [text "Vitor Stipanich, XX anos, nos compiuters e jogos online"]
       ]
         ,div [class "row center-align"]
       [

@@ -13354,7 +13354,11 @@ var _user$project$MeusFilmes$montaItemFilme = function (mf) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('center-align'),
+						_1: {ctor: '[]'}
+					}
 				},
 				{
 					ctor: '::',
@@ -13575,7 +13579,7 @@ var _user$project$MeusFilmes$mostraSingleResp = F2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('lista'),
+									_0: _elm_lang$html$Html_Attributes$class('center-align'),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -13844,7 +13848,7 @@ var _user$project$MeusFilmes$view = function (model) {
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('col s12 m8 l9'),
+					_0: _elm_lang$html$Html_Attributes$class('col s12'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -13878,7 +13882,7 @@ var _user$project$MeusFilmes$view = function (model) {
 											_elm_lang$html$Html$ul,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('lista'),
+												_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
 												_1: {ctor: '[]'}
 											},
 											A3(_elm_lang$core$List$map2, _user$project$MeusFilmes$mostraSingleResp, model.respMeusFilmes.pks, model.respMeusFilmes.filmes)),
@@ -13910,7 +13914,7 @@ var _user$project$MeusFilmes$view = function (model) {
 													_elm_lang$html$Html$ul,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('lista'),
+														_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
 														_1: {ctor: '[]'}
 													},
 													A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.favoritos)),
@@ -13942,7 +13946,7 @@ var _user$project$MeusFilmes$view = function (model) {
 															_elm_lang$html$Html$ul,
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('lista'),
+																_0: _elm_lang$html$Html_Attributes$class('lista wrap'),
 																_1: {ctor: '[]'}
 															},
 															A2(_elm_lang$core$List$map, _user$project$MeusFilmes$montaItemFilme, model.assistidos)),
@@ -14257,7 +14261,7 @@ var _user$project$Main$viewRoot = A2(
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Tópicos especiais em informática - Professor Ms. Alexandre Garcia'),
+							_0: _elm_lang$html$Html$text('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil.'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -14351,7 +14355,7 @@ var _user$project$Main$viewRoot = A2(
 										_elm_lang$html$Html$img,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$src('../static/images/ramon.jpg'),
+											_0: _elm_lang$html$Html_Attributes$src(''),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$class('responsive-img circle'),
@@ -14376,7 +14380,7 @@ var _user$project$Main$viewRoot = A2(
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Ramon Gaspar, 20 anos, músico e positividade'),
+										_0: _elm_lang$html$Html$text('Ramon Gaspar, XX anos, músico e positividade'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -14435,7 +14439,7 @@ var _user$project$Main$viewRoot = A2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Vitor Stipanich, 20 anos, nos compiuters e jogos online'),
+											_0: _elm_lang$html$Html$text('Vitor Stipanich, XX anos, nos compiuters e jogos online'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {ctor: '[]'}
