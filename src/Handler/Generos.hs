@@ -27,3 +27,9 @@ putAlterarGeneroR gid = do
     novoGenero <- requireJsonBody :: Handler Generos
     runDB $ replace gid novoGenero
     sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey gid))])
+    
+postGeneroR :: Handler Value
+postGeneroR = do
+    genero <- requireJsonBody :: Handler Generos 
+    gid <- runDB $ insert genero 
+    sendStatusJSON created201 (object ["resp" .= (fromSqlKey gid)]) 

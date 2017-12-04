@@ -25,3 +25,4 @@
 /generos/listargenero/#CadastrosId          ListarGeneroCadR      GET
 /generos/deletargenero/#GenerosId           DeletarGeneroR        DELETE
 /generos/alterargenero/#GenerosId           AlterarGeneroR        PUT
+/generos/inserirgenero                      GeneroR               POST
