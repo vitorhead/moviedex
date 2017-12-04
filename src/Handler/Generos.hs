@@ -14,3 +14,9 @@ getListarGeneroCadR :: CadastrosId -> Handler TypedContent
 getListarGeneroCadR cid = do
     generos <- runDB $ selectList [GenerosIdCadastro <=. cid] [] 
     sendStatusJSON ok200 (object ["resp" .= toJSON generos])
+    
+deleteDeletarGeneroR :: GenerosId -> Handler Value
+deleteDeletarGeneroR gid = do
+    _ <- runDB $ get404 gid 
+    runDB $ delete gid
+    sendStatusJSON noContent204 (object ["resp" .= ("deletado" ++ show (fromSqlKey gid))])
