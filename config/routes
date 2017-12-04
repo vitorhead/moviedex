@@ -19,8 +19,8 @@
 /filmescad/listarfilmes/#CadastrosId        ListarFilmesR         GET
 /filmescad/listarfavoritos/#CadastrosId     ListarFavoritosR      GET
 /filmescad/listarassistidos/#CadastrosId    ListarAssistidosR     GET
-/filmescad/alterarfavoritos/#FilmesCadId    AlterarFavoritosR     PATCH
-/filmescad/alterarassistidos/#FilmesCadId   AlterarAssistidosR    PATCH
+/filmescad/alterarfavoritos/#FilmesCadId    AlterarFavoritosR     POST
+/filmescad/alterarassistidos/#FilmesCadId   AlterarAssistidosR    POST
 
 /generos/listargenero/#CadastrosId          ListarGeneroCadR      GET
 /generos/deletargenero/#GenerosId           DeletarGeneroR        DELETE

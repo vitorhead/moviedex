@@ -5,6 +5,7 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Http exposing (..)
 import Json.Decode exposing (..)
+import Json.Encode exposing (..)
 import BuscaFilme as BF exposing(..)
 
 type alias MeusFilmes =
@@ -31,24 +32,29 @@ type alias Model =
 init : Model
 init = Model (Resp [] []) [] [] 0 ""
 
+
+type Atualizar = Favorito | Assistido
+
 type Message =  SubmitListarMeusFilmes
               | ResponseListarMeusFilmes (Result Http.Error Resp)
               | SubmitListarFavoritos
               | ResponseListarFavoritos (Result Http.Error (List(MeusFilmes)))
               | SubmitListarAssistidos
               | ResponseListarAssistidos (Result Http.Error (List(MeusFilmes)))
+              | SubmitAtualizar Atualizar Int Bool
+              | ResponseAtualizar (Result Http.Error String)
 
 urlFoto : String
 urlFoto = "http://image.tmdb.org/t/p/w342/"
 
 
 decodeListarMeusFilmes : Decoder MeusFilmes
-decodeListarMeusFilmes = map6 MeusFilmes (at ["idapi"] int)
-                                         (at ["title"] string)
-                                         (at ["vote_average"] float)
-                                         (at ["poster_path"] string)
-                                         (at ["overview"] string)
-                                         (at ["release_date"] string)
+decodeListarMeusFilmes = map6 MeusFilmes (at ["idapi"] Json.Decode.int)
+                                         (at ["title"] Json.Decode.string)
+                                         (at ["vote_average"] Json.Decode.float)
+                                         (at ["poster_path"] Json.Decode.string)
+                                         (at ["overview"] Json.Decode.string)
+                                         (at ["release_date"] Json.Decode.string)
 
 
 getListarMeusFilmes : Int -> Cmd Message
@@ -86,6 +92,30 @@ getListarAssistidos idcad =
     Http.send ResponseListarAssistidos <| Http.get url (at ["resp"] (Json.Decode.list decodeListarMeusFilmes))
 
 
+
+patchAtualizarFilme : Atualizar -> Int -> Bool -> Cmd Message
+patchAtualizarFilme atualizar idfilmescad booleano =
+    case atualizar of
+        Favorito -> 
+            let
+                url = ("https://haskelleta-romefeller.c9users.io/filmescad/alterarfavoritos/"++ toString idfilmescad)
+                obj = [("favorito", Json.Encode.bool booleano)]
+                body = Http.jsonBody <| Json.Encode.object obj
+            in
+            Http.send ResponseAtualizar <| 
+                        Http.post url body (at ["resp"] Json.Decode.string)
+        
+        Assistido ->
+            let
+                url = ("https://haskelleta-romefeller.c9users.io/filmescad/alterarassistidos/"++ toString idfilmescad)
+                obj = [("assistido", Json.Encode.bool booleano)]
+                body = Http.jsonBody <| Json.Encode.object obj
+            in
+            Http.send ResponseAtualizar <| 
+                        Http.post url body (at ["resp"] Json.Decode.string)
+            
+
+            
 update : Message -> Model -> (Model, Cmd Message)
 update msg model =
     case msg of
@@ -112,6 +142,16 @@ update msg model =
             case x of
                 Err y -> ({model | error = toString y} , Cmd.none)
                 Ok y -> ({model | assistidos = y}, Cmd.none)
+                
+        SubmitAtualizar att id booleano->
+            case att of
+                Assistido -> (model, patchAtualizarFilme Assistido id booleano)
+                Favorito -> (model, patchAtualizarFilme Favorito id booleano)
+                
+        ResponseAtualizar resp ->
+            case resp of
+                Err y -> (model, Cmd.none)
+                Ok y -> (model, Cmd.none)
 
 
 montaItemFilme : MeusFilmes -> Html Message
@@ -126,7 +166,7 @@ montaItemFilme mf =
 
 
 mostraSingleResp : Int -> MeusFilmes -> Html Message
-mostraSingleResp i f = --i é a PK do filmescad, da pra dar update com isso...
+mostraSingleResp pkFilmesCad f = --PK do filmescad, da pra dar update com isso...
     li []
     [
       div [class "poster-filme", class "center-align"]
@@ -134,14 +174,14 @@ mostraSingleResp i f = --i é a PK do filmescad, da pra dar update com isso...
          img [src (urlFoto++f.poster_path)] []
          ,div [class "lista"] 
          [
-          button [class "btn btn-filme"]
+          button [class "btn btn-filme", onClick <| SubmitAtualizar Favorito pkFilmesCad True]
           [
-           Html.i [class "material-icons small"] [text "star_border"]
+           i [class "material-icons small"] [text "star_border"]
           ]
           
-          ,button [class "btn btn-filme"]
+          ,button [class "btn btn-filme", onClick <| SubmitAtualizar Assistido pkFilmesCad True]
           [
-           Html.i [class "material-icons small"] [text "check"]
+           i [class "material-icons small"] [text "check"]
           ]
         ]
       ]

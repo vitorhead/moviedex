@@ -28,103 +28,6 @@ var _user$project$MeusFilmes$montaItemFilme = function (mf) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$MeusFilmes$mostraSingleResp = F2(
-	function (i, f) {
-		return A2(
-			_elm_lang$html$Html$li,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('center-align'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$img,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src(
-									A2(_elm_lang$core$Basics_ops['++'], _user$project$MeusFilmes$urlFoto, f.poster_path)),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('lista'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$button,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$i,
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('material-icons small'),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('star_border'),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$button,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$i,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('material-icons small'),
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('check'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-	});
 var _user$project$MeusFilmes$MeusFilmes = F6(
 	function (a, b, c, d, e, f) {
 		return {id: a, title: b, vote_average: c, poster_path: d, overview: e, release_date: f};
@@ -217,6 +120,189 @@ var _user$project$MeusFilmes$decodeResp = A3(
 			_1: {ctor: '[]'}
 		},
 		_elm_lang$core$Json_Decode$list(_user$project$MeusFilmes$decodeListarMeusFilmes)));
+var _user$project$MeusFilmes$Assistido = {ctor: 'Assistido'};
+var _user$project$MeusFilmes$Favorito = {ctor: 'Favorito'};
+var _user$project$MeusFilmes$ResponseAtualizar = function (a) {
+	return {ctor: 'ResponseAtualizar', _0: a};
+};
+var _user$project$MeusFilmes$patchAtualizarFilme = F3(
+	function (atualizar, idfilmescad, booleano) {
+		var _p0 = atualizar;
+		if (_p0.ctor === 'Favorito') {
+			var obj = {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'favorito',
+					_1: _elm_lang$core$Json_Encode$bool(booleano)
+				},
+				_1: {ctor: '[]'}
+			};
+			var body = _elm_lang$http$Http$jsonBody(
+				_elm_lang$core$Json_Encode$object(obj));
+			var url = A2(
+				_elm_lang$core$Basics_ops['++'],
+				'https://haskelleta-romefeller.c9users.io/filmescad/alterarfavoritos/',
+				_elm_lang$core$Basics$toString(idfilmescad));
+			return A2(
+				_elm_lang$http$Http$send,
+				_user$project$MeusFilmes$ResponseAtualizar,
+				A3(
+					_elm_lang$http$Http$post,
+					url,
+					body,
+					A2(
+						_elm_lang$core$Json_Decode$at,
+						{
+							ctor: '::',
+							_0: 'resp',
+							_1: {ctor: '[]'}
+						},
+						_elm_lang$core$Json_Decode$string)));
+		} else {
+			var obj = {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'assistido',
+					_1: _elm_lang$core$Json_Encode$bool(booleano)
+				},
+				_1: {ctor: '[]'}
+			};
+			var body = _elm_lang$http$Http$jsonBody(
+				_elm_lang$core$Json_Encode$object(obj));
+			var url = A2(
+				_elm_lang$core$Basics_ops['++'],
+				'https://haskelleta-romefeller.c9users.io/filmescad/alterarassistidos/',
+				_elm_lang$core$Basics$toString(idfilmescad));
+			return A2(
+				_elm_lang$http$Http$send,
+				_user$project$MeusFilmes$ResponseAtualizar,
+				A3(
+					_elm_lang$http$Http$post,
+					url,
+					body,
+					A2(
+						_elm_lang$core$Json_Decode$at,
+						{
+							ctor: '::',
+							_0: 'resp',
+							_1: {ctor: '[]'}
+						},
+						_elm_lang$core$Json_Decode$string)));
+		}
+	});
+var _user$project$MeusFilmes$SubmitAtualizar = F3(
+	function (a, b, c) {
+		return {ctor: 'SubmitAtualizar', _0: a, _1: b, _2: c};
+	});
+var _user$project$MeusFilmes$mostraSingleResp = F2(
+	function (pkFilmesCad, f) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('poster-filme'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('center-align'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$img,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$src(
+									A2(_elm_lang$core$Basics_ops['++'], _user$project$MeusFilmes$urlFoto, f.poster_path)),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('lista'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													A3(_user$project$MeusFilmes$SubmitAtualizar, _user$project$MeusFilmes$Favorito, pkFilmesCad, true)),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$i,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('material-icons small'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('star_border'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('btn btn-filme'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														A3(_user$project$MeusFilmes$SubmitAtualizar, _user$project$MeusFilmes$Assistido, pkFilmesCad, true)),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$i,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('material-icons small'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('check'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
 var _user$project$MeusFilmes$ResponseListarAssistidos = function (a) {
 	return {ctor: 'ResponseListarAssistidos', _0: a};
 };
@@ -290,8 +376,8 @@ var _user$project$MeusFilmes$getListarMeusFilmes = function (idcad) {
 };
 var _user$project$MeusFilmes$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'SubmitListarMeusFilmes':
 				return {
 					ctor: '_Tuple2',
@@ -299,34 +385,7 @@ var _user$project$MeusFilmes$update = F2(
 					_1: _user$project$MeusFilmes$getListarMeusFilmes(model.idCadLogado)
 				};
 			case 'ResponseListarMeusFilmes':
-				var _p1 = _p0._0;
-				if (_p1.ctor === 'Err') {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								error: _elm_lang$core$Basics$toString(_p1._0)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{respMeusFilmes: _p1._0}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'SubmitListarFavoritos':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$MeusFilmes$getListarFavoritos(model.idCadLogado)
-				};
-			case 'ResponseListarFavoritos':
-				var _p2 = _p0._0;
+				var _p2 = _p1._0;
 				if (_p2.ctor === 'Err') {
 					return {
 						ctor: '_Tuple2',
@@ -342,18 +401,18 @@ var _user$project$MeusFilmes$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{favoritos: _p2._0}),
+							{respMeusFilmes: _p2._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
-			case 'SubmitListarAssistidos':
+			case 'SubmitListarFavoritos':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$MeusFilmes$getListarAssistidos(model.idCadLogado)
+					_1: _user$project$MeusFilmes$getListarFavoritos(model.idCadLogado)
 				};
-			default:
-				var _p3 = _p0._0;
+			case 'ResponseListarFavoritos':
+				var _p3 = _p1._0;
 				if (_p3.ctor === 'Err') {
 					return {
 						ctor: '_Tuple2',
@@ -369,9 +428,60 @@ var _user$project$MeusFilmes$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{assistidos: _p3._0}),
+							{favoritos: _p3._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
+				}
+			case 'SubmitListarAssistidos':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MeusFilmes$getListarAssistidos(model.idCadLogado)
+				};
+			case 'ResponseListarAssistidos':
+				var _p4 = _p1._0;
+				if (_p4.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Basics$toString(_p4._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{assistidos: _p4._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SubmitAtualizar':
+				var _p7 = _p1._1;
+				var _p6 = _p1._2;
+				var _p5 = _p1._0;
+				if (_p5.ctor === 'Assistido') {
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: A3(_user$project$MeusFilmes$patchAtualizarFilme, _user$project$MeusFilmes$Assistido, _p7, _p6)
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: A3(_user$project$MeusFilmes$patchAtualizarFilme, _user$project$MeusFilmes$Favorito, _p7, _p6)
+					};
+				}
+			default:
+				var _p8 = _p1._0;
+				if (_p8.ctor === 'Err') {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 		}
 	});
@@ -511,7 +621,7 @@ var _user$project$MeusFilmes$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$MeusFilmes$init, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$MeusFilmes$view,
 		update: _user$project$MeusFilmes$update,
-		subscriptions: function (_p4) {
+		subscriptions: function (_p9) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();

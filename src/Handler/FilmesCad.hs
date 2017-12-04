@@ -68,15 +68,15 @@ getListarAssistidosR idCad = do
     filmes <- sequence $ fmap (\fid -> runDB $ get404 fid) filmesIds 
     sendStatusJSON ok200 (object ["resp" .= (toJSON filmes)])
     
-patchAlterarFavoritosR :: FilmesCadId -> Handler Value
-patchAlterarFavoritosR idFilmesCad = do
+postAlterarFavoritosR :: FilmesCadId -> Handler Value
+postAlterarFavoritosR idFilmesCad = do
     _ <- runDB $ get404 idFilmesCad
     newFav <- requireJsonBody :: Handler Favorito
     runDB $ update idFilmesCad [FilmesCadFavorito =. (favorito newFav)] 
     sendStatusJSON noContent204 (object ["resp" .= ("atualizado" ++ show (fromSqlKey idFilmesCad))])
     
-patchAlterarAssistidosR :: FilmesCadId -> Handler Value
-patchAlterarAssistidosR idFilmesCad = do
+postAlterarAssistidosR :: FilmesCadId -> Handler Value
+postAlterarAssistidosR idFilmesCad = do
     _ <- runDB $ get404 idFilmesCad
     newAssistidos <- requireJsonBody :: Handler Assistido
     runDB $ update idFilmesCad [FilmesCadAssistido =. (assistido newAssistidos)] 
