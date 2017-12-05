@@ -356,14 +356,24 @@ view model =
                   ]
                 ]
       filmeDetalhe : Html Message
-      filmeDetalhe = div [ class "center-align"]
+      filmeDetalhe =
+        let
+            foto = case model.filmeEscolhidoDetalhe.poster_path of
+                        Nothing -> "--"
+                        Just x -> x
+        in
+                    div [class "lista"]
                     [
-                      p [] [text <| "ID: "++(toString model.filmeEscolhidoDetalhe.id)]
-                     ,p [] [text <| "Titulo: "++ model.filmeEscolhidoDetalhe.title]
-                     ,p [] [text <| "Nota:"++(toString model.filmeEscolhidoDetalhe.vote_average)]
-                     ,p [] [text <| "Data de lancamento:"++ model.filmeEscolhidoDetalhe.release_date]
-                     ,p [] [text <| "Sinopse: "++ model.filmeEscolhidoDetalhe.overview]
-                     , button [class "btn red", onClick GoBack] [text "Voltar"]
+                      img [src <| "http://image.tmdb.org/t/p/w500/"++foto, class "responsive-img"] []
+                     ,div [class "infos", style [("padding", "1em")] ] 
+                     [
+                          p [] [text <| "ID: "++(toString model.filmeEscolhidoDetalhe.id)]
+                         ,p [] [text <| "Titulo: "++ model.filmeEscolhidoDetalhe.title]
+                         ,p [] [text <| "Nota:"++(toString model.filmeEscolhidoDetalhe.vote_average)]
+                         ,p [] [text <| "Data de lancamento:"++ model.filmeEscolhidoDetalhe.release_date]
+                         ,p [] [text <| "Sinopse: "++ model.filmeEscolhidoDetalhe.overview]
+                         ,button [class "btn red", onClick GoBack] [text "Voltar"]
+                     ]
                     ]
     in
     if model.filmeEscolhidoDetalhe.id == 0 then

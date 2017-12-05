@@ -705,64 +705,56 @@ var _user$project$BuscaFilme$NomeFilme = function (a) {
 	return {ctor: 'NomeFilme', _0: a};
 };
 var _user$project$BuscaFilme$view = function (model) {
-	var filmeDetalhe = A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('center-align'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$p,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'ID: ',
-							_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.id))),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+	var filmeDetalhe = function () {
+		var foto = function () {
+			var _p9 = model.filmeEscolhidoDetalhe.poster_path;
+			if (_p9.ctor === 'Nothing') {
+				return '--';
+			} else {
+				return _p9._0;
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('lista'),
+				_1: {ctor: '[]'}
+			},
+			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$p,
-					{ctor: '[]'},
+					_elm_lang$html$Html$img,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(_elm_lang$core$Basics_ops['++'], 'Titulo: ', model.filmeEscolhidoDetalhe.title)),
-						_1: {ctor: '[]'}
-					}),
+						_0: _elm_lang$html$Html_Attributes$src(
+							A2(_elm_lang$core$Basics_ops['++'], 'http://image.tmdb.org/t/p/w500/', foto)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('responsive-img'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$p,
-						{ctor: '[]'},
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									'Nota:',
-									_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.vote_average))),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$p,
-							{ctor: '[]'},
-							{
+							_0: _elm_lang$html$Html_Attributes$class('infos'),
+							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									A2(_elm_lang$core$Basics_ops['++'], 'Data de lancamento:', model.filmeEscolhidoDetalhe.release_date)),
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'padding', _1: '1em'},
+										_1: {ctor: '[]'}
+									}),
 								_1: {ctor: '[]'}
-							}),
-						_1: {
+							}
+						},
+						{
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$p,
@@ -770,34 +762,88 @@ var _user$project$BuscaFilme$view = function (model) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html$text(
-										A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhidoDetalhe.overview)),
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'ID: ',
+											_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.id))),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$button,
+									_elm_lang$html$Html$p,
+									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('btn red'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$GoBack),
-											_1: {ctor: '[]'}
-										}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Voltar'),
+										_0: _elm_lang$html$Html$text(
+											A2(_elm_lang$core$Basics_ops['++'], 'Titulo: ', model.filmeEscolhidoDetalhe.title)),
 										_1: {ctor: '[]'}
 									}),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$p,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'Nota:',
+													_elm_lang$core$Basics$toString(model.filmeEscolhidoDetalhe.vote_average))),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$p,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													A2(_elm_lang$core$Basics_ops['++'], 'Data de lancamento:', model.filmeEscolhidoDetalhe.release_date)),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$p,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														A2(_elm_lang$core$Basics_ops['++'], 'Sinopse: ', model.filmeEscolhidoDetalhe.overview)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('btn red'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(_user$project$BuscaFilme$GoBack),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Voltar'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
 							}
-						}
-					}
+						}),
+					_1: {ctor: '[]'}
 				}
-			}
-		});
+			});
+	}();
 	var pgBusca = A2(
 		_elm_lang$html$Html$div,
 		{
@@ -939,7 +985,7 @@ var _user$project$BuscaFilme$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$BuscaFilme$init, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$BuscaFilme$view,
 		update: _user$project$BuscaFilme$update,
-		subscriptions: function (_p9) {
+		subscriptions: function (_p10) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
