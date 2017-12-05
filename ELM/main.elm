@@ -10,6 +10,7 @@ import Cadastro as ModuloCadastro
 import BuscaFilme as ModuloBuscaFilme
 import MeusFilmes as ModuloMeusFilmes
 
+
 type Pagina = Cadastro
             | Login
             | BuscaFilme
@@ -192,7 +193,7 @@ viewRoot =
      section [class "apresentacao"]
       [
         h2 [] [text "MovieDex"]
-        ,p [] [text "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, nihil."]
+        ,p [] [text "Tópicos especiais em informática - Prof. Ms. Alexandre Garcia"]
         ,div []
         [
           a [onClick (Mudar Cadastro) ,class "btn green"] [text "Cadastro"]
@@ -205,9 +206,9 @@ viewRoot =
         [
           a [href "https://github.com/guimon23", class "col s12 m6"]
            [
-            img [src "", class "responsive-img circle", alt "Github Ramon"] []
+            img [src "../static/images/ramon.jpg", class "responsive-img circle", alt "Github Ramon"] []
           ]
-          ,p [class "col s12 m6"] [text "Ramon Gaspar, XX anos, músico e positividade"]
+          ,p [class "col s12 m6"] [text "Ramon Gaspar, 20 anos, músico e positividade"]
         ]
         ,div [class "row center-align"]
       [
@@ -215,7 +216,7 @@ viewRoot =
         [
           img [src "../static/images/vitor.jpeg", class "responsive-img circle", alt "Github Vitor"] []
         ]
-        ,p [class "col s12 m6"] [text "Vitor Stipanich, XX anos, nos compiuters e jogos online"]
+        ,p [class "col s12 m6"] [text "Vitor Stipanich, 20 anos, nos compiuters e jogos online"]
       ]
         ,div [class "row center-align"]
       [
@@ -264,7 +265,33 @@ view model =
      if model.login.ret.mensagem.autenticacao == "" then
       deslogado
      else
-      logado
+      div []
+      [
+         header [] 
+        [
+         nav [] 
+          [
+            div [class "nav-wrapper cyan"] 
+            [
+             a [class "material-icons small", onClick <| Mudar Root] [text "arrow_back"]
+            -- button [onClick (Mudar Root), class "btn cyan"] 
+            -- [
+            --   i [class "material-icons small"] [text "arrow_back"]
+            -- ]
+              ,a [class "brand-logo"] [text "MovieDex"]
+              ,ul [id "nav-mobile", class "right hide-on-med-and-down"] 
+              [
+                li [] 
+                [
+                  a [href "cadastro-page.html"] [text "Home"]
+                ]
+              ]
+            ]
+          ]
+        ]
+        ,div [] [logado]
+       ]
+      
 
 
 main = program
