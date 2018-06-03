@@ -12,19 +12,9 @@ import Json.Encode as Encode exposing (..)
     API utilizada: The Movie DB API
     https://developers.themoviedb.org/3
 
-    moviedexHaskell@gmail.com
-    !Moviedex123
-
-    haskellmovie
-    !Moviedex123
-
-    API KEY: 3a97c7968533c6effacc04e1449450b1
-    Cadastrei uns dados fakes rs
-
     PARAMETROS DE CONFIGURAÇÃO DA API:
-    https://api.themoviedb.org/3/configuration?api_key=3a97c7968533c6effacc04e1449450b1
+    https://api.themoviedb.org/3/configuration?api_key=<key>
     A implementação recomendada é cachear isso no início do programa e ir usando.
-    No momento deixei fixo
     http://image.tmdb.org/t/p/w154/<<posterpath>>
 
     posterpath tamanhos:
@@ -255,7 +245,7 @@ decodeFilme = map4 Filme (at ["page"] Decode.int)
 getFilme : String -> Cmd Message
 getFilme nomefilme =
     let
-        url = ("https://api.themoviedb.org/3/search/movie?api_key=3a97c7968533c6effacc04e1449450b1&language=pt-BR&query="++nomefilme++"&page=1&include_adult=false")
+        url = ("https://api.themoviedb.org/3/search/movie?api_key=<key>&language=pt-BR&query="++nomefilme++"&page=1&include_adult=false")
     in
         send ResponseBusca <| Http.get url decodeFilme
 
